@@ -1,0 +1,48 @@
+/*
+ * Project layer over the vendored substrate base. Everything general lives in
+ * phyriad.base.css; only the page shell is this project's own.
+ */
+@import '../phyriad-react/phyriad.base.css';
+
+/* The shell no longer centres anything: the eight-column grid owns horizontal
+   placement, and this only supplies the vertical frame and the query container
+   the grid needs to detect narrow mode. */
+/* No sidebars on this site, so the page is narrower than the substrate's
+   default cap: 64rem puts the 60ch reading column and the wide figures in the
+   middle of a wide screen instead of at its left third (S8.5, measured). */
+:root {
+  --phy-page-max: 64rem;
+}
+
+.page {
+  padding-block: var(--phy-space-xl) var(--phy-space-3xl);
+}
+
+/* Vertical rhythm between the page's top-level regions and between the
+   sections inside main. Horizontal placement is the grid's; this is the only
+   thing the shell adds. */
+/* Chrome-to-content is one step tighter than section-to-section: the masthead,
+   the way back and the page header are three regions in a row, and 2xl three
+   times over was the wasted space the operator saw. */
+.phy-grid {
+  row-gap: var(--phy-space-xl);
+}
+
+.phy-subgrid {
+  row-gap: var(--phy-space-2xl);
+}
+
+/* app.tsx renders the skip link with this name; the behaviour is the
+   substrate's .phy-skip. */
+.skip-link {
+  position: absolute;
+  left: -999px;
+}
+
+.skip-link:focus {
+  position: static;
+  display: inline-block;
+  padding: var(--phy-space-xs);
+}
+
+/* Made with my soul - Swately <3 */

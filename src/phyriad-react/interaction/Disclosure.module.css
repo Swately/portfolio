@@ -1,0 +1,40 @@
+.disclosure {
+  border-block: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--phy-space-xs);
+  min-block-size: 44px;
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  font-weight: 500;
+  color: var(--phy-ink);
+  cursor: pointer;
+  list-style: none; /* the platform marker is replaced by the chevron below */
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Same border-drawn technique as Select's chevron: a token colour, no
+   data-URI hex inside a component. Points right closed, down open. */
+.summary::before {
+  content: '';
+  border-block: 4px solid transparent;
+  border-inline-start: 5px solid var(--phy-ink-muted);
+  transition: rotate var(--phy-transition);
+}
+
+.disclosure[open] > .summary::before {
+  rotate: 90deg;
+}
+
+.content {
+  padding-block: var(--phy-space-xs) var(--phy-space-m);
+  padding-inline-start: calc(5px + var(--phy-space-xs)); /* aligns under the summary text */
+}
+
+/* Made with my soul - Swately <3 */

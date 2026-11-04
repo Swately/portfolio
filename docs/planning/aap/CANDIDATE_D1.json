@@ -1,0 +1,200 @@
+{
+  "angle": "D1 evidence-index — the page is an index of evidence: each project enters by its single strongest verifiable claim plus the artifact or number that proves it, and the page's structure (order, depth, what is even said) follows what can be proven rather than what looks balanced.",
+  "thesis": "This design bets that making evidence a required, typed field of every project assertion — so an unbacked claim does not compile and the reader can audit the whole ledger on a public page — buys more credibility with a screening engineer than any amount of polish, and it accepts the cost that the resulting order puts the operator's most impressive-sounding result last.",
+  "routes": [
+    {
+      "path": "/",
+      "purpose": "The index. Header, one paragraph of what the operator builds, then the five projects ordered by how independently a reader can check them — each row is name + the literal status string from its README + one claim + one evidence affordance + a link into its dossier. No images here: the index is text and numbers, which keeps the entry view the lightest one on the site.",
+      "sections": [
+        "Eduardo Ramos Mendoza — Ingeniero en Sistemas Computacionales (encabezado con ubicación, correo y GitHub)",
+        "Qué construyo",
+        "Proyectos, ordenados por lo que puedo probar",
+        "Herramientas y tecnologías",
+        "Idiomas · Cómo se verifica esta página (pie)"
+      ]
+    },
+    {
+      "path": "/proyecto/:slug",
+      "purpose": "One dossier per project, rendered from data for the five slugs (climx, pharvard, phyriadfg, phyriager, phynned). The claim is stated once and large; the proof follows immediately as a figure or a number block; then the full claim-to-evidence table; then the project's own limits, taken from its README rather than softened. This is the route a CV link or an application should point at.",
+      "sections": [
+        "<Nombre> — <estado literal del README>",
+        "La afirmación",
+        "La prueba",
+        "Qué puedes verificar tú mismo",
+        "Lo que este proyecto no es",
+        "Enlaces",
+        "← Volver al índice"
+      ]
+    },
+    {
+      "path": "/evidencia",
+      "purpose": "The evidence model made public: what counts as proof here, why the projects are in that order, the complete ledger of every claim on the site with its evidence and link (rendered from the same array the tests enumerate), and an honest list of what is missing. This is D1's signature — the index of evidence is itself auditable, not just asserted.",
+      "sections": [
+        "Qué cuenta como prueba en esta página",
+        "Por qué los proyectos están en este orden",
+        "Todas las afirmaciones del sitio",
+        "Lo que falta y por qué",
+        "Cómo está hecha esta página"
+      ]
+    },
+    {
+      "path": "(fallback, sin ruta — NotFound)",
+      "purpose": "The router's mandatory `fallback` prop. Renders a 404 page with a link home. Counted in routeCount even though it occupies no path, so the E8 count is conservative rather than favourable to me.",
+      "sections": ["Página no encontrada", "Volver al índice"]
+    }
+  ],
+  "evidenceModel": "Every assertion about a project is a typed `Claim` in `src/content.ts` whose `evidence` field is REQUIRED — under TS strict an unbacked claim does not compile, so M1 is enforced by the toolchain rather than by discipline. `Evidence` is a discriminated union of five kinds, ordered by how independently a reader can check it: `live` (open the running thing yourself — climx), `number` (a value + the named instrument that produced it + the repo doc that records it — PHarvard's vendor-toolchain figures), `figure` (an artifact the project itself produced, rendered on the page and linked at full size — the PhyriadFG TikZ diagrams, the Phyriager annotated frame), `doc` (a specific file in the project's repo), and `provisional` (the project's own published statement that its numbers must NOT be cited as validated — Phynned). Project name and status are modelled as claims too, so M1's enumeration unit is covered end to end: the name's evidence is the repo URL, the status's evidence is the README the literal string was copied from. Nothing about a project renders as free prose — `<EvidenceChip>` is the only component that prints a claim's backing, which makes \"rendered assertion\" and \"evidence affordance\" the same JSX node by construction. The mechanism is instrumented twice: `src/content.test.ts` walks every project, asserts each claim carries evidence, asserts every URL is https, and asserts every `figure.file` actually exists on disk under `public/` (Node fs inside Vitest), so a broken image cannot ship; `src/pages/ProjectPage.test.tsx` renders all five dossiers and asserts that each claim's text is accompanied in the DOM by an anchor or a number. `/evidencia` then renders that same array as a public ledger, so the reader audits exactly what the tests enforce. Where a project has no checkable evidence, the design's answer is to delete the claim, not to keep it and dim the wording.",
+  "climxPorts": [
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\router\\router.tsx",
+      "adaptation": "Verbatim copy. Zero deps, zero changes needed: BASE is read from `import.meta.env.BASE_URL`, which the portfolio's vite.config already sets to '/portfolio/'. Only the route table in app.tsx differs. The `matchPath` try/catch around decodeURIComponent comes with it, which matters here because a truncated shared link is exactly how a recruiter's mail client mangles a URL.",
+      "structuralJustification": "STRUCTURAL — counts toward M6. Delete it and /proyecto/:slug and /evidencia cease to exist; the page collapses to a single scroll and every deep link a CV or application points at is gone. This is the capability the portfolio provably lacks today (verified: no src/router, no src/pages)."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\public\\404.html",
+      "to": "F:\\Phyriad\\projects\\portfolio\\public\\404.html",
+      "adaptation": "One string changes: `var base = '/climx/'` becomes `'/portfolio/'`, matching the portfolio's vite base. `<title>` and `lang` updated. Paired with the 12-line restore block from climx/src/main.tsx lines 7-18 (see next entry) — the two are useless apart.",
+      "structuralJustification": "STRUCTURAL — counts toward M6, on the objective's own declared referent (M6/AT0 fix 3: GitHub Pages at a project path). Without it, `swately.github.io/portfolio/proyecto/pharvard` returns Pages' own 404 and never reaches React — i.e. every dossier URL, which under this design is the URL worth sharing, is dead on arrival. Honest instrument caveat: this deletion test is host behaviour and cannot be reproduced locally, because Vite's preview server does SPA fallback and masks it. I claim it on the objective's declared referent, not on a local measurement."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\main.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\main.tsx",
+      "adaptation": "Copy lines 7-18 (the `?/`-prefix restore that history.replaceState's the real path back BEFORE createRoot) into the portfolio's main.tsx, which currently has no such block (verified by reading it). No other change; the import order (tokens.css, reset.css, App) is already identical.",
+      "structuralJustification": "Same resource as the 404.html above — the inventory catalogues them as ONE entry ('GH-Pages deep-link shim (404.html + main.tsx restore)'), and I count them as one, not two. Listed separately here only because they are two files with two paths."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\lib\\assets.ts + F:\\Phyriad\\projects\\portfolio\\src\\components\\Figure.tsx",
+      "adaptation": "Take the two reusable halves and drop the card. `estadoImg(ides)` becomes a generic `asset(path: string)` in src/lib/assets.ts returning `${import.meta.env.BASE_URL}${path}`. The `onError` degrade moves into Figure.tsx, but degrades to the figcaption text rather than hiding silently. Two deliberate reversals of climx's choices: alt is a real Spanish description (climx's image is decorative and uses alt=\"\"; mine carries the information, so an empty alt would be a lie), and loading is 'eager' with explicit width/height, because these figures are the reason the reader opened the page and lazy-loading an above-the-fold hero only buys CLS.",
+      "structuralJustification": "STRUCTURAL — counts toward M6, on the same host referent as the shim. Delete `asset()` and every `<img src=\"/img/...\">` resolves to swately.github.io/img/... instead of /portfolio/img/..., so 100% of the figures 404 and the two projects whose only proof is an artifact (PhyriadFG, Phyriager) lose their evidence entirely. The onError half is a smaller capability (degrade instead of a broken-image icon) and I do not claim it as a separate resource."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\styles\\reset.css",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\styles\\reset.css",
+      "adaptation": "Re-add the five blocks the portfolio dropped (diffed first-hand): `.skip-link` / `.skip-link:focus`, `button:focus-visible` added to the existing `a:focus-visible` rule, the `button` base style, `input,button,textarea,select {font: inherit}`, and `.page`'s flex-column + `gap: var(--space-6)`. The portfolio's own `max-width: 44rem` and `color-scheme: light` stay — I am not adopting climx's 64rem.",
+      "structuralJustification": "STRUCTURAL — counts toward M6, but this is the WEAKEST of my four and I say so rather than let an adversary find it. The case: app.tsx renders `<a class=\"skip-link\">Saltar al contenido</a>`, so deleting the rules does not merely restyle — it leaves a stray always-visible link at the top of all four views and removes the keyboard bypass affordance, and `.page`'s flex+gap is what actually spaces the shell once the shell stops being one component. The counter-case an adversary will make: M5(b) as written requires landmarks and keyboard operability, not a skip link, and this is a CSS file. If it is struck, my M6 falls to 3 — above K2, below the M6 ≥ 4 target."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\router\\router.test.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\router\\router.test.tsx",
+      "adaptation": "Small adapt: the 9 tests port intact; route strings become '/', '/proyecto/:slug', '/evidencia' and the page stubs are renamed. The malformed-percent-escape regression test is the one worth keeping verbatim — it encodes a real production defect climx caught on the live site (MEASUREMENTS.md, 2026-07-31, FATAL).",
+      "structuralJustification": "NOT STRUCTURAL — I do not count it toward M6, and I will not argue otherwise. Delete this file and the page renders identically; M4 requires `npm test` green, not that these tests exist. It removes a capability of the REPOSITORY (regression protection on the one piece of real logic here), not of the page, and M6's deletion test is scored against the page. Ported anyway because shipping the router without its suite would be the exact overclaim this design is built to avoid."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\app.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\app.tsx",
+      "adaptation": "Small adapt of the 25-line shell: skip-link anchor with Spanish text, `.page` div carrying id=\"contenido\", `<Router routes={routes} fallback={NotFound} />`. My version adds a real `<nav>` (Índice · Evidencia) and a real `<footer>` inside the shell, because M5(b) names header/main/nav/footer and the portfolio currently renders its footer as a `<span>`.",
+      "structuralJustification": "NOT COUNTED toward M6 — it is the router's mounting site, so its deletion test is the router's deletion test wearing a second name. Counting the shell and the router as two resources would be double-counting one capability."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\pages\\NotFound.tsx",
+      "adaptation": "Verbatim except the two strings, which are already Spanish and already correct for this page ('Página no encontrada', 'Volver al inicio' → 'Volver al índice').",
+      "structuralJustification": "NOT COUNTED toward M6, although a literal reading would admit it: `Router`'s `fallback` prop is required and non-optional under TS strict, so deleting this file fails `npm run typecheck` and breaks the build. But that structural-ness is derivative of the router, which I already count. Claiming both would be padding."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.module.css",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\components\\ProjectCard.module.css",
+      "adaptation": "Small adapt into the index row: keep the flex-column with `height: 100%` (so rows in a Grid stretch equal), `text-decoration: none` with inherited colour, and — the part actually worth stealing — hover/focus-visible moving the accent and underline onto the TITLE rather than the whole card, which keeps the evidence chip inside the row from lighting up as if it were the link. Drop `.img` (the index carries no images) and `overflow: hidden` with it.",
+      "structuralJustification": "NOT STRUCTURAL — delete it and the index rows are unstyled but every claim, status and link still renders and every route still works. This is style, and M6 says cosmetic resemblance does not count. Ported because it is good and free, not to raise a count."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\docs\\planning\\MEASUREMENTS.md",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\content.ts (climx claims, kind: 'number')",
+      "adaptation": "Content, not code: the dated instrumented rows become the climx dossier's numbers, each carrying its instrument and a link back to this file. I deliberately DO NOT print the live Lighthouse row (90/100 home, 100/98 municipio): it was measured against https://swately.github.io/project-tw/ before the repo rename, and the inventory's own caution says re-run before printing. I use 2,463 municipios from 9,852 SMN records, ~350 B gzip per municipio file, 66.66 KB gzip bundle, 4-hourly refresh.",
+      "structuralJustification": "NOT COUNTED toward M6. This is content, and the deletion test applied to the portfolio's copy removes evidence links and numbers — which hurts M1, not the page's capabilities. Counting a donor's markdown as structural reuse would be exactly the padding the brief warns against."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\README.md",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\content.ts (climx claim + 'Lo que este proyecto no es')",
+      "adaptation": "Content. The 'Why it's built the way it is' bullets compress into one Spanish claim (no backend, $0, no API keys, because SMN has no CORS) plus the composite-key trap as a second claim. Compressed, not rewritten, and its scoping discipline is preserved — climx's docs are careful to say what was NOT measured, and this page copies that habit rather than just its numbers.",
+      "structuralJustification": "NOT COUNTED toward M6, same reason as MEASUREMENTS.md: it is prose the page quotes, not a resource whose deletion removes a capability."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\primitives",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\primitives (already on disk)",
+      "adaptation": "None — already ported verbatim before this design existed; the portfolio's Text additionally has a `mono` variant. My design adds no primitive and changes none.",
+      "structuralJustification": "Structural by any reading — delete Stack/Grid/Text and nothing renders — but ALREADY PRESENT, not ported by this design. M6's wording ('resources doing structural work in the portfolio') would literally admit it; the spirit of a design search is what the candidate contributes. Listed for a complete recount; my claimed M6 = 4 EXCLUDES it."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\styles\\tokens.css",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\styles\\tokens.css (already on disk)",
+      "adaptation": "None. The portfolio has the same mechanism with its own palette. My design deliberately adds NO new colour token — status is carried by the literal README string in mono type plus a border, not by a hue — so no new WCAG contrast risk is introduced and M5(c) stays at the values I computed from the existing file.",
+      "structuralJustification": "Structural by any reading (delete it and every var() falls back to nothing) but ALREADY PRESENT. Same treatment as the primitives: excluded from my claimed M6 = 4."
+    }
+  ],
+  "newFiles": [
+    "F:\\Phyriad\\projects\\portfolio\\src\\router\\router.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\router\\router.test.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\lib\\assets.ts",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\IndexPage.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\ProjectPage.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\ProjectPage.test.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\EvidencePage.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\NotFound.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\pages.module.css",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\EvidenceChip.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\EvidenceChip.module.css",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\ClaimList.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\ClaimList.module.css",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\Figure.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\Figure.module.css",
+    "F:\\Phyriad\\projects\\portfolio\\src\\content.test.ts"
+  ],
+  "scopeBudget": {
+    "routeCount": 4,
+    "newFileCount": 16,
+    "closesUnderE8": true
+  },
+  "metricSelfEstimates": [
+    {
+      "metric": "M1",
+      "estimate": "100%, by construction rather than by care — but CONDITIONAL on contentGap 1. `Claim.evidence` is a required field of a discriminated union, so an assertion with no backing fails `tsc --noEmit`; `EvidenceChip` is the only component that prints backing, so every rendered assertion and its affordance are the same node. Name and status are modelled as claims (evidence = repo URL and README URL respectively), which covers M1's full enumeration unit. The conditional: if a project's GitHub repo is not public, its `repo`/`doc` evidence does not resolve, the quality veto fires, and the honest response is to delete those claims — which lowers what the page says, not the fraction. The operator's profile paragraph and the skills table are assertions about the person, not about a project, so they sit outside M1's unit; I flag that rather than let it pass as coverage.",
+      "instrument": "`npm test` — src/content.test.ts enumerates every claim and asserts evidence present, https URLs, and that every figure.file exists on disk under public/ (Node fs in Vitest); src/pages/ProjectPage.test.tsx renders all five dossiers and asserts each claim's text is accompanied by an anchor or a number in the DOM. Plus a manual DOM read of / and one /proyecto/:slug in `npm run preview`."
+    },
+    {
+      "metric": "M2",
+      "estimate": "5/5. The page prints each project's status as the LITERAL string from its own README, so the diff is exact-string rather than interpretive: Phyriager `0.1.0-experimental`, PhyriadFG `0.4.0-experimental`, Phynned `0.2.0-experimental`, PHarvard 'runs on silicon — conjunto de instrucciones completo verificado en la placa, 2026-08-01', climx 'en vivo'. All five re-read first-hand in this session. The design cannot render five equal polished tiles because the rows are ordered by evidence strength and each carries a different evidence kind — the asymmetry is the layout, not a defect in it.",
+      "instrument": "Diff the rendered page text against each project's README, per the objective's named instrument."
+    },
+    {
+      "metric": "M3",
+      "estimate": "(a) ~66-70 kB gzip JS, ~2.5 kB gzip CSS. Reasoning from measured neighbours, not a guess: the portfolio's baseline is 62.40 kB gzip with no router; climx ships the same router plus five pages, a fetch/cache layer, an ARIA combobox and a geo layer for 66.66 kB gzip. Adding ~120 lines of router, three pages and four small components to a 62.40 kB React baseline should land under 70. Budget 150 kB — not close. (b) heaviest view is /proyecto/phyriager: JS ~68 KB + CSS ~2.5 KB + HTML ~1 KB + trazado_1.png at 167,722 B raw ≈ 240 KB transferred. Second heaviest /proyecto/phyriadfg ≈ 162 KB (multigpu.png 89,350 B). The index carries no images at all, ~72 KB. Budget 500 KB — not close. The PNGs ship uncompressed-as-is: converting to WebP would need `sharp`, which E3 forbids.",
+      "instrument": "(a) `npm run build` output, quoted. (b) `npm run preview` over dist/ with the browser network panel, per the objective's instrument; the dev server is explicitly not used."
+    },
+    {
+      "metric": "M4",
+      "estimate": "Expected green, with two named risks rather than a blanket claim. Risk 1: jsx-a11y on Figure — a `<figure>` whose `<img>` sits inside an anchor to the full-size file needs the anchor to carry its own accessible name, or the rule fires; the fix is a visible 'Ver en tamaño completo' link rather than a wrapped image. Risk 2: react-hooks v7 on the ported router's `useEffect` listener registration — climx passes it under the identical flat config (verified: same eslint.config shape), so this should be clean. Test count goes 6 → ~21 (6 existing + 9 router + ~6 new).",
+      "instrument": "`npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, run first-hand, output quoted verbatim."
+    },
+    {
+      "metric": "M5",
+      "estimate": "(a) expected clean under the existing config, subject to the Figure risk above. (b) the design ADDS the landmarks the portfolio lacks: app.tsx gains a real `<nav>` (Índice · Evidencia) and `<footer>`, the restored `.skip-link` gets its target on `.page#contenido`, and every interactive element is a native `<a>` or `<summary>` — there is no custom widget on this page and no JS disclosure state. (c) computed by me first-hand from the current tokens.css values: text #111111 on #ffffff = 18.7:1; muted #5b5b5b on #ffffff = 6.8:1; muted #5b5b5b on surface #fafafa = 6.5:1; accent #2255cc on #ffffff = 6.5:1. All ≥ 4.5. The design introduces no new colour token, so these are the final numbers, not a starting point.",
+      "instrument": "The lint run; a DOM read of the rendered page in `npm run preview` for landmarks and tab order; sRGB relative-luminance arithmetic on src/styles/tokens.css (the four ratios above already computed this session)."
+    },
+    {
+      "metric": "M6",
+      "estimate": "4 — meeting the floor, not farming it. Counted: (1) the hand-rolled router; (2) the GH-Pages deep-link shim as ONE resource (404.html + the main.tsx restore block, exactly as the inventory catalogues it); (3) the BASE_URL asset helper lifted out of EstadoCard, without which every figure 404s at a project path; (4) the reset.css a11y block. NOT counted, deliberately: router.test.tsx (deleting it breaks no page), NotFound (derivative of the router), the app shell (the router's mounting site under another name), EstadoCard.module.css (style), MEASUREMENTS.md and climx's README (content). A literal reading of M6's wording — 'resources doing structural work in the portfolio', with no requirement that this candidate ported them — would add the five primitives and tokens.css for 6; I report 4 as my claim because the other two were already on disk. Since the objective declares M6 a floor and not a maximand, I spend nothing further to raise it.",
+      "instrument": "Delete-and-rebuild each candidate resource against a `/portfolio/` build. Declared limitation: two of the four (the shim, and the asset helper's base prefix) are host behaviours whose deletion test is only observable on a real GitHub Pages deployment — `npm run preview` does SPA fallback and masks the shim. Those two rest on the objective's own declared referent (AT0 fix 3), not on a local measurement, and I do not claim otherwise."
+    }
+  ],
+  "milestones": [
+    "M-A · Router and shim landed, page unchanged. Port router.tsx + router.test.tsx verbatim, public/404.html with base '/portfolio/', the 12-line restore block into main.tsx, the app.tsx shell (skip link, nav, footer, Router with NotFound fallback), NotFound.tsx, and the five reset.css blocks. The route table has one entry: '/' renders today's one-page App untouched. RUNNABLE: the site is exactly what it is now, plus routing. MEASURABLE: `npm test` goes 6 → 15; lint/typecheck/build green; `npm run build` gzip number recorded as the router's isolated cost against the 62.40 kB baseline; M6 = 3 at this point.",
+    "M-B · Content model and the index. Rewrite src/content.ts in Spanish with the Project/Claim/Evidence types (evidence required), add src/content.test.ts, rebuild ProjectCard as the evidence row, add IndexPage + pages.module.css + EvidenceChip. /proyecto/:slug and /evidencia not yet routed; the index's 'Ver evidencia' links are absent rather than dead. RUNNABLE: the finished index page. MEASURABLE: content.test.ts enumerates claims and fails on any without evidence — this is M1's instrument going live; M2 diffed by hand against the five READMEs and recorded as 5/5; build size re-reported.",
+    "M-C · Dossiers and figures. Add ProjectPage + ProjectPage.test.tsx + ClaimList + Figure + src/lib/assets.ts; copy phyriadfg_multigpu.png, phyriadfg_pipeline.png and trazado_1.png into public/img/ (outside src/, so outside the E8 count — declared). Route /proyecto/:slug. RUNNABLE: all five dossiers reachable and shareable. MEASURABLE: content.test.ts now asserts each figure file exists on disk; `npm run preview` + network panel on /proyecto/phyriager gives M3(b)'s real transferred-bytes number; M6 reaches 4 with the asset helper in place.",
+    "M-D · Evidence page and the veto sweep. Add EvidencePage (ledger rendered from the same array), route /evidencia, then the unconditional pass: fetch every URL in content.ts and record its HTTP status in a table (this is where contentGap 1 either clears or forces claims to be deleted), re-run the WCAG arithmetic on tokens.css, DOM-read the landmarks and tab order in preview, and run all four M4 commands quoting the output. RUNNABLE: the finished site. MEASURABLE: every metric M1-M6 has a first-hand number, and the quality veto (every link resolves, no claim contradicts its source) is either passed with the evidence table or the page is trimmed until it is."
+  ],
+  "contentGaps": [
+    "Repository publicity is unverifiable from disk and is the single biggest threat to this design. Phynned's own README says its release link will be 'published once the project's public repository is up; until then, build from source' — i.e. github.com/Swately/Phynned may not exist publicly, while src/content.ts already links it. Phyriager's and PhyriadFG's public status is likewise unconfirmed (PHarvard's README states its URL explicitly and climx is demonstrably live). Any non-public repo means that project's claims are not one click from evidence for an external reader: the quality veto fires and M1 cannot reach 100% while those claims remain. Needs the operator to confirm or publish; the design's fallback is deleting the unverifiable claims, which makes the page shorter and thinner.",
+    "The portfolio itself has no public source. E6 records a local git repo with no remote and no commits, and no deployment URL is chosen (vite base assumes /portfolio/). The /evidencia section 'Cómo está hecha esta página' makes claims about this page — 2 runtime dependencies, hand-rolled router ported from climx — with nowhere to link them. Until the repo is pushed, that section is the one place on the site that asserts without proof, which is precisely what the design forbids elsewhere.",
+    "climx contradicts itself on the test count: its README says '41 tests' while MEASUREMENTS.md's latest dated row (2026-07-31) says 51/51. Printing either number contradicts one of that project's own sources and trips the quality veto. Needs the operator to reconcile climx's README before any test count is rendered; my design avoids the number for now, which costs the climx card its most concrete engineering figure.",
+    "climx's live Lighthouse figures (Performance 90 / Accessibility 100 home; 100 / 98 municipio) were measured against https://swately.github.io/project-tw/ BEFORE the repo rename. They are the strongest presentation numbers in the whole pool and this design refuses to print them un-rerun. A re-run against the current URL does not exist on disk.",
+    "No photograph of the PHarvard board or its display. PHarvard's strongest line — the four-digit display is produced by four calls to its own software divide routine, so 'the display is a photograph of its own software arithmetic working' — is exactly the claim a photo would prove in one glance, and there is no image of it anywhere in the project (the only PNGs under PHarvard are Lattice toolchain temp files). This is minutes of work for the operator and it is the highest-value missing asset for this design specifically.",
+    "No screenshot of climx running, of Phynned's UI, or of PhyriadFG presenting frames. climx compensates with a live URL, which is stronger than a screenshot. Phynned ends up with NO visual evidence and no citable number at all — its dossier is a claim about measurement discipline plus a link to a document that disclaims itself. That is the honest position, and it is thin.",
+    "Per-claim deep links into each repo (e.g. sw/hwcheck.s, docs/reports/EMPIRICAL_EVIDENCE_SUMMARY.md, docs/ARCHITECTURE.md) are what makes the `doc` evidence kind worth anything. Those paths exist on disk and I verified several; their GitHub URLs depend on gap 1 and on each repo's default branch name, which I did not verify for any project.",
+    "Language: O2 fixes the page in Spanish, but every status string it quotes, every README it links, and every document title in the ledger is in English. The evidence rows will read bilingual by construction and there is no Spanish source to point at. This is a consequence of a recorded operator decision, not a defect, but it is a real content gap for a design whose entire surface is quotations of sources.",
+    "A portfolio-legible version of phyriadfg_pipeline.png does not exist. I opened it first-hand: 2063x507, and at the 44rem column its formulas and small labels are unreadable. The design links to full size, which is honest but is a second click on the one route whose job is to show proof immediately. Re-typesetting from the .tex on disk would need a LaTeX toolchain whose presence on this machine I did not verify."
+  ],
+  "weakestPoint": "Ordering by provability is not ordering by relevance, and this design knowingly optimizes the wrong one for its own named workload. The index leads with climx (a municipal weather site) and PHarvard (a 2.08 MHz FPGA CPU) because their evidence is the strongest a reader can check — one runs in your browser, the other reports vendor-toolchain numbers and a self-computed on-silicon verdict. The two projects that actually match the profile line the reader just read, 'infraestructura de alto rendimiento y de agentes LLM', sit third and fourth, because their evidence is a diagram and a screenshot. And Phynned — whose +98% average-FPS result is the single most impressive-sounding number the operator owns — is rendered last, with a chip that says the dataset is provisional and must not be cited, because that is what its own README says. The objective's named workload gives a screening engineer roughly twenty seconds; in twenty seconds this page can plausibly read as 'weather website and a toy processor'. I take that trade because P1 (credibility) outranks everything below it and because a reader who has seen ten inflated portfolios rewards the one that grades its own evidence — but the trade is real, it costs exactly the thing the ~20 s design target cares about, and the objective does not reward me for it anywhere, since honesty-of-ordering is not a metric while M2 (which I would score 5/5 under any ordering) is. A secondary weakness, stated so an adversary does not have to find it: /evidencia is the least load-bearing of the three routes — a reader may never open it — so it is the first thing I would cut under scope pressure, and cutting it would take the design from 16 files to about 14 without touching M1, M2 or M6."
+}

@@ -1,0 +1,31 @@
+.list {
+  margin: 0;
+}
+
+/* The NARROW form is the unconditional default, so the un-queried fallback is
+   the safe one — a stacked list is never broken, a clipped two-column one is. */
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--phy-space-3xs) var(--phy-space-m);
+  padding-block: var(--phy-space-s);
+  border-block-end: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.row:last-child {
+  border-block-end: none;
+}
+
+/* Two columns once THIS component's container has the room — not once the
+   viewport does. No breakpoint, no device assumption, correct in any slot. */
+@container (width > 32rem) {
+  .row {
+    grid-template-columns: var(--dl-term, 10rem) 1fr;
+  }
+}
+
+.desc {
+  margin: 0;
+}
+
+/* Made with my soul - Swately <3 */

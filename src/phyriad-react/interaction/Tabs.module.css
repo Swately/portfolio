@@ -1,0 +1,71 @@
+.tabs {
+  display: block;
+}
+
+.tabs[data-orientation='vertical'] {
+  display: flex;
+  gap: var(--phy-space-m);
+  align-items: flex-start;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--phy-space-3xs);
+  border-block-end: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.list[data-overflow='scroll'] {
+  flex-wrap: nowrap;
+}
+
+.tabs[data-orientation='vertical'] .list {
+  flex-direction: column;
+  border-block-end: 0;
+  border-inline-end: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+/* The selected tab's rule overprints the list's hairline: no gap, no double line. */
+.tab {
+  background: none;
+  border: 0;
+  border-block-end: 2px solid transparent;
+  margin-block-end: calc(-1 * var(--phy-rule-width));
+  padding: var(--phy-space-xs) var(--phy-space-s);
+  font: inherit;
+  color: var(--phy-ink-muted);
+  cursor: default;
+  min-block-size: 44px;
+}
+
+.tabs[data-orientation='vertical'] .tab {
+  border-block-end: 0;
+  border-inline-end: 2px solid transparent;
+  margin-block-end: 0;
+  margin-inline-end: calc(-1 * var(--phy-rule-width));
+  text-align: start;
+}
+
+.tab[aria-selected='true'] {
+  color: var(--phy-ink);
+  font-weight: 700;
+  border-color: var(--phy-ink);
+}
+
+.tab:focus-visible,
+.panel:focus-visible {
+  outline: 2px solid var(--phy-accent);
+  outline-offset: -2px;
+}
+
+.panel {
+  padding-block: var(--phy-space-s);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+/* Made with my soul - Swately <3 */

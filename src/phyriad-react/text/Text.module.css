@@ -1,0 +1,23 @@
+.text {
+  font-size: var(--text-size);
+  line-height: var(--phy-leading-prose);
+}
+
+.text:is(h1, h2, h3, h4, h5, h6) {
+  line-height: var(--phy-leading-tight);
+}
+
+.muted {
+  color: var(--phy-ink-muted);
+}
+
+.bold {
+  font-weight: 700;
+}
+
+/* only when a face is asked for: without it the element keeps its own (h1-h3 take the heading role) */
+.face {
+  font-family: var(--text-face);
+}
+
+/* Made with my soul - Swately <3 */

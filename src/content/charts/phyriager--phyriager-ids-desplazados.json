@@ -1,0 +1,36 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "phyriager-ids-desplazados",
+  "title": "Identificadores que cambian de significado al subir de 26.1.2 a 26.2, antes y después del registro estable",
+  "takeaway": "Numerar por posición alfabética movió el 84 % de los identificadores; con un registro nombre→id no se movió ninguno.",
+  "kind": "slope",
+  "unit": "identificadores desplazados",
+  "xLabel": "numeración",
+  "yLabel": "identificadores desplazados (de los comunes a ambas versiones)",
+  "series": [
+    {
+      "name": "objetos (1506 comunes)",
+      "emphasis": true,
+      "points": [
+        { "x": "por posición", "y": 1271 },
+        { "x": "registro estable", "y": 0 }
+      ]
+    },
+    {
+      "name": "bloques (1170 comunes)",
+      "points": [
+        { "x": "por posición", "y": 981 },
+        { "x": "registro estable", "y": 0 }
+      ]
+    }
+  ],
+  "instrument": "diff de la posición de cada nombre entre las tablas 26.1.2 y 26.2 (tools/harvest/harvest_jar.py y tools/extract_*.py); informe en docs/reference/DATA_HARVEST_26.2_DIFF.md",
+  "source": {
+    "label": "docs/PHYRIAGER_LOGBOOK.md, E-6 y D·9. Antes: «`item_table`  | 1506 → 1537 (+31) | 31 | 0 | **1271 of 1506 common (84 %)** |» y «`block_table` | 1170 → 1198 (+28) | 28 | 0 | **981 of 1170 common (83 %)** |». Después: «**0 of 1506 item ids and 0 of 1170 block ids moved** (from 1271 and 981)»",
+    "url": "https://github.com/Swately/Phyriager/blob/main/docs/PHYRIAGER_LOGBOOK.md"
+  },
+  "notes": [
+    "No dice que las tablas nuevas sean correctas: el propio registro (E-6, «Not claimed») declara que eso solo lo establece el agente corriendo contra un mundo 26.2, cosa que a esa fecha no había ocurrido.",
+    "Cada valor es un conteo único de una comparación de dos tablas, no una estimación con repeticiones; no lleva dispersión."
+  ]
+}

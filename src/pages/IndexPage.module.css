@@ -1,0 +1,12 @@
+/* Rhythm by space only: the between step of the scale separates entries; no
+   rules, no boxes. One step tighter since direction B (VISUAL_LANGUAGE_CONCEPT.md): the plate already
+   marks where an entry ends. */
+.list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-xl);
+}
+
+/* Made with my soul - Swately <3 */

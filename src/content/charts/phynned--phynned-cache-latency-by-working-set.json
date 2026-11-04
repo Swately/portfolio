@@ -1,0 +1,34 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "phynned-cache-latency-by-working-set",
+  "title": "Latencia por acceso a memoria según el tamaño del conjunto de trabajo (7950X3D)",
+  "takeaway": "Con 64 MB la latencia por acceso sube a 11.4 ns, más de tres veces la de 8 MB; con 512 MB llega a 46.2 ns.",
+  "kind": "bar",
+  "unit": "ns por salto",
+  "xLabel": "conjunto de trabajo",
+  "yLabel": "ns por lectura dependiente",
+  "series": [
+    {
+      "name": "latencia medida",
+      "emphasis": true,
+      "points": [
+        { "x": "8 MB", "y": 3.5, "n": 1 },
+        { "x": "64 MB", "y": 11.4, "n": 1 },
+        { "x": "512 MB", "y": 46.2, "n": 1 }
+      ]
+    }
+  ],
+  "instrument": "Micro-benchmark de cadena de punteros (ciclo aleatorio, lecturas dependientes, semilla fija, -O2), sin fijar a un núcleo, una corrida por punto, en un AMD Ryzen 9 7950X3D. El código del micro-benchmark no está en el repositorio.",
+  "source": {
+    "label": "docs/research/ON_BOX_FACTS.md, sección 3",
+    "url": "https://github.com/Swately/Phynned/blob/main/docs/research/ON_BOX_FACTS.md"
+  },
+  "notes": [
+    "Una máquina, n pequeño (una corrida por punto), confiabilidad no medida: no se calculó la correlación entre corridas.",
+    "Línea fuente 8 MB, tal como está impresa: | 8 MB   | 3.5  | fits L3 of **both** CCDs |",
+    "Línea fuente 64 MB: | 64 MB  | 11.4 | fits the 96 MB V-Cache, **exceeds** the 32 MB frequency-CCD L3 — the decisive routing regime |",
+    "Línea fuente 512 MB: | 512 MB | 46.2 | exceeds both → DRAM-bound |",
+    "Cociente recalculado aquí: 11.4 / 3.5 = 3.26 y 46.2 / 3.5 = 13.2; el archivo fuente dice «A **3.3×** latency step … and **13×** to DRAM».",
+    "La sección 6.2 del mismo archivo registra un error de factor 8 en el etiquetado del tamaño de un micro-benchmark anterior y no dice si esta tabla salió de ese código: las etiquetas de MB llevan esa duda. Es la forma de la curva, no un valor preciso."
+  ]
+}

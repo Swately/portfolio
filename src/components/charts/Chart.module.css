@@ -1,0 +1,125 @@
+/* Charts: the token colours as classes, so the two schemes and any palette follow with no code. ONE accent
+   against muted ink. Nothing here is a literal colour. */
+.chart {
+  margin-block: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-xs);
+}
+
+.viewport {
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+}
+
+/* Capped at 45rem and centred: at the full 62rem breakout a 14-unit label would be 22 px, bigger than the
+   page text. At 45rem the scale is 1.125 and the label is about 16 px. */
+.svg {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 45rem;
+  margin-inline: auto;
+  block-size: auto;
+}
+
+/* text, in design units (14 is about 12 px at the legibility floor) */
+.t,
+.tInk,
+.tAccent,
+.tStrong,
+.tOnAccent,
+.tOnMuted,
+.tOnInk {
+  font: 14px var(--phy-font-ui);
+}
+.t {
+  fill: var(--phy-ink-muted);
+}
+.tInk {
+  fill: var(--phy-ink);
+}
+.tAccent {
+  fill: var(--phy-accent);
+  font-weight: 700;
+}
+.tStrong {
+  fill: var(--phy-ink);
+  font-weight: 700;
+}
+.tOnAccent {
+  fill: var(--phy-accent-on);
+}
+.tOnMuted {
+  fill: var(--phy-paper);
+}
+.tOnInk {
+  fill: var(--phy-paper);
+}
+
+/* marks */
+.fAccent {
+  fill: var(--phy-accent);
+}
+.fMuted {
+  fill: var(--phy-ink-muted);
+}
+.fInk {
+  fill: var(--phy-ink);
+}
+.fRule {
+  fill: var(--phy-rule);
+}
+.fPaper2 {
+  fill: var(--phy-paper-2);
+}
+.sAccent {
+  stroke: var(--phy-accent);
+}
+.sMuted {
+  stroke: var(--phy-ink-muted);
+}
+.sInk {
+  stroke: var(--phy-ink);
+}
+.thin {
+  stroke-width: 2;
+  fill: none;
+}
+.thick {
+  stroke-width: 3.5;
+  fill: none;
+}
+.cross {
+  stroke: currentColor;
+  stroke-width: 2.5;
+  fill: none;
+}
+.segment {
+  stroke: var(--phy-ink-muted);
+  stroke-width: 1;
+}
+
+.grid {
+  stroke: var(--phy-rule);
+  stroke-width: 1;
+}
+.axis {
+  stroke: var(--phy-ink-muted);
+  stroke-width: 1.5;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--phy-space-2xs) var(--phy-space-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+/* Made with my soul - Swately <3 */

@@ -1,0 +1,33 @@
+.chip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--phy-space-xs);
+  color: var(--phy-ink-muted);
+}
+
+.tag {
+  border: 1px solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+  padding: 0 var(--phy-space-xs);
+  background: var(--phy-paper-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.value {
+  color: var(--phy-ink);
+  font-weight: 700;
+}
+
+.detail {
+  flex: 1 1 12rem;
+}
+
+.provisional .tag {
+  border-color: var(--phy-accent);
+  color: var(--phy-accent);
+}
+
+/* Made with my soul - Swately <3 */

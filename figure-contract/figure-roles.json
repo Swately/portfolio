@@ -1,0 +1,24 @@
+{
+  "_why": "THE ONE SOURCE OF TRUTH for the colours a project figure may use (D-16: one number is truth). The LaTeX colour file and the dark-theme map are GENERATED from this file by build-contract.mjs; never edit them by hand. Base hexes are the site's own tokens (catalog/web/tokens/phyriad.tokens.css, oxide palette): paper, muted, accent, ok, error, rule. `ink` is TeX's default black in the light theme: authors never set it. The four fill* roles are tints of a base role over the paper, so a figure has ONE accent against muted ink, never a categorical palette.",
+  "tint": { "light": 0.14, "dark": 0.16 },
+  "light": {
+    "paper": "#faf9f6",
+    "ink": "#000000",
+    "muted": "#5f5c52",
+    "accent": "#8a3324",
+    "ok": "#2f6238",
+    "error": "#a3242e",
+    "fill": "#f2f0ea",
+    "border": "#ddd9cf"
+  },
+  "dark": {
+    "paper": "#16150f",
+    "ink": "#faf9f6",
+    "muted": "#aaa597",
+    "accent": "#e0836a",
+    "ok": "#7fbb8c",
+    "error": "#f0868c",
+    "fill": "#211f19",
+    "border": "#3d3a32"
+  }
+}

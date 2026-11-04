@@ -1,0 +1,76 @@
+{
+  "schema": "phyriad-matrix/1",
+  "id": "phyriager-approach-comparison",
+  "title": "Comparación de enfoque entre Phyriager, Voyager, Mineflayer y Baritone: qué es cada uno según su propia página y en qué se diferencia el enfoque de Phyriager.",
+  "note": "Comparación de enfoque únicamente: ninguna fila lleva una medición propia de Phyriager frente a la alternativa y no se afirma ventaja de ningún tipo. Las tres fuentes se abrieron de primera mano el 2026-10-09 con una herramienta que devuelve un resumen hecho por un modelo pequeño, no el texto literal: el nivel es [V2] (primaria, parcial; la brecha se declara).",
+  "status": "approach-only",
+  "options": [
+    "Phyriager",
+    "Voyager (Wang et al.)",
+    "Mineflayer (PrismarineJS)",
+    "Baritone (cabaletta)"
+  ],
+  "rows": [
+    {
+      "attribute": "Qué es",
+      "kind": "enfoque",
+      "cells": [
+        "Un mod de cliente (Java/Fabric) y un cerebro en C++23 que percibe lo que recibe un cliente conectado y actúa solo por la entrada normal de jugador; un LLM juega por superficies HTTP y el LLM queda fuera del bucle motor.",
+        "Agente abierto de Minecraft con LLM: currículo automático, biblioteca de habilidades de código ejecutable y un bucle de indicaciones iterativas; consulta GPT-4 como caja negra. El resumen cita «3.3x more unique items», «2.3x longer distances» y «15.3x faster» en hitos del árbol tecnológico frente al estado del arte previo.",
+        "Biblioteca de Node.js para scripts de bots; se conecta a nivel de protocolo (sobre node-minecraft-protocol), sin pasar por el cliente oficial; soporta Minecraft 1.8 a 26.1.",
+        "Buscador de rutas para Minecraft («google maps for block game»), mod para Forge, Fabric y NeoForge; A*, comandos de chat (#goto, #mine) y una API."
+      ]
+    },
+    {
+      "attribute": "En qué se diferencia el enfoque de Phyriager",
+      "kind": "enfoque",
+      "cells": [
+        "(es el proyecto: ver la fila anterior)",
+        "Phyriager toma el mismo molde (biblioteca de habilidades y memoria externa; su VISION.md lo señala como la forma publicada más cercana), pero sus habilidades son rutinas declarativas que un validador estático admite («verifiable by construction») en vez de código libre, y la honestidad de la percepción y la actuación es un contrato mecánico. No se comparan cifras: el propio registro dice que «Surpass Voyager» es una intención de diseño falsable, nunca una afirmación de logro. Qué usa Voyager para actuar no lo dice el resumen leído; no se afirma.",
+        "Phyriager corre dentro del cliente real como un mod y aplica la orden como entrada de jugador (teclas), con percepción filtrada en el mod; el objetivo es la frontera de honestidad verificable, no la facilidad de scripting. Mineflayer cubre hasta 26.1 según su página; Phyriager apunta a 26.2. Diferencia de enfoque, sin medición.",
+        "Baritone es un componente de navegación que un humano o un cliente controla. En Phyriager la navegación es una capa del cerebro; su plan declara paridad con Baritone en las aristas de colocar bloques, una afirmación del propio proyecto que no se midió contra Baritone."
+      ]
+    },
+    {
+      "attribute": "Fuente y nivel",
+      "kind": "enfoque",
+      "cells": [
+        "docs/VISION.md y docs/PHYRIAGER_LOGBOOK.md del propio proyecto",
+        "arXiv:2305.16291 (v1 2023-05-25, v2 2023-10-19) [V2]",
+        "github.com/PrismarineJS/mineflayer [V2]",
+        "github.com/cabaletta/baritone [V2]"
+      ]
+    }
+  ],
+  "sources": [
+    [
+      {
+        "text": "docs/VISION.md",
+        "href": "https://github.com/Swately/Phyriager/blob/main/docs/VISION.md"
+      }
+    ],
+    [{ "text": "arxiv.org/abs/2305.16291", "href": "https://arxiv.org/abs/2305.16291" }],
+    [
+      {
+        "text": "github.com/PrismarineJS/mineflayer",
+        "href": "https://github.com/PrismarineJS/mineflayer"
+      }
+    ],
+    [{ "text": "github.com/cabaletta/baritone", "href": "https://github.com/cabaletta/baritone" }]
+  ],
+  "quotes": [
+    [
+      "\"verifiable by construction\" (tools/validate_routine.py)",
+      "\"Surpass Voyager\" is falsifiable design intent, NEVER an achievement claim (docs/PHYRIAGER_LOGBOOK.md)"
+    ],
+    [
+      "\"3.3x more unique items\", \"2.3x longer distances\" and \"15.3x faster\" (resumen del artículo)"
+    ],
+    [],
+    ["\"google maps for block game\" (README de Baritone)"]
+  ],
+  "origin": {
+    "label": "Phyriager/docs/PORTFOLIO_DOSSIER.md, sección 6 (no publicado)",
+    "note": "Transpuesta el 2026-10-14 (una opción por columna)."
+  }
+}

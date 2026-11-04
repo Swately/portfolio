@@ -1,0 +1,124 @@
+{
+  "schema": "phyriad-matrix/1",
+  "id": "phynned-approach-comparison",
+  "title": "Tabla comparativa de enfoques: Process Lasso, CPUSetSetter, el controlador de AMD y la API de conjuntos de CPU de Windows frente a Phynned, según el mecanismo, quién decide la colocación y si mide su propio efecto.",
+  "note": "No row claims an advantage. Phynned has not been measured against any of these tools (the README's own comparison table is qualitative). Verification levels: V1 = primary source read first-hand on 2026-10-09; V3 = secondary press, primary not located.",
+  "cellsLang": "en",
+  "status": "approach-only",
+  "options": [
+    "Process Lasso (Bitsum)",
+    "CPUSetSetter (open source, MIT)",
+    "AMD 3D V-Cache Performance Optimizer (chipset driver)",
+    "Windows CPU Sets API (the mechanism itself)",
+    "Phynned"
+  ],
+  "rows": [
+    {
+      "attribute": "Mecanismo",
+      "kind": "enfoque",
+      "cells": [
+        "Affinity and CPU Sets dialogs; ProBalance lowers priority class of background processes",
+        "CPU Sets rather than affinity",
+        "Driver that changes which cores Windows prefers; a companion provisioning driver parks the second CCD",
+        "Soft affinity that cooperates with OS power management",
+        "Hard affinity and priority on admitted processes only (as implemented in 0.2.2); a CPU Sets lever is planned in the design docs, not built"
+      ]
+    },
+    {
+      "attribute": "Qué decide la colocación",
+      "kind": "enfoque",
+      "cells": [
+        "Rules the user sets. ProBalance triggers on high system CPU load and lost responsiveness; the page gives no thresholds.",
+        "The user: rules are per program, core masks chosen by hand, with hotkeys to change or clear a mask on the fly.",
+        "Whether Windows sees a game. The reports disagree on the trigger (Game Mode, or Xbox Game Bar); AMD has not documented the internal logic in the sources found.",
+        "Whoever calls it. Not a policy.",
+        "A default-deny admission gate, then rules and profile, then user rules. A per-process A/B arbiter (cycles per unit of work) is designed and NOT built (MR-3)."
+      ]
+    },
+    {
+      "attribute": "Mide su propio efecto",
+      "kind": "enfoque",
+      "cells": [
+        "Not described on the pages read. It logs which processes ProBalance acted on.",
+        "No built-in measurement described; its suggested approach is experimentation with hotkeys.",
+        "No.",
+        "n/a",
+        "A/B/A/B/A protocol exists for the operator to run; its exploratory catalog is provisional. The in-agent arbiter is unbuilt."
+      ]
+    },
+    {
+      "attribute": "Nivel de lo leído",
+      "kind": "enfoque",
+      "cells": [
+        "V1 for what the two pages say; the pages say nothing on whether the X3D cache CCD is detected or measured.",
+        "V1 (project README read via the fetch tool; summarized, not copied whole)",
+        "V3 (press: HotHardware read first-hand; the trigger details come from search-result snippets of other outlets and a forum post, not read in full)",
+        "V1 (Microsoft Learn, page dated 2025-07-14)",
+        "Own repository"
+      ]
+    }
+  ],
+  "sources": [
+    [
+      {
+        "text": "bitsum.com/product-update/process-lasso-14-2-improved-core-selection",
+        "href": "https://bitsum.com/product-update/process-lasso-14-2-improved-core-selection/"
+      },
+      {
+        "text": "bitsum.com/how-probalance-works",
+        "href": "https://bitsum.com/how-probalance-works/"
+      }
+    ],
+    [
+      {
+        "text": "github.com/SimonvBez/CPUSetSetter",
+        "href": "https://github.com/SimonvBez/CPUSetSetter"
+      }
+    ],
+    [
+      {
+        "text": "hothardware.com/news/amds-chipset-driver-for-v-cache-cpus",
+        "href": "https://hothardware.com/news/amds-chipset-driver-for-v-cache-cpus"
+      }
+    ],
+    [
+      {
+        "text": "learn.microsoft.com/en-us/windows/win32/procthread/cpu-sets",
+        "href": "https://learn.microsoft.com/en-us/windows/win32/procthread/cpu-sets"
+      }
+    ],
+    [
+      {
+        "text": "github.com/Swately/Phynned/blob/main/action/include/phynned/action/ActionExecutor.hpp",
+        "href": "https://github.com/Swately/Phynned/blob/main/action/include/phynned/action/ActionExecutor.hpp"
+      },
+      {
+        "text": "github.com/Swately/Phynned/blob/main/docs/plans/PHYNNED_MASS_ROUTER_OBJECTIVE.md",
+        "href": "https://github.com/Swately/Phynned/blob/main/docs/plans/PHYNNED_MASS_ROUTER_OBJECTIVE.md"
+      }
+    ]
+  ],
+  "quotes": [
+    [
+      "\"The CPU Affinity and CPU Sets dialogs now feature varied controls depending on the processor and system configuration.\" (14.2 update page)",
+      "ProBalance \"intelligently lowers the priority class of background processes when they may be interfering with system responsiveness.\" (how-probalance-works, as summarized by the fetch tool; the verbatim sentence was not re-checked word for word)"
+    ],
+    [
+      "Affinity: \"Hard lock (some games crash/freeze)\"; CPU Set: \"Very strong hint but may be deviated from when necessary (more stable, works with more games)\""
+    ],
+    [
+      "It \"will dynamically modify the preferred cores based on workload preference\" for \"either the high-clocking die or the cache-heavy chiplet.\" (HotHardware)"
+    ],
+    [
+      "\"If a thread or process has a restrictive affinity mask set, the affinity mask is respected above any conflicting CPU Set assignment.\""
+    ],
+    [
+      "ActionExecutor.hpp:4 \"Uses phyriad::hw::set_process_affinity (FR-3) and phyriad::hw::set_process_priority\"",
+      "HardwareTopology.cpp:871 \"SetThreadSelectedCpuSetMasks route for > 64 groups is left as a future hardening.\" (a grep for CpuSet over all .cpp and .hpp files of the repository, excluding third_party, returned only this comment)"
+    ]
+  ],
+  "origin": {
+    "label": "Phynned/docs/portfolio/tables/approach_comparison.json",
+    "note": "Copiado el 2026-10-14 sin cambios de contenido; solo se transpuso (una opción por columna)."
+  }
+}

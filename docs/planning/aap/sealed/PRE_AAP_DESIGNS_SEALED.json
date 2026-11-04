@@ -1,0 +1,865 @@
+{
+  "designs": [
+    {
+      "climxResourcesUsed": [
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx",
+          "howUsed": "Copied verbatim (only the module comment's climx-specific strategy references get rewritten). It is what turns the portfolio from one scrolling page into /, /projects/:slug, /about, /lab. Its BASE handling already works for a GH-Pages project path, and the portfolio's vite base is '/portfolio/' (verified in vite.config.ts), so it works unchanged. The matchPath try/catch around decodeURIComponent comes along and is load-bearing for the same reason it was in climx.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\public\\404.html + the restore block in climx\\src\\main.tsx",
+          "howUsed": "Ported together with the router as one unit. The portfolio has NO public/ directory at all (verified: `ls public` fails), so public/404.html is created; inside it `var base = '/climx/'` becomes `'/portfolio/'`. The 8-line restore block above createRoot in climx's main.tsx is pasted verbatim into the portfolio's main.tsx (which currently has no such block — verified by reading it). Without this every deep link a recruiter is sent — the whole point of /projects/:slug — 404s on Pages.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\router\\router.test.tsx",
+          "howUsed": "Ported with route names and page stubs swapped. The portfolio currently ships 6 tests; this takes it to ~15, and since the design's whole thesis is 'the claims on this page are checkable', the suite is part of the product. Pairs with wiring a coverage threshold on src/router/** in vite.config.ts, which today says there is no logic layer worth gating — the router is exactly the thing that makes that comment false.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\app.tsx",
+          "howUsed": "Template for the new shell: skip-link anchor, a .page div carrying id, <Router routes={routes} fallback={NotFound}/>, routes as a plain array. The portfolio's app.tsx becomes this, and its current three-section body moves into src/pages/HomePage.tsx.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\styles\\reset.css",
+          "howUsed": "Paste back the five blocks the portfolio dropped (diffed first-hand): .skip-link / .skip-link:focus, the button base style, `input,button,textarea,select {font: inherit}`, `button:focus-visible` (the portfolio kept only `a:focus-visible`), and .page's flex-column + gap. Also raise .page max-width from 44rem to climx's 64rem — the fold now carries a three-column stat strip and an 18rem auto-fill card grid, which 44rem cannot hold.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.module.css",
+          "howUsed": "The .link rule becomes ProjectCard's shell: flex column, height:100%, overflow:hidden + radius, text-decoration:none with inherited color, and hover/focus-visible moving accent+underline onto the TITLE rather than the whole card. The .img rule is dropped — there are no project screenshots on disk.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx",
+          "howUsed": "Copied and translated to English; it is the router's mandatory `fallback` prop.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\pages\\CreditsPage.tsx",
+          "howUsed": "Only the PATTERN: native <details>/<summary> groups with zero JS disclosure state. Reused on /projects/:slug for the 'Honest scope' block so caveats are present and find-in-page-able without eating fold space. ~15 lines rewritten; climx's data join and Spanish copy are discarded.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx",
+          "howUsed": "Ported as /lab with all copy translated and the Cluster demo's Mexican state names replaced by the project tags. It earns its route here because the token set genuinely grows in this design (700 type step, warning/verified color roles, a dark palette) — a five-primitive lab over an unchanged token file would not have.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\components\\MuniHeader.tsx",
+          "howUsed": "Its fallback discipline, not its markup: `file === null` means 'no image' so nothing is requested that cannot exist, and onError degrades exactly once. ProjectFigure follows the same rule for the two project pages that actually have a figure on disk.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\styles\\tokens.css",
+          "howUsed": "--color-warning: #b45309 is the one token the portfolio dropped and it now has a real consumer: the PROVISIONAL badge on Phynned. Everything else in tokens.css is already ported.",
+          "cosmeticOrStructural": "cosmetic"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\docs\\planning\\MEASUREMENTS.md",
+          "howUsed": "CONTENT, and the single highest-value thing taken. Its date/metric/instrument column shape becomes the MetricList component's data shape, and its actual rows become the climx project page: 2,463 files from 9,852 SMN records, 66.66 KB gzip home bundle against a 150 KB budget, 51/51 tests, lib coverage 98.92%, live Lighthouse 90/100 mobile home and 100/98 municipio, and the self-inflicted 404 bug found in production with its fix.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\README.md ('Why it's built the way it is')",
+          "howUsed": "Compressed into the climx page's HowItWorks rows: no backend / $0 / no API keys because SMN has no CORS; the idmun trap (570 distinct values for 2,463 municipios, every path composite-keyed, regression-tested); 'hand-rolled where it teaches, dependencies where it doesn't' with the 2-runtime-dependency count; the CI gate list. Also the source of the site footer's build line.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\docs\\ARCHITECTURE.md",
+          "howUsed": "Its 'Honest weakest point' STANCE is the design's organizing idea, applied to all five projects, not just climx. The DetailsGroup on every project page exists because of it.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\primitives (Box, Stack, Cluster, Grid, Text)",
+          "howUsed": "Already ported verbatim; every component below is built from them plus CSS Modules. No new layout mechanism is introduced anywhere in this design.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\public\\img\\estados (32 state photos)",
+          "howUsed": "REFUSED. Not used anywhere. See whatItRefuses.",
+          "cosmeticOrStructural": "cosmetic"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\lib\\** , src\\lib\\geo, SearchCombobox, AgeBanner/ForecastCard/skyIcon/NearestMunicipio/CommonsGallery, scripts\\*.mjs",
+          "howUsed": "NOT used. The page imports content at build time: no fetch, no cache, no staleness, no network failure mode, nothing to search, no weather. Porting any of it would be the speculative-wrapper defect. AgeBanner is cited only as the stance ancestor of VerificationBadge (a component whose job is to state the true status of the thing it labels, loudly when that status is bad).",
+          "cosmeticOrStructural": "cosmetic"
+        }
+      ],
+      "components": [
+        {
+          "name": "Router / Link / useParams / navigate (src/router/router.tsx)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx — verbatim copy",
+          "description": "Unchanged hand-rolled History-API router. BASE is read from import.meta.env.BASE_URL, which is '/portfolio/'. Pages import only the four public names. matchPath and stripBase stay exported for the test file."
+        },
+        {
+          "name": "public/404.html + main.tsx restore block",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\public\\404.html and climx\\src\\main.tsx — small adapt (base string '/climx/' -> '/portfolio/', lang='en')",
+          "description": "Creates public/ (the portfolio has none). The restore block goes above createRoot in the portfolio's main.tsx verbatim. Ship these in the same commit as the router or every shared /projects/:slug link 404s on Pages."
+        },
+        {
+          "name": "App shell (src/app.tsx)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\app.tsx — small adapt",
+          "description": "Replaces the current single-page app.tsx. Renders <a href=\"#content\" className=\"skip-link\">Skip to content</a>, then <div className=\"page\" id=\"content\">, then SiteHeader, then <Router routes={routes} fallback={NotFound}/>, then SiteFooter. routes = [{'/', HomePage}, {'/projects/:slug', ProjectPage}, {'/about', AboutPage}, {'/lab', PrimitivesLab}]."
+        },
+        {
+          "name": "SiteHeader",
+          "derivedFrom": "portfolio's existing src/components/Header.tsx, restructured; the skip-link half is from climx src/app.tsx",
+          "description": "Persistent on every route. Row 1: Text as=h1 size=700 'Eduardo Ramos Mendoza' (h1 only on /; size=400 and as=span on inner routes, where the page's own h1 is the project name). Row 2: mono muted 'Computer Systems Engineer · ESCOM/IPN, Ciudad de México'. Row 3: Cluster gap=2 of eramosm2506@gmail.com, github.com/Swately, 'CV (PDF)' -> /portfolio/cv.pdf, and Links to /about and /lab. Keeps the existing Header.module.css '·' separator rule."
+        },
+        {
+          "name": "ProofStrip",
+          "derivedFrom": "new — reason: the twenty-second scan needs three hard facts before any prose, and climx has no analogue because a weather site has no claims about its author to substantiate. Built entirely from Cluster + Text + Box variant=surface; no new layout mechanism.",
+          "description": "Three stat chips directly under the header, above everything else. Each = a mono tabular-nums number at size 600, a four-word label at size 100 mono muted, and the whole chip is a Link to the page that proves it. Exact contents, all verified on disk: (1) '2,463' / 'municipios served, live' -> /projects/climx; (2) '1,409' / 'LUT4 on real silicon' -> /projects/pharvard; (3) '3' / 'GPUs in one pipeline' -> /projects/phyriadfg. Uses EstadoCard.module.css's hover rule so the number, not the chip, takes the accent."
+        },
+        {
+          "name": "VerificationBadge",
+          "derivedFrom": "new — reason: no climx component labels a claim's evidence level. Its stance ancestor is climx src/components/AgeBanner.tsx, which names a failed pipeline attempt instead of showing a calm banner; this does the same job for project claims.",
+          "description": "A mono size-100 uppercase chip with exactly four states, each mapped to a color role: LIVE (--color-verified, climx), ON SILICON (--color-verified, PHarvard), EXPERIMENTAL (--color-text-muted, PhyriadFG 0.4.0 / Phyriager 0.1.0 — both READMEs self-declare that word), PROVISIONAL (--color-warning, Phynned's evidence, whose own README says its numbers must not be cited as validated). Appears on every ProjectCard and at the top of every project page. This badge is the design; it is why --color-warning gets ported back."
+        },
+        {
+          "name": "ProjectCard",
+          "derivedFrom": "portfolio's src/components/ProjectCard.tsx rewritten; its CSS derives from F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.module.css (.link flex column, height:100%, overflow:hidden, radius, inherited color, hover/focus-visible accenting the title) minus the .img rule",
+          "description": "Box as=li variant=surface padding=4, containing: Cluster of tag chip + VerificationBadge; h3 name (Link to /projects/:slug, whole-title target); one-line description from content.ts; then ONE EvidenceRow — the single hardest number that project owns; then a Cluster of external links (Source: GitHub, and Live site for climx). Five of these in a Grid min=\"18rem\" gap={4}."
+        },
+        {
+          "name": "EvidenceRow",
+          "derivedFrom": "new — reason: nothing in climx pairs a claim with its instrument in UI; the pairing exists only in docs/planning/MEASUREMENTS.md's table, which this component is the UI of.",
+          "description": "A single line: mono bold value, then muted size-100 instrument/date. Real values, all read first-hand: climx = '66.66 KB gzip home bundle · vite build, 2026-07-29 · budget 150 KB'; PHarvard = 'Fmax 20.4 MHz post-route, 1,409/6,864 LUT4 (21%) · Lattice vendor toolchain, 2026-08-01'; PhyriadFG = '3 pipelined threads across iGPU + 2 discrete GPUs · docs/ARCHITECTURE.md'; Phyriager = 'Ran a full explore/dig/mine/craft session with every LLM endpoint dead · README, deterministic-layer claim'; Phynned = '14 A/B/A/B/A runs on 7950X3D + RTX 4090, +98% to 0% · provisional, see caveat'."
+        },
+        {
+          "name": "MetricList",
+          "derivedFrom": "new — reason: it is the on-page rendering of climx's docs/planning/MEASUREMENTS.md table, which is a document, not a component. Structurally it reuses the dl/grid-row pattern already in the portfolio's own SkillsTable.module.css (10rem 1fr, collapsing to one column at 560px), so no new CSS idea is introduced.",
+          "description": "A <dl> of {metric, measured, instrument, date}. Used once per project page. climx's list is the fullest (SMN 9,852 records -> 2,463 files across 32 states; all-lite.json 44,266 B gzip; 51/51 tests; lib coverage 98.92% lines / 100% funcs; state images 123 MB -> 1.12 MB; photo coverage 1,474/2,463 = 59.8%; live Lighthouse mobile 90/100 home, 100/98 municipio). PHarvard's is the most striking (runs on silicon; 625 registers, 9%; 12 of 26 block RAMs; design clocks 2.08 MHz; hwcheck.s reports 0007 = 7/7 checks, computed by the CPU about itself)."
+        },
+        {
+          "name": "HowItWorks",
+          "derivedFrom": "new — reason: no climx component renders a mechanism table; the content shape is lifted from climx README's 'Why it's built the way it is' bullets and Phyriager README's three-process table. Renders as Stack + Box variant=surface rows, primitives only.",
+          "description": "Two to four rows per project page, each a bold mono label plus one sentence. Phyriager: 'The mod (Java/Fabric)' thin fixed tap, owns no decision logic / 'The brain (C++23)' perceive-plan-act, pathfinding, voxel memory, verifies every outcome against the game / 'The LLM' deliberation only, behind a spend cap, deliberately outside the motor loop / 'The seam' shared memory with a versioned ABI that refuses to attach on drift. PhyriadFG: thread C (capture, iGPU) -> F (optical flow, second GPU) -> P (warp + present, primary GPU) over lock-free SPSC rings. climx: the CORS/cron/partition pipeline, and the idmun composite-key trap (570 distinct values for 2,463 municipios) with its regression test. PHarvard: no multiplier circuit — a multiply routine of adds and shifts, costing zero gates."
+        },
+        {
+          "name": "DetailsGroup",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\pages\\CreditsPage.tsx — pattern only, rewritten (~15 lines)",
+          "description": "Native <details>/<summary>, no JS state, keyboard- and find-in-page-friendly. One per project page, summary reading 'Honest scope'. Bodies are the projects' own words: PhyriadFG cannot exceed display refresh and interpolation adds latency; Phyriager builds but is not validated live on a server at 0.1.0-experimental; Phynned's dataset is under re-validation and must not be cited as validated; climx's deep links return HTTP 404 + shim HTML to clients without JS, an accepted SPA-on-Pages limitation. This block is the reason the page reads as engineering."
+        },
+        {
+          "name": "ProjectFigure",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\components\\MuniHeader.tsx — small adapt (figure + figcaption + degrade-once onError; the null-means-no-image rule kept, the author/license credit links dropped since these are the operator's own figures)",
+          "description": "Renders only where a real image exists on disk — verified: F:\\Phyriad\\projects\\PhyriadFG\\docs\\diagrams\\phyriadfg_multigpu.png (89,350 B) and phyriadfg_pipeline.png (64,286 B), and F:\\Phyriad\\projects\\Phyriager\\screenshots\\trazado_1.png (167,722 B). Two of five project pages get a figure. The other three get none — no placeholder, no stand-in image."
+        },
+        {
+          "name": "SkillsTable",
+          "derivedFrom": "portfolio's existing src/components/SkillsTable.tsx — unchanged",
+          "description": "Kept as-is, including its 560px single-column collapse. Rendered in full on /about; the home page renders it below the project grid so it never competes with the fold."
+        },
+        {
+          "name": "HomePage",
+          "derivedFrom": "new page file, but its body is the portfolio's current src/app.tsx sections re-ordered and re-weighted",
+          "description": "Order: ProofStrip, then a single 22-word positioning line, then the 5-card Grid, then SkillsTable, then a short 'How this page is built' paragraph. The current 'Profile' paragraph moves to /about — it is prose, and prose loses the twenty-second scan."
+        },
+        {
+          "name": "ProjectPage",
+          "derivedFrom": "new — reason: climx's StatePage/MunicipioPage are data-fetching weather views with nothing transferable; this page reads from a static content.ts import",
+          "description": "Route /projects/:slug via useParams. Order: back Link, h1 + tag + VerificationBadge, one-paragraph lede from the README, MetricList, HowItWorks, ProjectFigure (where one exists), DetailsGroup, external links Cluster. Unknown slug renders NotFound, not a blank page."
+        },
+        {
+          "name": "AboutPage",
+          "derivedFrom": "new — reason: climx has no equivalent; content is from cv.tex / content.ts",
+          "description": "Profile paragraph, experience (freelance 2020–present: server administration and systems development), education (ESCOM/IPN, currently enrolled), full SkillsTable, languages line, contact Cluster, CV (PDF) link."
+        },
+        {
+          "name": "PrimitivesLab (/lab)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx — small adapt",
+          "description": "Translated to English; the Cluster demo's state names become the five project tags; a sixth section is added for the new token roles (verified/warning badges and the 700 type step) so the page documents what actually grew."
+        },
+        {
+          "name": "NotFound",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx — verbatim copy, two strings translated",
+          "description": "The router's mandatory fallback."
+        },
+        {
+          "name": "content.ts extension",
+          "derivedFrom": "portfolio's existing src/content.ts — extended, not replaced",
+          "description": "Project gains: slug, verification ('live'|'silicon'|'experimental'|'provisional'), headline (the EvidenceRow), metrics (MetricList rows with date + instrument), how (HowItWorks rows), caveat (DetailsGroup body), figure (path + alt, or null). Still one static module, still no data layer — so vite.config.ts's no-threshold comment stays honest for everything except src/router/**, which should get the 80% gate climx wires on src/lib/**."
+        }
+      ],
+      "contentGaps": [
+        "No screenshot of climx running, of Phyriager in a session, of the Phynned UI, or of PhyriadFG output exists anywhere on disk. Three of the five project pages will have no figure at all. Capturing four screenshots is roughly twenty minutes of the operator's time and is the single highest-value content action available.",
+        "No photograph of the PHarvard board or of its seven-segment display showing 0007 exists — `find` over the whole PHarvard tree returns zero image files. This is the page's best possible image (a processor displaying a verdict it computed about itself) and it does not exist.",
+        "No favicon, no OG/Twitter card image, no apple-touch-icon. The portfolio has no public/ directory at all. A link shared into Slack or LinkedIn — the exact path a recruiter receives it by — previews as a blank rectangle. climx has none either, so nothing can be inherited.",
+        "No headline measured number exists for Phyriager. Its README and logbook are strong prose, but I found no single instrumented figure comparable to PHarvard's Fmax or climx's bundle size. The EvidenceRow I specified for it is a qualitative claim, and it is the weakest cell in the grid.",
+        "climx's live Lighthouse numbers (90/100 home, 100/98 municipio) were measured against https://swately.github.io/project-tw/ before the repo rename. Re-run against the current URL before printing them on a page.",
+        "cv.pdf exists at F:\\Phyriad\\documentos_varios\\cv.pdf but is outside the portfolio repo and is not in any build output. It must be copied into public/ (which must be created) or the CV link 404s.",
+        "No 'last updated' date exists for the portfolio itself, and there is no mechanism to derive one. Everything else on the page is dated; the page is not.",
+        "No dark palette exists in either repo — I grepped nothing of the kind in climx's src per the inventory and confirmed the portfolio's reset.css pins color-scheme: light. The dark values below are my proposal, unreviewed by anyone, and they are the only part of this design not traceable to an existing decision.",
+        "No English-language copy exists for /lab. Every string in climx's PrimitivesLab is Spanish and must be written fresh.",
+        "No prefers-reduced-motion rule exists in either repo to inherit."
+      ],
+      "lens": "recruiter-scan",
+      "risks": [
+        "The design's whole value rests on the numbers being right. If any figure on the page turns out to be stale or wrong, the honesty framing inverts and does more damage than a vague page would have. Every number I specified I read first-hand today, but they are snapshots: PHarvard's synthesis, climx's bundle size, and the test counts all drift.",
+        "Phynned's PROVISIONAL badge is the riskiest call. A recruiter scanning fast may read the orange chip as 'broken' and skip the project rather than as 'this person distinguishes exploratory from validated'. I think the trade is right — the alternative is printing +98% as if it were a benchmark, which that project's own README forbids — but it costs something.",
+        "Four verification states is already near the limit of what a twenty-second scan can absorb. If a fifth is ever added, the badge stops being scannable and becomes a legend the reader has to learn.",
+        "Three of five project pages having no figure will read as unfinished to a designer's eye, even though it is the correct answer. This is visible emptiness, deliberately chosen.",
+        "/lab is the section most likely to be dead weight. It is defensible only while the token set is genuinely growing; if the design settles and the lab is not updated, it becomes a page showing five boxes.",
+        "Shipping the router without public/404.html and the main.tsx restore block in the same commit silently breaks every deep link on Pages, and it breaks in a way local dev will never reveal. This is the one ordering mistake that costs the most.",
+        "The portfolio has no logic layer today and the vite config says so honestly. Adding the router makes that comment false; if the src/router/** coverage gate is not wired at the same time, the page will claim CI discipline it is no longer fully exercising.",
+        "The evidence-first fold assumes the reader values verifiability. A recruiter screening for keywords rather than substance may bounce off three numbers where a skills list would have caught them. This design accepts that reader loss."
+      ],
+      "routes": [
+        {
+          "path": "/",
+          "purpose": "Answer both scan questions above the fold: what he builds, and whether it is real. Nothing here is prose the reader must parse — it is three numbers and five labelled cards.",
+          "sections": [
+            "SiteHeader (name, role, ESCOM/IPN + CDMX, email, github, CV PDF, nav)",
+            "ProofStrip — 2,463 municipios live · 1,409 LUT4 on silicon · 3 GPUs in one pipeline, each a link to its proof",
+            "Positioning line: 'I build systems that have to be measured: a CPU in VHDL that runs on silicon, a multi-GPU frame pipeline, an LLM agent with a C++ motor loop, and a live weather site for 2,463 municipios.'",
+            "Project grid — 5 ProjectCards, Grid min=18rem gap=4, ordered climx, PHarvard, PhyriadFG, Phyriager, Phynned",
+            "SkillsTable (6 groups, existing component, below the fold)",
+            "'How this page is built' — 2 runtime dependencies, hand-rolled router, CI gates lint -> typecheck -> coverage -> build -> deploy-on-main; links to /lab and to the source",
+            "SiteFooter — languages, /about, /lab, source"
+          ]
+        },
+        {
+          "path": "/projects/:slug",
+          "purpose": "The click that proves the card. Five slugs: climx, pharvard, phyriadfg, phyriager, phynned. This is where the claim on the card becomes a dated, instrumented table plus the mechanism plus the caveat.",
+          "sections": [
+            "Back link to /",
+            "h1 project name + tag + VerificationBadge",
+            "One-paragraph lede taken from that project's own README",
+            "MetricList — dated measurements with instrument column",
+            "HowItWorks — 2 to 4 mechanism rows",
+            "ProjectFigure — only on phyriadfg (phyriadfg_multigpu.png) and phyriager (trazado_1.png)",
+            "DetailsGroup 'Honest scope' — the project's own declared limits",
+            "External links: Source on GitHub, and Live site for climx"
+          ]
+        },
+        {
+          "path": "/about",
+          "purpose": "Everything a recruiter needs after the scan has already succeeded. Deliberately not on the home page.",
+          "sections": [
+            "Profile paragraph (the current content.ts profile text)",
+            "Experience — freelance, 2020–present: server administration and systems development",
+            "Education — ESCOM/IPN, Computer Systems Engineering, currently enrolled",
+            "Full SkillsTable",
+            "Languages: Spanish (native) · English (B1) · Russian (A1)",
+            "Contact: eramosm2506@gmail.com, github.com/Swately, CV (PDF)"
+          ]
+        },
+        {
+          "path": "/lab",
+          "purpose": "The styleguide. Not in the primary nav — a footer link. It exists so 'component-based design' on the skills list is one click from proof, mirroring climx's own /lab.",
+          "sections": [
+            "Stack gaps",
+            "Cluster of the five project tags",
+            "Grid auto-fill cells",
+            "The 100–700 type scale",
+            "New token roles: verified, warning, accent-soft, and the dark palette"
+          ]
+        },
+        {
+          "path": "* (fallback)",
+          "purpose": "NotFound. Mandatory as the Router's fallback prop, and the thing that catches a malformed percent-escape instead of blanking the app.",
+          "sections": ["h1 'Page not found'", "Link home"]
+        }
+      ],
+      "thesis": "That the scarcest thing on an engineering portfolio is a claim you can check, so the page leads with three verified numbers and labels every project with its true evidence level — including the one that has to say PROVISIONAL.",
+      "visualDirection": {
+        "color": "Keep the existing palette and add exactly three roles. --color-warning: #b45309 (ported back from climx's tokens.css, which the portfolio dropped — it now has a real consumer in Phynned's PROVISIONAL badge). --color-verified: #15803d (new, for LIVE and ON SILICON). --color-accent-soft: #eef3fd (badge and chip backgrounds). Accent #2255cc stays and is used for exactly three things: links, the ProofStrip numbers on hover, and the card-title hover from EstadoCard.module.css. No decorative fills, no gradients, no colored section backgrounds. Dark mode is net-new — a single @media (prefers-color-scheme: dark) block redefining only the color roles: bg #0f1115, surface #171a21, text #e8eaed, text-muted #a0a6b0, accent #6c9cf5, border #2a2f3a, warning #d99a4e, verified #5fbb7a; reset.css's `color-scheme: light` becomes `light dark`. No toggle UI — the system preference is the whole mechanism, which keeps the page at zero UI state.",
+        "density": "High and deliberately front-loaded. Target: header, ProofStrip, positioning line, and all five project cards visible without scrolling at 1440x900. Every card is 6 lines: tag + badge, title, description, evidence, links. Prose is capped at 60ch via a --measure token; the project grid is not, because cards are scanned, not read. Below the fold density relaxes: SkillsTable at gap 3, footer at gap 2. On a project page the MetricList is the densest block on the site and that is correct — it is a table of evidence.",
+        "layout": "One centered column, .page max-width raised from 44rem to climx's 64rem (the 44rem column cannot hold a three-chip strip or an 18rem auto-fill grid). ProofStrip is a Cluster of three Boxes that wraps to one column on narrow screens with no media query. Projects are Grid min=\"18rem\" gap={4} — auto-fill, so two columns at 64rem and one on a phone, again with no breakpoint. The only media query on the whole site remains the 560px rule already in SkillsTable.module.css. Vertical rhythm is Stack gap={7} between top-level sections and gap={3} inside them, matching the current app.tsx.",
+        "motion": "Effectively none. No entrance animation, no scroll-triggered anything, no transforms, no parallax. The single transition on the site is 120ms on `color` for card titles and ProofStrip numbers under hover/focus-visible, and it is wrapped in @media (prefers-reduced-motion: reduce) { transition: none }. Focus outlines are the restored 2px solid var(--color-accent) with 2px offset from climx's reset, applied to both a and button.",
+        "typography": "system-ui for prose (unchanged from reset.css); --font-mono for every label, tag, badge, metric value and instrument string — the mono/prose split is what makes evidence visually separable from claims at a glance. Add --font-size-700: 2.441rem (continuing the existing 1.25 ratio from 1.953rem) for the name, which at the current 600 max is too small to anchor a fold. All metric values get font-variant-numeric: tabular-nums so a column of numbers aligns. Below the fold no heading exceeds size 400. Section headings stay as they are today: size 200, mono, muted, uppercase — a label, not a title."
+      },
+      "whatItRefuses": "It refuses decoration that carries no information — and specifically, it refuses climx's 32 state photographs. They are unattributed re-encodes of a 2023 school project with no author, license, or source recorded anywhere in that repo (climx's own CreditsPage credits every municipality photo and says of the state photos only that they came from the original project), they are 640x360 and will soften as any hero, and they are photographs of Mexican geography rather than of anything the operator built. A mangrove above a card about pinning threads to V-Cache cores is the visual grammar of a bought template. It also refuses: a hero image or any placeholder art in the three project pages that have no real figure (visible emptiness over borrowed pixels); a profile photograph, which does not exist and is not needed; skill percentage bars or star ratings, which invent precision the CV does not have; the profile paragraph above the fold, because prose loses a twenty-second scan to three numbers; a contact form, because there is no backend and climx's entire stance is that there does not need to be; a dark-mode toggle, because prefers-color-scheme does the job with zero state; any scroll or entrance animation; ErrorState and the whole src/lib data layer, because a page that imports its content at build time has no fetch that can fail and adding them would be exactly the speculative wrapper the house rules forbid; and it refuses to print Phynned's +98% as a benchmark — that project's own README states its numbers must not be cited as validated, so the page shows the direction under a PROVISIONAL badge or not at all."
+    },
+    {
+      "climxResourcesUsed": [
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx",
+          "howUsed": "Copied verbatim to F:\\Phyriad\\projects\\portfolio\\src\\router\\router.tsx. Read in full: Router/Link/useParams/navigate are the page-facing contract, matchPath/stripBase are test-only exports, BASE is import.meta.env.BASE_URL with the trailing slash stripped, and matchPath wraps decodeURIComponent in try/catch. Nothing needs changing — the file is already base-agnostic, so it works under '/portfolio/' unmodified. This is the single change that turns the site from one scrolling page into an index plus five notes plus a colophon.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\router\\router.test.tsx",
+          "howUsed": "Ported with route names and page stubs swapped ('/estado/:ides' becomes '/projects/:slug'). It is the reason src/router/** can carry a real coverage threshold; vite.config.ts's existing comment ('No hard threshold yet... Revisit if one appears') is the standing instruction to wire an 80% gate on src/router/** the moment the router lands.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\public\\404.html",
+          "howUsed": "Copied to a new F:\\Phyriad\\projects\\portfolio\\public\\ (verified: the portfolio has no public/ directory at all today) with one edit — var base = '/climx/' becomes '/portfolio/', and the <title>/lang change to 'Eduardo Ramos Mendoza'/'en'. Mandatory the moment routes exist: without it every shared /portfolio/projects/pharvard link 404s on Pages.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\main.tsx",
+          "howUsed": "The eight-line 404-shim restore block (the `if (loc.search.startsWith('?/'))` history.replaceState that runs BEFORE createRoot) is copied verbatim into the portfolio's src/main.tsx, which currently has no such block — verified by reading it. It must land in the same commit as 404.html or deep links half-work.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\app.tsx",
+          "howUsed": "Template for the new portfolio shell: the skip-link anchor, one .page div carrying the id that the skip link targets, and <Router routes={routes} fallback={NotFound}/> with routes as a plain array literal. Strings become English ('Skip to content', id='content').",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\styles\\reset.css",
+          "howUsed": "Five blocks the portfolio's copy dropped are pasted back, verbatim: .skip-link / .skip-link:focus, `input,button,textarea,select { font: inherit }`, the button base style, the `button:focus-visible, a:focus-visible` outline pair, and .page's display:flex/flex-direction:column/gap. The portfolio currently has only `a:focus-visible` and no skip link — a real a11y gap against a donor that measured Accessibility 100 live.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx",
+          "howUsed": "Ported as the router's mandatory fallback with the two Spanish strings translated ('Page not found', 'Back to the index').",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.module.css",
+          "howUsed": "Used for exactly one rule and its subtractions. Kept: `.link:hover .name, .link:focus-visible .name { color: var(--color-accent); text-decoration: underline }` — hover moves onto the TITLE, not the whole tile. Deliberately dropped: background:var(--color-surface), the 1px border, border-radius, overflow:hidden, height:100%, and the whole .img rule. Those five are what make it a card, and this design has no cards.",
+          "cosmeticOrStructural": "cosmetic"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.tsx",
+          "howUsed": "Two things. (1) The `<li>` wrapping one Link that carries the whole entry — the entire project row is one link target, no separate 'read more'. (2) `estadoImg(ides)` becomes `asset(path)` in src/lib/asset.ts: the BASE_URL-aware path helper, one line, needed the moment any file is served from public/. The onError-hide-the-img discipline goes to Figure, below.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\components\\MuniHeader.tsx",
+          "howUsed": "Source of Figure's fallback discipline only: a `<figure>` + `<figcaption>` where a null/absent file means DO NOT request a file that cannot exist, and onError degrades exactly once. The author/license link machinery is dropped — these are the operator's own artifacts and there is no attribution obligation. Two real consumers today (the PhyriadFG diagram, the Phyriager frame), so it is not a speculative wrapper.",
+          "cosmeticOrStructural": "cosmetic"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx",
+          "howUsed": "Two uses. (1) Its page skeleton — `<Stack as=\"main\" gap>` wrapping a `<Stack as=\"header\" gap={1}>` of h1 + muted p, then a sequence of `<section aria-labelledby=\"...\">` blocks — is the exact structure of ProjectNotePage and Colophon. (2) Its type-scale demo (mapping [600,500,400,300,200,100] over Text) becomes the specimen block inside /colophon. It does NOT become a /lab route — see whatItRefuses.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\styles\\tokens.css",
+          "howUsed": "The mechanism is already ported; this design retunes the values and adds four names (--font-serif, --measure, --gutter, --tracking-caps) plus a prefers-color-scheme block. climx's own comment in this file — that the breakpoint literal is the one sanctioned repetition — is the licence for the single 52rem media query this design introduces.",
+          "cosmeticOrStructural": "cosmetic"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\docs\\planning\\MEASUREMENTS.md",
+          "howUsed": "Content, not code. Its date / metric / measured / instrument / cap column shape becomes the 'Measured' section on every project note, and its own rows supply climx's note: 2,463 per-municipio files from 9,852 SMN records, 66.66 KB gzip home bundle against a 150 KB budget, 51/51 tests with lib coverage 98.9% lines / 100% funcs, 32 state images 123 MB -> 1.12 MB, photo coverage 1,474/2,463 (59.8%), and the self-inflicted production 404 (useMuniSidecar called twice; 989 municipios with no sidecar) with its fix. Its discipline — 'No entry, no claim' — is the rule the whole Measured section is written under.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\README.md",
+          "howUsed": "Its 'Why it's built the way it is' section is compressed, not rewritten, into climx's note body: no backend / $0 / no API keys because SMN has no CORS; the idmun trap (570 distinct values for 2,463 municipios, so every path is composite-keyed and a regression test enforces it); 'hand-rolled where it teaches, dependencies where it doesn't' with the 2-runtime-dep count. Its 'Provenance' paragraph supplies the documented-design-search line.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\docs\\ARCHITECTURE.md",
+          "howUsed": "Not opened by me in this pass — I am relying on the handed inventory for its contents, so the design uses only the STANCE it is credited with ('Honest weakest point' as a named section), which becomes the mandatory last section of every project note. No number is taken from it; every number on the site comes from a file I read.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\primitives (Box, Stack, Cluster, Grid, Text)",
+          "howUsed": "Already ported verbatim. Read both copies: the portfolio's are identical except Text gains a `mono` variant. This design consumes them unchanged and adds no sixth primitive. Grid loses its only consumer on the index (the project list stops being a grid) but keeps one on /colophon's spacing specimen.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\public\\img\\estados\\*.webp",
+          "howUsed": "NOT USED. Rejected on both grounds the inventory names, and I agree with them: unattributed provenance (build-state-images.mjs re-encodes a 2023 school project's images with no author or licence recorded anywhere), and subject matter that is Mexican geography rather than the operator's work.",
+          "cosmeticOrStructural": "cosmetic"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\lib\\ (data, geo), SearchCombobox, weather components, pipeline scripts",
+          "howUsed": "NOT USED. This page imports its content at build time from src/content.ts — no fetch, no cache, no staleness, no failure mode, nothing to search over five projects. Porting any of it would be exactly the speculative wrapper the house rules forbid. Their value here is as sentences on the climx note, which README.md already supplies.",
+          "cosmeticOrStructural": "cosmetic"
+        }
+      ],
+      "components": [
+        {
+          "name": "Router / Link / useParams / navigate (src/router/router.tsx)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx — verbatim copy, zero edits",
+          "description": "History-API router, ~120 lines, zero dependencies. BASE is read from import.meta.env.BASE_URL so the file needs no adaptation for '/portfolio/'. Pages import only Router, Link, useParams, navigate; matchPath and stripBase stay exported for the test file. Keep the try/catch around decodeURIComponent and keep its comment — that guard is a fixed production defect (a malformed percent-escape threw during render and blanked climx), and it is one of the things the colophon says out loud."
+        },
+        {
+          "name": "router.test.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\router\\router.test.tsx — small-adapt",
+          "description": "The 9 cases port with only route names and page stubs changed: literal match, :param extraction, segment-length mismatch, URI decoding, the malformed-escape regression, stripBase, Link navigation, popstate/back, fallback. Takes the suite from 6 tests to ~15. Wire an 80% line threshold on src/router/** in vite.config.ts and delete the 'no logic layer worth gating' comment, which vite.config.ts itself flags as revisitable."
+        },
+        {
+          "name": "App (src/app.tsx)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\app.tsx — small-adapt",
+          "description": "Replaces the current three-stacked-sections App entirely. Renders <a href=\"#content\" className=\"skip-link\">Skip to content</a>, then <div className=\"page\" id=\"content\">, then <Router routes={routes} fallback={NotFound}/>. routes = [{'/', IndexPage}, {'/projects/:slug', ProjectNotePage}, {'/colophon', Colophon}]. Four route entries, no more."
+        },
+        {
+          "name": "NotFound (src/pages/NotFound.tsx)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx — verbatim-adapt, strings translated",
+          "description": "<main>, an h1 'Page not found', a Link to '/' reading 'Back to the index'. Eleven lines. Required by Router's fallback prop, so it is not optional."
+        },
+        {
+          "name": "Masthead (src/components/Masthead.tsx)",
+          "derivedFrom": "new — climx has NO site header at all (verified: its app.tsx renders only a skip link and the Router, and every page supplies its own <header>). This is a rewrite of the portfolio's own src/components/Header.tsx.",
+          "description": "Four lines of text and nothing else. Line 1: 'Eduardo Ramos Mendoza' at --font-size-500, normal weight, tracking -0.015em — no <strong> split, no oversized display type. Line 2: 'Computer Systems Engineer · ESCOM, Instituto Politécnico Nacional' in serif, muted. Line 3: a MetaLine of 'Ciudad de México · eramosm2506@gmail.com · github.com/Swately'. Line 4 (subpages only): a Link '← Eduardo Ramos Mendoza' at --font-size-200 replacing lines 1–3, so no route ever grows a nav bar. Followed by a 1px --color-border rule; nothing else separates it from the profile paragraph."
+        },
+        {
+          "name": "MetaLine (src/components/MetaLine.tsx)",
+          "derivedFrom": "new — generalization of the portfolio's own src/components/Header.module.css `.meta li:not(:last-child)::after { content: '·' }` rule, which today exists once and inline. No climx analogue.",
+          "description": "A mono, --font-size-100, --tracking-caps line of items joined by a middle dot via ::after, wrapping cleanly. Renders as a <ul> when the items are links and a <span> otherwise. Four consumers: the masthead contacts, each project's status/stack line, each note's source/live links, the footer. This is the design's only recurring piece of UI furniture, and it is one line of text."
+        },
+        {
+          "name": "ProjectNote (src/components/ProjectNote.tsx)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.tsx + EstadoCard.module.css — structure and hover discipline kept, card chrome deliberately removed",
+          "description": "One project as an index entry, NOT a tile. <li> containing a Link to /projects/{slug} that wraps: the name at --font-size-400 in serif; a MetaLine reading e.g. 'AI agents · C++23, Java/Fabric, JNI · 0.1.0-experimental'; and a two-sentence note in body serif at --measure. From EstadoCard.module.css it keeps only `.link:hover .name, .link:focus-visible .name { color: var(--color-accent); text-decoration: underline }` — the accent lands on the title, never on a whole rectangle. Dropped from that file: background, border, border-radius, overflow:hidden, height:100%, and .img. The five entries are a <Stack as=\"ul\" gap={5}> with a hairline top border on each :not(:first-child), not a <Grid>."
+        },
+        {
+          "name": "HangingRows (src/components/HangingRows.tsx)",
+          "derivedFrom": "new — rewrite of the portfolio's own src/components/SkillsTable.tsx into the hanging-gutter grid. No climx analogue is possible: I grepped climx/src and it contains zero @media and zero prefers-* rules, so every breakpoint here is net-new.",
+          "description": "A <dl> of {term, detail} rows. Above 52rem: `grid-template-columns: var(--gutter) minmax(0, var(--measure))` with a var(--space-5) gap, term right-aligned in mono at --font-size-100 --tracking-caps, detail in serif. Below 52rem: one column, term above detail, gap var(--space-1). Rows separated by var(--space-3) of space, no borders — the current SkillsTable's per-row 1px border is dropped because a rule between every row reads as a table, and this is prose with labels. Four consumers: skills (6 rows), experience (1), education (1), and each note's Measured section (3–6 rows)."
+        },
+        {
+          "name": "IndexPage (src/pages/IndexPage.tsx)",
+          "derivedFrom": "new — the portfolio's current src/app.tsx body relocated into a page, restructured. Its section shape follows climx's src/pages/PrimitivesLab.tsx (aria-labelledby on every <section>).",
+          "description": "Everything on one column. Masthead; profile paragraph verbatim from content.ts at --font-size-300; 'Projects' as a mono --font-size-100 label above the five ProjectNotes in curated order — Phyriager, PhyriadFG, PHarvard, Phynned, climx (PHarvard moves up because it is the only one that runs on silicon and it is the strongest single artifact); 'Work' as one HangingRows row (2020–Present / Server administration and systems development, freelance — game-server availability and latency, Windows and Linux maintenance); 'Education' as one row; 'Skills' as the six HangingRows from content.ts; then the footer. No hero, no photo, no scroll-triggered anything. A reader who reads nothing but this page still gets the whole CV."
+        },
+        {
+          "name": "ProjectNotePage (src/pages/ProjectNotePage.tsx)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx — page skeleton (Stack as=\"main\", a Stack as=\"header\" gap={1} of h1 + muted p, then <section aria-labelledby> blocks). Route param via useParams from the ported router.",
+          "description": "useParams<{slug:string}>(), look the project up in content.ts, and call navigate('/', {replace:true})? No — an unknown slug renders NotFound directly, so a bad link shows the 404 rather than silently bouncing. Five fixed sections in this order: (1) header — name, MetaLine of tag/stack/status; (2) 'What it is' — 2–3 serif paragraphs at --measure; (3) an optional Figure, only where a real artifact exists; (4) 'Measured' — HangingRows where each term is the metric and each detail is 'value — instrument, date', numbers set in mono because the serif's old-style figures do not align; (5) 'Honest scope' — the limitations in the project's own words. Then a MetaLine of Source / Live / docs links, then a Link back to '/'. Section 5 is mandatory: every one of the five READMEs already has that material first-hand (PhyriadFG 'Honest scope', Phyriager 'On claims' and its 0.1.0-experimental status, Phynned's provisional-evidence banner, PHarvard's vendor-numbers-not-estimates note, climx's declared MINOR/INFO non-fixes), and a note without it is marketing."
+        },
+        {
+          "name": "Figure (src/components/Figure.tsx)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\components\\MuniHeader.tsx — the <figure>/<figcaption> shell and the fallback discipline; the artist/licence link machinery removed",
+          "description": "Takes {src, alt, caption} where src may be null. Null means render nothing at all — never request a file that cannot exist. onError degrades exactly once by hiding the img and leaving the caption, so a missing file reads as a sentence rather than a broken-image icon. The caption is a plain mono --font-size-100 line, no borders, no shadow, width:100% inside --measure. Exactly two consumers exist today, both verified on disk by me: F:\\Phyriad\\projects\\PhyriadFG\\docs\\diagrams\\phyriadfg_multigpu.png (89,350 B) and F:\\Phyriad\\projects\\Phyriager\\screenshots\\trazado_1.png (167,722 B). Both must be copied into portfolio/public/img/ and converted to WebP first — see contentGaps."
+        },
+        {
+          "name": "asset (src/lib/asset.ts)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.tsx — the exported `estadoImg(ides)` BASE_URL helper, generalized to one path argument",
+          "description": "`export const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`;`. One line. Needed because the portfolio has no public/ today and the moment it gains one, every hardcoded '/img/...' breaks under the '/portfolio/' base."
+        },
+        {
+          "name": "Colophon (src/pages/Colophon.tsx)",
+          "derivedFrom": "new page; its section skeleton and its type/spacing specimen blocks are lifted from F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx, and its prose stance from climx's README 'Why it's built the way it is'",
+          "description": "Four sections. (1) 'How this page is built' — React 19, TypeScript strict, Vite, two runtime dependencies, CSS Modules over custom-property tokens; the router is ~120 lines of project code with the malformed-escape guard named explicitly; CI gate order lint → typecheck → coverage → build → deploy-on-main. (2) 'The system' — the type scale rendered with itself (Text mapped over [600,500,400,300,200,100], the PrimitivesLab pattern) and the eight spacing steps as a Grid of labelled bars. (3) 'What it doesn't do' — no analytics, no cookies, no third-party fonts, no tracking, no images that are not the operator's own work. (4) 'Where the content comes from' — src/content.ts is generated from documentos_varios/cv.tex, and cv.tex stays the source of truth. This route absorbs what would otherwise be /lab."
+        },
+        {
+          "name": "src/styles/tokens.css (retuned)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\styles\\tokens.css — mechanism already ported; values retuned and four names added",
+          "description": "Spacing scale unchanged (4/8/12/16/24/32/48/64). New: --font-serif: ui-serif, Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif; --measure: 34rem; --gutter: 9rem; --tracking-caps: 0.08em (replacing ProjectCard.module.css's inline 0.06em). Type scale retuned to a ~1.2 ratio anchored on a 17px body: 100 = 0.8125rem, 200 = 0.9375rem, 300 = 1.0625rem, 400 = 1.25rem, 500 = 1.5rem, 600 = 2rem. Leading: --line-height-normal 1.6 (from 1.55), --line-height-tight 1.25. Palette moves off pure white/black to warm paper: --color-bg #fbfaf8, --color-surface #f3f1ec, --color-text #1a1a17, --color-text-muted #6b6a63, --color-border #e2ded6, --color-accent #14459b (darker and less saturated than the current #2255cc, because in this design the accent appears only on hover and focus and must hold contrast against paper). A `@media (prefers-color-scheme: dark)` block redefines only those six: bg #141411, surface #1d1d19, text #e9e6dd, muted #a09c91, border #2e2e28, accent #9db8f0. No --color-warning: there is still no warning state, and adding one for a status label would be the speculative token the house rules forbid."
+        },
+        {
+          "name": "src/styles/reset.css (restored blocks + serif body)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\styles\\reset.css — the five dropped blocks pasted back verbatim; the body font-family and .page rules changed",
+          "description": "Restore .skip-link/.skip-link:focus, `input,button,textarea,select { font: inherit }`, the button base, and `button:focus-visible, a:focus-visible` outlines. Add climx's `.page { display:flex; flex-direction:column; gap:var(--space-6) }`. Change body font-family from the system sans stack to var(--font-serif). Change .page max-width from 44rem to 45rem (--gutter 9 + --space-5 gap + --measure 34, so the hanging gutter and the text column both fit exactly). Add `color-scheme: light dark` on html, replacing the current `color-scheme: light`. Add one `@media (prefers-reduced-motion: reduce)` block killing the single 120ms color transition on links — net-new, climx has none."
+        },
+        {
+          "name": "src/content.ts (extended model)",
+          "derivedFrom": "new — the portfolio's own file, extended. No climx analogue: climx's content is fetched JSON, not a typed module.",
+          "description": "Project gains: slug ('phyriager' | 'phyriadfg' | 'pharvard' | 'phynned' | 'climx'), status (a short honest string taken verbatim from each repo, e.g. '0.1.0-experimental' / '0.4.0-experimental' / 'runs on silicon' / '0.2.0-experimental' / 'live'), stack (string), note (string[] of paragraphs), measured ({metric, value, instrument, date}[]), scope (string[]), figure ({src, alt, caption} | null), docs ({label,url}[]). experience and education become exported arrays of {term, detail} so IndexPage can feed them straight to HangingRows. The existing profile/skills/languages exports and the cv.tex-is-source-of-truth comment stay untouched."
+        },
+        {
+          "name": "public/404.html + the main.tsx restore block",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\public\\404.html (small-adapt: base string, title, lang) and F:\\Phyriad\\projects\\climx\\src\\main.tsx (verbatim block)",
+          "description": "Ships in the same commit as the router or deep links break silently on Pages. Keep climx's 'TOUCHPOINT: keep in sync with vite.config.ts base' comment — it is load-bearing, and the base string is currently undecided (see contentGaps)."
+        }
+      ],
+      "contentGaps": [
+        "The five long-form project notes DO NOT EXIST. src/content.ts today has one 25-word description per project and nothing else. Each note needs ~250–350 words of 'What it is' plus a 'Honest scope' section. The raw material is real and on disk — I read PhyriadFG's, Phyriager's, Phynned's and PHarvard's READMEs and climx's README + MEASUREMENTS.md in this pass — but those are written for repo readers, and compressing them into portfolio prose is writing work, not porting. This is the single largest task in the design and the one thing that makes it work.",
+        "No screenshot of the live climx site exists anywhere on disk. The climx note is the one place a screenshot would be honest (it is a shipped, live web page), and there is none. Capturing one from https://swately.github.io/climx/ is a minute of work and I did not do it.",
+        "No image exists for PHarvard or Phynned. PHarvard's strongest artifact is described in its own README as a photograph of its display showing '0007' — that photo is not on disk (I listed the project root; there are .vhd files, docs/, syn/, sw/, no image). Phynned has no UI screenshot on disk that I found. So Figure has two real consumers, not five, and three notes will run text-only. That is acceptable; pretending otherwise is not.",
+        "The two images that DO exist are PNG and must be converted before shipping. I verified their existence and byte sizes first-hand — phyriadfg_multigpu.png at 89,350 B and Phyriager/screenshots/trazado_1.png at 167,722 B — but I did NOT verify their pixel dimensions; the handed inventory claims 1273x721 for trazado_1 and I am passing that on as its claim, not mine. They need a sharp resize/WebP pass (climx's scripts/build-state-images.mjs is the shape to copy: resize width 640, webp quality 75, print per-file KB, exit non-zero on anything missing).",
+        "climx's live Lighthouse numbers (Performance 90 / Accessibility 100 home; 100 / 98 municipio) were measured against https://swately.github.io/project-tw/ — the pre-rename URL, per MEASUREMENTS.md's own heading. They must be re-run against swately.github.io/climx before any of them is printed on this page.",
+        "Phynned's benchmark table cannot be used as written. Its README carries an explicit banner saying the dataset is provisional, under re-validation, and that its specific numbers must NOT be cited as validated, because the raw captures were rewritten during a processing pass. So Phynned's Measured section either states the methodology (14 A/B/A/B/A tests on 7950X3D + RTX 4090, exploratory) with the provisional status attached in the same sentence, or it carries no numbers at all. Quoting '+98% on Halo CE' without that caveat would contradict the project's own honesty.",
+        "The deployment target is still undecided (swately.github.io root vs /portfolio/ project page). Three files depend on the answer — vite.config.ts base, public/404.html's base literal, and every asset() path — and the portfolio README lists this as an open question. The router work should not start until the operator picks one.",
+        "No favicon, no OG/social image, no <meta property=\"og:*\"> tags. climx has none either (verified: its public/ contains only 404.html, data/ and img/), so nothing can be inherited. A shared link to this page currently unfurls as a bare title. Low priority, real gap.",
+        "No 'last updated' date is available at runtime. The footer wants one; there is no git in F:\\Phyriad (removed 2026-07-15) and the portfolio has no repo of its own that I checked, so it needs a vite `define` injecting a build-time date, or a hand-maintained constant in content.ts. Either is honest; a fabricated date is not.",
+        "The original research pass comparing madebyevan.com-style reference sites — which is the stated basis for this lens — could not be found on disk, per the portfolio's own README. Every typographic value in this design is my judgement, not a recovered decision. If that document turns up, it outranks me."
+      ],
+      "lens": "editorial-minimal",
+      "risks": [
+        "The design's value is ~70% writing and ~30% code. If the five long-form notes are not actually written, this collapses into the current page with a serif font and three extra routes — strictly worse than today, because it adds a router and a 404 shim to carry content that does not exist. Do not ship the routes before the notes.",
+        "--color-accent #14459b on --color-bg #fbfaf8 and #9db8f0 on #141411 are my estimates, not measured contrast ratios. Both need a checker run before they land; the accent carries hover and focus state, so a fail there is an a11y fail, on a page whose colophon brags about CI gates including jsx-a11y.",
+        "The serif stack (ui-serif, Charter, Iowan Old Style, Georgia, Times New Roman) resolves differently on Windows and macOS — Georgia on the operator's own machine, Charter or Iowan on a reviewer's Mac. The measure (34rem) is tuned for roughly 66 characters and will land closer to 60 or 72 depending on which face wins. Acceptable, but it means the page will not look identical to the operator on the machine he designed it on. Testing on both is worth ten minutes.",
+        "Georgia's old-style figures are the reason every measured number is specified in mono. If someone later 'simplifies' a Measured row into body serif, the digits will hop above and below the baseline and the numbers will stop aligning. That constraint should be a comment in the CSS, not tribal knowledge.",
+        "Sending five projects to five routes means the index carries only two sentences each. If a reader lands, skims, and leaves, they see less than the current single page shows. The mitigation is that the index still carries the complete CV — profile, work, education, all six skill groups — so the shallow read is intact; but the project detail genuinely moves behind a click, and that is a real trade.",
+        "A 34rem measure on a 27-inch monitor is a lot of empty paper. That is the tradition being followed on purpose, and it will still read to some viewers as an unfinished page. Naming it in the colophon does not fully defuse it.",
+        "The router carries a real production-defect fix (the decodeURIComponent guard). Porting it verbatim is right, but the guard's comment references climx's own incident. Rewrite the comment to say what it does without claiming this site suffered the bug — otherwise the page's own source contains a borrowed war story told in the first person.",
+        "Three of five notes will have no figure. Combined with an already-austere design, the PHarvard / Phynned / climx notes risk reading as walls of text. The Measured HangingRows block is the intended visual break; if it is empty for a project, that note needs its paragraphs kept short or it will not hold a reader."
+      ],
+      "routes": [
+        {
+          "path": "/",
+          "purpose": "The whole CV on one dense page. A reader who never clicks anything still gets profile, five projects, work, education, skills and contact. Every deeper page is optional.",
+          "sections": [
+            "Masthead — name at 1.5rem, title + institution, contact MetaLine, hairline rule",
+            "Profile — the one paragraph from content.ts, at measure, no heading beyond a mono label",
+            "Projects — five ProjectNote entries in curated order (Phyriager, PhyriadFG, PHarvard, Phynned, climx), each a title link + status MetaLine + two sentences, separated by space and a hairline",
+            "Work — one HangingRows row: 2020–Present / freelance server administration and systems development",
+            "Education — one HangingRows row: currently enrolled / Computer Systems Engineering, ESCOM–IPN",
+            "Skills — the six HangingRows groups from content.ts, terms in mono in the hanging gutter",
+            "Footer — languages line, a Link to /colophon, github.com/Swately, build date"
+          ]
+        },
+        {
+          "path": "/projects/:slug",
+          "purpose": "One honest note per project. Five real slugs: phyriager, phyriadfg, pharvard, phynned, climx. An unrecognised slug renders NotFound rather than redirecting.",
+          "sections": [
+            "Header — back-link masthead, project name, MetaLine of tag · stack · status",
+            "What it is — 2–3 serif paragraphs at measure, compressed from the project's own README",
+            "Figure — only where a real artifact exists on disk (today: phyriadfg, phyriager)",
+            "Measured — HangingRows of metric / value + instrument + date, numbers in mono, written under climx's MEASUREMENTS rule: no entry, no claim",
+            "Honest scope — the project's stated limitations, in its own words",
+            "Links — MetaLine of Source · Live · the one or two docs worth reading, then a Link back to the index"
+          ]
+        },
+        {
+          "path": "/colophon",
+          "purpose": "How this page is built and what it refuses to do. The route that carries the engineering credibility of the site itself, so the index never has to.",
+          "sections": [
+            "How this page is built — stack, two runtime dependencies, the ~120-line hand-rolled router and its malformed-escape guard, the CI gate order",
+            "The system — the type scale and the eight spacing steps rendered with themselves (the PrimitivesLab pattern, as a specimen not a lab)",
+            "What it doesn't do — no analytics, no cookies, no third-party fonts, no tracking, no borrowed imagery",
+            "Where the content comes from — src/content.ts is derived from documentos_varios/cv.tex, which stays the source of truth"
+          ]
+        },
+        {
+          "path": "(fallback)",
+          "purpose": "Router's mandatory fallback prop. Also the honest destination for a malformed URL, since matchPath treats an undecodable segment as no-match.",
+          "sections": ["h1 'Page not found'", "Link back to the index"]
+        }
+      ],
+      "thesis": "That the operator's real material — measured numbers with instruments, and every project's own stated weakest point — is strong enough to carry a portfolio as plain prose, so the page should be a well-set document with a router underneath it rather than a grid of tiles with nothing inside them.",
+      "visualDirection": {
+        "color": "Warm paper, near-monochrome. --color-bg #fbfaf8, --color-text #1a1a17, --color-text-muted #6b6a63, --color-border #e2ded6, --color-surface #f3f1ec (used only for the colophon specimen). --color-accent moves from the current #2255cc to #14459b and is RESERVED: links are body-coloured with a 1px underline at 0.08em offset, and the accent appears only on :hover and :focus-visible. A dark-mode block redefines the same six tokens (bg #141411, text #e9e6dd, muted #a09c91, border #2e2e28, accent #9db8f0) — net-new work, since climx has zero prefers-color-scheme rules anywhere in src (grepped, confirmed). No --color-warning: nothing warns.",
+        "density": "Dense vertically, generous horizontally. Text never exceeds --measure 34rem regardless of viewport. Section rhythm: var(--space-6) between sections, var(--space-5) between project entries, var(--space-3) between HangingRows rows. Hairline --color-border rules appear in exactly three places — under the masthead, between project entries, above the footer. Nowhere else. No borders around anything, no border-radius above 0, no box-shadow, no background fills outside the colophon specimen.",
+        "layout": "One centred column, .page max-width 45rem (up from 44rem, to fit gutter + gap + measure exactly). Above 52rem — the single media query this design introduces, licensed by tokens.css's own comment that the breakpoint literal is the sanctioned repetition — labelled rows use a hanging gutter: `grid-template-columns: var(--gutter) minmax(0, var(--measure))`, terms right-aligned in mono in the 9rem gutter, prose in the measure column. Below 52rem it collapses to stacked term-above-detail. The project list is a Stack, not a Grid — Grid keeps exactly one consumer, the colophon's spacing specimen.",
+        "motion": "Effectively none. One 120ms color transition on link hover, wrapped in a `@media (prefers-reduced-motion: reduce)` guard that removes it. No scroll animation, no fade-in, no parallax, no view transitions. climx has no motion rules at all, so this is net-new and deliberately kept to a single property.",
+        "typography": "Serif body, mono metadata, no sans anywhere. --font-serif: ui-serif, Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif — system stacks only, nothing fetched, consistent with climx's two-runtime-dependency stance. The existing --font-mono carries every label, status line, link row and measured NUMBER; that last one is a hard rule, because Georgia ships old-style figures that will not align in a measured-values column. Type scale retuned to ~1.2 anchored on a 17px body: 0.8125 / 0.9375 / 1.0625 / 1.25 / 1.5 / 2rem. Leading 1.6 body, 1.25 headings. The name renders at --font-size-500 (1.5rem) — the largest thing on the site is the operator's name, and it is 24px."
+      },
+      "whatItRefuses": "\"It refuses the card grid. The current <Grid min=\\\"16rem\\\"> of surface-and-border ProjectCards is deleted, not restyled — five projects laid out as tiles is the visual grammar of a template, and it caps every project at whatever fits in a box. It refuses climx's 32 state photographs, for both of the reasons already on the record: no author or licence is recorded for a single one of them, and they are pictures of Mexican geography, not of the operator's work. It refuses stock photography, generated illustration, project logos, and any decorative image whatsoever — the only images allowed anywhere on this site are artifacts the operator produced, of which exactly two exist on disk today. It refuses a /lab route: a styleguide page for five primitives is a route about the site instead of about the work, so the type specimen goes inside /colophon and earns no URL of its own. It refuses a separate /about page — the profile, work and education are eight lines and belong on the index. It refuses the <details>/<summary> disclosure pattern from CreditsPage: hiding three documentation links behind a summary is furniture, and this page shows its links. It refuses a skills bar chart, a percentage, a star rating, or any other invented quantification of proficiency; skills are a labelled list because that is what the CV honestly contains. It refuses a blog, a writing section, and a 'latest posts' block, because nothing has been written. It refuses badges, counters, GitHub stat cards, analytics, cookie banners and third-party fonts — the colophon says so out loud. And it refuses to print any number without its instrument and date beside it, which means Phynned's headline benchmarks either carry their own project's provisional-and-under-re-validation caveat in the same sentence or do not appear at all.\""
+    },
+    {
+      "climxResourcesUsed": [
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx",
+          "howUsed": "Copied verbatim into F:\\Phyriad\\projects\\portfolio\\src\\router\\router.tsx. It is the whole reason this design can be four routes instead of one scrolling page. Nothing in it is climx-specific: BASE is read from import.meta.env.BASE_URL, so it adapts to base:'/portfolio/' with zero edits. The try/catch around decodeURIComponent in matchPath (a FATAL found in climx production, per docs/planning/MEASUREMENTS.md 2026-07-31) ports with it.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\router\\router.test.tsx",
+          "howUsed": "Ported with route names swapped: '/estado/:ides/municipio/:idmun' becomes '/projects/:slug', the Muni stub becomes a Project stub. The five matchPath tests, stripBase, Link-navigation, popstate and fallback tests port unchanged. The malformed-percent-escape regression test stays verbatim and stays meaningful. Takes the suite from 6 to ~15 tests.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\public\\404.html + the restore block in src/main.tsx",
+          "howUsed": "Both halves ported together. 404.html copied with one string changed (var base = '/climx/' becomes '/portfolio/'); the 8-line restore block copied verbatim into the portfolio's src/main.tsx above createRoot (verified absent there today). Mandatory the moment a router lands: without it every shared /projects/phyriager link 404s on Pages.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\app.tsx",
+          "howUsed": "Template for the new shell: skip-link anchor, a .page div carrying id=\"contenido\" (renamed to id=\"content\"), <Router routes={routes} fallback={NotFound}/>, and the route table as a plain array of {path, page}. The portfolio's shell additionally renders SiteHeader and SiteFooter outside the Router so nav and build stamp are page-independent.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\styles\\reset.css",
+          "howUsed": "Diffed first-hand against the portfolio's copy. Porting the four blocks the portfolio dropped: .skip-link + .skip-link:focus, the button base rule, `input,button,textarea,select {font: inherit}`, and the button half of `button:focus-visible, a:focus-visible` (the portfolio kept only the `a` half — the inventory's claim that it dropped both is wrong). The button rules stop being dead the moment ThemeToggle exists.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.module.css",
+          "howUsed": "The whole-card-link mechanics lifted into ProjectCard.module.css: .link as a flex column with height:100% (equal-height cards in a Grid row), overflow:hidden + radius, text-decoration:none with inherited color, and hover/focus-visible moving accent+underline onto the .name only, not the whole card. The .img rule is dropped — there are no card images. This replaces the portfolio's current Box variant=surface card.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.tsx (estadoImg helper)",
+          "howUsed": "Generalized into src/lib/asset.ts: `export const asset = (p: string) => import.meta.env.BASE_URL + p`. Same one-line idea, generalized because the portfolio serves several unrelated asset kinds (figures, favicon, cv.pdf) rather than one keyed family.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\components\\MuniHeader.tsx + MuniHeader.module.css",
+          "howUsed": "Source of Figure.tsx: the <figure> + object-fit:cover img + <figcaption> shape, and specifically the once-only onError degrade (a failed image hides itself rather than showing a broken-image icon). The artist/license/Commons attribution chain is deleted — the three figures are the operator's own work and there is nothing to attribute — and figcaption becomes a required plain caption prop.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx",
+          "howUsed": "Structure ported into LabPage.tsx: per-primitive sections, each an aria-labelledby'd <section> with a Box variant=surface demo. All Spanish copy replaced; the Cluster demo's Mexican state names replaced by the six real skill-group labels from content.ts. Three sections added that climx has no equivalent for, because this design's token set grows: color-role swatches (proving the dark-mode swap), a spacing ruler, and a focus-state row.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx",
+          "howUsed": "Ported as the router's mandatory fallback, translated to English, plus one addition: it echoes the unmatched path in mono. 15 lines.",
+          "cosmeticOrStructural": "cosmetic"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\docs\\planning\\MEASUREMENTS.md",
+          "howUsed": "Not code — the content model. Its columns (Date | Metric | Measured | Instrument) become the Measurement type in content.ts and the MeasuredTable component. Five rows populate the climx project page directly: 66.66 KB gzip home bundle (vite build, 2026-07-29), 51/51 tests (vitest run, 2026-07-31), 98.92% lib line coverage (vitest --coverage, 2026-07-31), 9,852 SMN records to 2,463 per-municipio files (pipeline run log, 2026-07-28), Lighthouse mobile 90/100 home and 100/98 municipio (2026-07-29). Its 'NOT yet run ... Declared' discipline becomes the design's hard rule: no instrument, no row.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\README.md ('Why it's built the way it is')",
+          "howUsed": "Compressed, not rewritten, into the climx project page's what[] and how[]: the no-backend/no-API-key CORS-cron-partition argument, the idmun composite-key trap (570 distinct values for 2,463 municipios, kept honest by a regression test), and 'hand-rolled where it teaches, dependencies where it doesn't' with the 2-runtime-dependency count. The last line is also the thesis of the whole portfolio and is quoted as such on /engineering.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\docs\\ARCHITECTURE.md ('Honest weakest point')",
+          "howUsed": "Its stance, not its text, becomes ClaimList: every project page carries a scope[] section naming what the project cannot do. climx's own entry quotes the router-as-highest-execution-risk judgement and the declared deep-link limitation (static SPA on Pages returns HTTP 404 + shim HTML to non-JS clients).",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\styles\\tokens.css",
+          "howUsed": "Already ported (same mechanism, own palette). This design extends it rather than re-porting: --color-warning comes back from climx (dropped in the port, now has a real consumer in StatusChip), plus new --color-accent-weak, --color-warning-weak, --font-size-700, --radius-1/-2 and --measure, plus the dark-theme override blocks climx does not have.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\src\\primitives (Box, Stack, Cluster, Grid, Text)",
+          "howUsed": "Already ported verbatim; zero further work. This design deliberately adds no sixth primitive — every layout on all four routes is Stack/Cluster/Grid/Box/Text plus one .page rule and one .prose measure rule. That constraint is itself the /lab page's claim.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\.github\\workflows\\ci.yml + vite.config.ts coverage gate",
+          "howUsed": "ci.yml is already ported and needs no change. climx's 80% coverage threshold on src/lib/** was deliberately omitted from the portfolio's vite.config.ts with the comment 'there is no data/logic layer here worth gating on'. This design makes that comment false on purpose: src/router/** and src/lib/** become real gate targets, and the comment is replaced by an actual threshold block.",
+          "cosmeticOrStructural": "structural"
+        },
+        {
+          "resource": "F:\\Phyriad\\projects\\climx\\scripts\\build-state-images.mjs",
+          "howUsed": "Read, then refused. Its 3-line sharp core would convert the three real figures, but adding a sharp devDependency to convert three files once is a build step with no recurring consumer. The three .webp are committed instead and the exact conversion command is recorded in the portfolio README.",
+          "cosmeticOrStructural": "cosmetic"
+        }
+      ],
+      "components": [
+        {
+          "name": "router/router.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx — verbatim copy, zero edits",
+          "description": "Router, Link, useParams, navigate + matchPath/stripBase. BASE is read from import.meta.env.BASE_URL so base:'/portfolio/' works unmodified. Pages may import only the four public names; matchPath/stripBase exist for the tests."
+        },
+        {
+          "name": "router/router.test.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\router\\router.test.tsx — small-adapt (route names + page stubs)",
+          "description": "9 ported tests with '/projects/:slug' in place of the composite estado/municipio route. Keeps the malformed-percent-escape regression verbatim. Suite goes 6 -> ~15 tests, which is what makes the coverage threshold below meaningful rather than ceremonial."
+        },
+        {
+          "name": "public/404.html",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\public\\404.html — small-adapt (base string '/climx/' -> '/portfolio/')",
+          "description": "GH-Pages deep-link shim. The portfolio has no public/ directory at all today, so this creates it. TOUCHPOINT comment kept: base must match vite.config.ts."
+        },
+        {
+          "name": "main.tsx restore block",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\main.tsx — verbatim copy of the 8-line ?/ unwind above createRoot",
+          "description": "history.replaceState before React mounts, so Router's initial useState(currentPath) already sees the intended path. Verified absent from the portfolio's main.tsx."
+        },
+        {
+          "name": "app.tsx (shell)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\app.tsx — small-adapt",
+          "description": "skip-link -> SiteHeader -> <div className=\"page\" id=\"content\"><Router routes={routes} fallback={NotFound}/></div> -> SiteFooter. routes = [{'/',HomePage},{'/projects/:slug',ProjectPage},{'/engineering',EngineeringPage},{'/lab',LabPage}]. Header and footer sit outside the Router because nav and build stamp are route-independent."
+        },
+        {
+          "name": "pages/HomePage.tsx",
+          "derivedFrom": "new — the portfolio's current src/app.tsx body, split out and re-sectioned. climx's HomePage is a state grid over fetched data and shares nothing but its Stack/Grid skeleton.",
+          "description": "IdentityBlock, then Profile prose, then 'Work' (Grid min='18rem' gap={4} of five ProjectCard), then 'Technical skills' (SkillsTable), then 'Experience & education' (two RecordRow entries: freelance 2020-present, ESCOM/IPN currently enrolled). Ends with a single Link to /engineering reading 'How this page is built'."
+        },
+        {
+          "name": "pages/ProjectPage.tsx",
+          "derivedFrom": "new — climx's StatePage/MunicipioPage are the structural ancestors (useParams -> lookup -> render), but every section here is different because the data is static, not fetched.",
+          "description": "const { slug } = useParams<{slug:string}>(); const p = projects.find(x => x.slug === slug); if (!p) return <NotFound/>. Sections in fixed order: h1 + tag + StatusChip; one-line lede; 'What it is' (prose); optional Figure; 'How it's built' (mechanism bullets); 'Measured' (MeasuredTable, rendered only when measured.length > 0); 'Honest scope' (ClaimList); a Cluster of source/live links. The not-found branch is deliberate: matchPath matched, so the page owns the miss — the router fallback would be the wrong handler."
+        },
+        {
+          "name": "pages/EngineeringPage.tsx",
+          "derivedFrom": "new — no climx page equivalent. Its content ancestors are climx's README.md 'Why it's built the way it is' and docs/ARCHITECTURE.md.",
+          "description": "The colophon, and the place where this lens becomes literal content. Sections: 'What this page is' (the site is the work sample); 'Constraints' (2 runtime dependencies — react, react-dom, verified in package.json; no router library; no CSS framework; no web fonts; no analytics; no third-party scripts); 'The gate' (the exact ci.yml order: lint -> typecheck -> coverage -> build -> upload-pages-artifact, then deploy gated on needs:checks and main-only); 'This build' (BuildStamp); 'Where the machinery came from' (a provenance table naming climx's router, 404 shim, primitives, reset a11y block and token mechanism — the reuse stated as a fact rather than hidden); 'Known limitations' (deep links return HTTP 404 + shim HTML to non-JS crawlers and unfurlers — inherent to a static SPA on Pages, declared not fixed; no prerender; Lighthouse not yet run on this site). Ends linking /lab."
+        },
+        {
+          "name": "pages/LabPage.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx — small-adapt, plus three new sections",
+          "description": "Five ported primitive sections (Stack gaps, wrapping Cluster of the six skill-group labels, Grid auto-fill cells, Box variants, the 100-700 type scale) plus: a color-role swatch grid that visibly proves the dark-mode token swap, a spacing ruler rendering --space-1..8 as bars, and a focus-state row (link, button, card) demonstrating the 2px outline. This route only earns its place because the token set actually grew; if the dark theme and the new roles are cut, cut /lab with them."
+        },
+        {
+          "name": "pages/NotFound.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx — verbatim structure, English copy",
+          "description": "<main>, h1 'Page not found', the unmatched path echoed in mono Text, a Link home. Doubles as ProjectPage's unknown-slug branch."
+        },
+        {
+          "name": "components/SiteHeader.tsx",
+          "derivedFrom": "new — climx has no header at all (its app.tsx renders only the skip link). Reason: four routes need persistent navigation, which one page did not.",
+          "description": "A Cluster with justify='space-between': a mono wordmark Link to '/', a <nav aria-label=\"Sections\"> Cluster of Links (Work / Engineering / Lab), and ThemeToggle. Current route gets aria-current='page' — derived from the router by comparing stripBase(location.pathname), which is why stripBase stays exported."
+        },
+        {
+          "name": "components/SiteFooter.tsx",
+          "derivedFrom": "new — climx has no footer; the portfolio's current footer is an inline <Text> in app.tsx styled by src/app.module.css .footer. Reason: languages plus the build stamp need a home on every route, not just home.",
+          "description": "Keeps the .footer border-top rule from src/app.module.css. Contains the languages line, mailto + github links, a link to the CV PDF, and a one-line commit/date stamp from buildinfo."
+        },
+        {
+          "name": "components/IdentityBlock.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\portfolio\\src\\components\\Header.tsx — kept nearly as-is, renamed and demoted to home-only",
+          "description": "h1 at size 700 ('Eduardo Ramos Mendoza'), mono muted role line, and the existing Cluster of location/email/github with the ::after middot separator from Header.module.css. Renamed because SiteHeader now owns the word 'header'."
+        },
+        {
+          "name": "components/ProjectCard.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\portfolio\\src\\components\\ProjectCard.tsx rewritten onto F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.module.css's whole-card-link pattern",
+          "description": "<li> wrapping exactly one <Link to={`/projects/${slug}`}> containing name (h3, 400, bold), tag (100, mono, uppercase, letter-spacing .06em), StatusChip, and the one-line description. The external source/live links move to the detail page: three links inside a grid card is a keyboard tab-tarpit and it makes 'which target does this card have' ambiguous. Hover/focus-visible underlines the title only."
+        },
+        {
+          "name": "components/StatusChip.tsx",
+          "derivedFrom": "new — chip visual comes from climx PrimitivesLab's Box variant='surface' padding={2} inside a Cluster. Reason: four of five projects self-declare a version and an experimental status in their own READMEs, and printing it is the honest alternative to letting a card imply shipped software.",
+          "description": "Renders content.ts's status string: '0.1.0-experimental' (Phyriager), '0.2.0-experimental' (Phynned), '0.4.0-experimental' (PhyriadFG), 'runs on silicon' (PHarvard), 'live' (climx). tone='caution' uses --color-warning / --color-warning-weak, tone='ok' uses --color-accent / --color-accent-weak. This is the single reason --color-warning comes back from climx's token file."
+        },
+        {
+          "name": "components/MeasuredTable.tsx",
+          "derivedFrom": "new component, but its schema is F:\\Phyriad\\projects\\climx\\docs\\planning\\MEASUREMENTS.md's table and its CSS is F:\\Phyriad\\projects\\portfolio\\src\\components\\SkillsTable.module.css",
+          "description": "A real <table> with <caption>, columns Metric | Measured | Instrument | Date, and an optional note row. Wrapped in overflow-x:auto rather than collapsed on mobile — destroying table semantics for layout is the wrong trade for tabular data. Renders nothing at all when measured is empty. The Instrument column is required by the type, which is the mechanism that makes an unmeasured claim impossible to state."
+        },
+        {
+          "name": "components/ClaimList.tsx",
+          "derivedFrom": "new — the stance comes from climx docs/ARCHITECTURE.md 'Honest weakest point' and from the 'Honest scope' section PhyriadFG's README already has. Reason: no climx component does this because climx's honesty lives in prose docs, not in UI.",
+          "description": "A Stack of <li>, each prefixed by a mono em-dash marker, no icons. Renders limitations verbatim from the project's own README: PhyriadFG 'cannot exceed the display refresh', 'interpolation adds latency', 'no engine data — disocclusion is the hard case'; Phyriager 'the mod builds but has not been validated live on a server'; PHarvard 'the point is not speed'; climx the crawler-404 and the 59.8% photo coverage."
+        },
+        {
+          "name": "components/Figure.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\components\\MuniHeader.tsx + MuniHeader.module.css — small-adapt (attribution chain removed, caption made required)",
+          "description": "<figure> with an object-fit:cover img, a required plain-text <figcaption>, and MuniHeader's once-only onError degrade. Used on exactly three cards, pointed at files verified on disk: PhyriadFG's two TikZ diagrams (phyriadfg_multigpu.png 89,350 B and phyriadfg_pipeline.png 64,286 B under projects\\PhyriadFG\\docs\\diagrams\\) and Phyriager's projects\\Phyriager\\screenshots\\trazado_1.png (167,722 B). I verified those three files exist and their byte sizes; I did not open them, so their pixel dimensions and contents are an unverified claim from the handed-in inventory."
+        },
+        {
+          "name": "components/ThemeToggle.tsx + lib/theme.ts",
+          "derivedFrom": "new — climx has zero @media and zero prefers-color-scheme rules anywhere in src (the inventory's grep, consistent with the reset.css and tokens.css I read). Reason: a text-heavy page read at night, and the smallest honest proof that colors are tokens rather than literals.",
+          "description": "theme.ts is JSX-free: readTheme() / applyTheme(t) setting data-theme on documentElement, localStorage wrapped in try/catch, default 'system'. The button is a three-state cycle (system -> light -> dark) with aria-pressed omitted in favour of an accessible label naming the current state. Its real structural payoff: together with src/router/**, it gives vite.config.ts a coherent coverage-threshold target and lets the current comment ('no data/logic layer here worth gating on') be replaced by an actual gate."
+        },
+        {
+          "name": "components/BuildStamp.tsx + scripts/collect-buildinfo.mjs",
+          "derivedFrom": "new — nothing in climx does this; climx's equivalent honesty is a hand-maintained MEASUREMENTS.md. Reason: on a page whose whole claim is 'the implementation is the evidence', a hand-typed '15 tests pass' is a claim, while a value written by a prebuild script is evidence that cannot silently rot.",
+          "description": "collect-buildinfo.mjs runs as npm prebuild, shells `git rev-parse --short HEAD` and reads the vitest JSON reporter's test count, and writes a gitignored src/buildinfo.generated.ts. Any value it cannot obtain is written as the literal 'unknown' and BuildStamp prints it as such — the script never fails the build, because a colophon that can break the deploy is worse than a colophon. It deliberately does NOT report bundle size: that is unknowable before the build it would describe, and a stale committed number is exactly the kind of fake evidence this page exists to refuse."
+        },
+        {
+          "name": "components/SkillsTable.tsx",
+          "derivedFrom": "F:\\Phyriad\\projects\\portfolio\\src\\components\\SkillsTable.tsx — kept as-is",
+          "description": "The existing dl/grid with the 10rem label column and the 560px single-column collapse already does the job and already matches the rule-not-card density this design wants. Only change: the label column uses the new mono/muted treatment consistently with MeasuredTable so the two read as the same instrument."
+        },
+        {
+          "name": "styles/tokens.css (extended)",
+          "derivedFrom": "F:\\Phyriad\\projects\\portfolio\\src\\styles\\tokens.css — extended, mechanism already ported from climx",
+          "description": "Adds --font-size-700: 2.441rem (continues the existing 1.25 ratio from 1.953); --color-accent-weak: #e8eefc; --color-warning: #8a5a00; --color-warning-weak: #fdf3e0; --radius-1: 4px and --radius-2: 8px (stops climx's habit of spending --space-2 as a radius, which is the one token abuse worth fixing in the port); --measure: 66ch. Then the dark blocks the light palette never had: @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) { --color-bg:#0f1115; --color-surface:#161a21; --color-text:#e8eaed; --color-text-muted:#9aa3af; --color-accent:#7aa2f7; --color-border:#262b34; --color-accent-weak:#1a2233; --color-warning:#e0a458; --color-warning-weak:#2a2015 } } and the same block again under :root[data-theme='dark'] so the toggle wins in both directions."
+        },
+        {
+          "name": "styles/reset.css (extended)",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\src\\styles\\reset.css — the four blocks the portfolio's copy dropped, pasted back verbatim",
+          "description": ".skip-link + .skip-link:focus, the button base rule, `input,button,textarea,select {font: inherit}`, and the button half of the focus-visible outline. Plus two portfolio-specific edits: html gets color-scheme: light dark instead of light, and .page's max-width goes 44rem -> 60rem with a new .prose { max-width: var(--measure) } carrying the reading measure, because project pages hold a figure and a four-column table that 44rem strangles."
+        },
+        {
+          "name": "content.ts (extended schema)",
+          "derivedFrom": "F:\\Phyriad\\projects\\portfolio\\src\\content.ts — extended. No climx equivalent: climx's content is fetched JSON, not a module.",
+          "description": "Project gains slug, status, what: string[], how: string[], measured: Measurement[], scope: string[], figures?: Figure[]. Measurement = { metric, value, instrument, date, note? }. The note field exists for exactly one real case: climx's live Lighthouse numbers were measured 2026-07-29 against https://swately.github.io/project-tw/ before the repo rename, and the page must say so rather than print them bare. measured: [] renders no section — today that means only climx (5 rows from MEASUREMENTS.md), PHarvard (1,409/6,864 LUT4 = 21%, 625 registers, 12/26 BRAM, post-route Fmax 20.4 MHz vs a 2.08 MHz design clock, 7/7 hwcheck on silicon — all from the Lattice vendor toolchain via `python syn/build_vendor.py`, 2026-08-01) and Phynned (49 tests via testbench.ps1) get one. Phyriager and PhyriadFG get none, and the page shows nothing rather than a placeholder."
+        },
+        {
+          "name": "vite.config.ts coverage thresholds",
+          "derivedFrom": "F:\\Phyriad\\projects\\climx\\vite.config.ts — the 80%-on-src/lib gate the portfolio deliberately omitted",
+          "description": "Replace the 'no data/logic layer here worth gating on' comment with real thresholds on src/router/** and src/lib/** at 90% lines / 100% functions. Both directories are net-new in this design and both are pure logic, so the gate is coherent rather than decorative — and /engineering can then state the number as a fact about the repo it is served from."
+        }
+      ],
+      "contentGaps": [
+        "No screenshot of climx live. This is the single most conspicuous missing figure — the one project whose output is visual has no image of that output on disk. Needs a browser capture of https://swately.github.io/climx/ (home) and one municipio page, at 1440x900, converted to WebP. Until it exists the climx card carries text and numbers only, and the design must not pretend otherwise.",
+        "No photograph of PHarvard running. Its README's strongest sentence is that the display is a photograph of its own software arithmetic working (the four decimal digits are produced by four calls to __div on a machine with no divide instruction) — and there is no such photograph. I listed the PHarvard repo root and PHarvard/docs; docs contains exactly one file, RNG_CONTEXT.md, and no image. A phone photo of the MachXO2 board showing 0007 would be the highest-value single asset in this entire design.",
+        "No Phynned UI screenshot verified on disk. I did not search its tree for images; the inventory counted images under holith and PhyShell but not Phynned. Treat as unknown, not as absent.",
+        "No PhyriadFG runtime capture — no frame-pacing plot, no before/after, no live stat overlay. The two TikZ diagrams that DO exist are architecture, not results.",
+        "No dated, instrumented number for Phyriager or PhyriadFG. Neither README carries one; Phyriager's README explicitly says the mod builds but has not been validated live. So those two cards ship with an empty Measured section. That is the design working as intended, but it is a gap in the material, not a design choice.",
+        "Phynned's A/B/A/B/A performance results are marked 'provisional' in its own README and I did not read the underlying evidence table. No performance delta may be printed for Phynned until someone reads that table and can name the instrument and date. Only the 49-test count is currently quotable.",
+        "The portfolio has never been Lighthouse-tested, and climx's live 90/100 and 100/98 were measured at the pre-rename URL swately.github.io/project-tw/ on 2026-07-29. Both facts have to appear as caveats until re-run.",
+        "No public/ directory exists in the portfolio at all (verified by listing the project root). No favicon, no og:image, no social card. index.html has a description meta and nothing else. A shared link to this page currently unfurls as a bare URL — which matters more for a portfolio than for any other kind of site.",
+        "content.ts has no slug field and no what/how/measured/scope arrays. Writing them for five projects, sourced from each README, is the bulk of the work in this design and it is prose authoring, not coding. Nothing can be generated.",
+        "The deployment target is undecided (vite.config.ts assumes base '/portfolio/'; the alternative is the swately.github.io root). The 404.html base string and every Link href depend on it. This must be settled before the router lands, not after.",
+        "No CV link is wired today, though F:\\Phyriad\\documentos_varios\\cv.pdf does exist — it needs copying into public/ and a build-time reminder that it and content.ts drift apart independently.",
+        "The earlier design-research pass comparing reference portfolio sites could not be found on disk (the portfolio README records the search). So this design's visual decisions have no recorded prior art behind them; they are argued from the lens, not from that research."
+      ],
+      "lens": "engineer-craft",
+      "risks": [
+        "The deep-link crawler 404 is the sharpest risk and it is inherited, not introduced. climx's own MEASUREMENTS.md declares it: a static SPA on GitHub Pages returns HTTP 404 plus shim HTML to any client that does not run JS — crawlers, link unfurlers, some social previews. On a weather site that costs little. On a portfolio, where the most common act is someone pasting a link to a project page into a chat or a job application, it costs a lot. Accepted here with eyes open, but it is the one place where 'hand-rolled where it teaches' bills the operator rather than teaching him.",
+        "The router is climx's own declared 'highest execution risk'. The port removes most of that risk (the code is written, tested, and has already had its FATAL found in production and fixed), but one specific failure is silent: if public/404.html's base string and vite.config.ts's base ever disagree, deep links break with no error anywhere. The TOUCHPOINT comment is the only guard, and it is a comment.",
+        "This design's cost is concentrated in prose, not code. The five what/how/scope arrays are roughly 60 short paragraphs that only the operator can validate. A half-written content.ts produces five thin detail pages, which is strictly worse than the single good page that exists today. The router should not land until the content does.",
+        "ThemeToggle is the weakest item under this lens and I want that on the record. It is 25 tested lines with a real user, and it makes the token system legible — but it is also the one component here that a reader could fairly call a feature added because it was fun. If something has to be cut, cut it first, and cut /lab with it.",
+        "MeasuredTable creates an incentive to fill it. The type requires an instrument and a date, which stops the laziest overclaim, but nothing stops someone typing a plausible instrument next to a remembered number. The discipline is social, not mechanical, and it degrades the moment one row is written from memory.",
+        "collect-buildinfo.mjs can become a maintenance toy. It has one consumer and it touches git and the test reporter, both of which change shape over time. Its 'unknown' fallback keeps it from breaking the build, but a stamp that quietly reads 'unknown / unknown' for six months is worse than no stamp — it is the page failing its own claim in public.",
+        "Four routes and a colophon on a five-project portfolio is close to the ceiling of what the content supports. If the project detail pages turn out thin, the honest correction is to collapse /projects/:slug back into expandable sections on home (climx's CreditsPage native <details> pattern is the ready-made mechanism) and keep only the router-plus-shim work that /engineering already justifies."
+      ],
+      "routes": [
+        {
+          "path": "/",
+          "purpose": "The index. Who he is, what he built, what he knows — in that order, above the fold as far as possible. Every project is one card with one link target; depth lives one click away, not in a scroll.",
+          "sections": [
+            "IdentityBlock: h1 at --font-size-700, mono role line 'Computer Systems Engineer', Cluster of Ciudad de México · eramosm2506@gmail.com · github.com/Swately",
+            "Profile: the one-paragraph profile from content.ts, constrained to --measure",
+            "Work: Grid min='18rem' gap={4} of five ProjectCard (Phyriager, PhyriadFG, Phynned, PHarvard, climx), each carrying name, mono tag, StatusChip and one line",
+            "Technical skills: the existing SkillsTable over the six real groups",
+            "Experience & education: freelance server administration and systems development, 2020-present; ESCOM/IPN, Computer Systems Engineering, currently enrolled",
+            "A single closing link: 'How this page is built' -> /engineering"
+          ]
+        },
+        {
+          "path": "/projects/:slug",
+          "purpose": "One page per project, same skeleton five times, driven entirely by content.ts. Slugs: phyriager, phyriadfg, phynned, pharvard, climx. This route is the reason the router is worth porting — it is also what makes the CV's one-line descriptions into something a reader can evaluate.",
+          "sections": [
+            "h1 + mono tag + StatusChip (0.1.0-experimental / 0.2.0-experimental / 0.4.0-experimental / runs on silicon / live)",
+            "Lede: the one-line claim, one sentence",
+            "What it is: 2-4 sentences compressed from the project's own README — e.g. Phyriager's three deliberately separated processes (thin Fabric mod, C++23 brain, LLM router) and the fact that the LLM is not in the motor loop on purpose; PHarvard's modified-Harvard dual-port arrangement and its no-multiplier-circuit-only-a-multiply-routine argument",
+            "Figure (only where a real file exists on disk): PhyriadFG gets phyriadfg_multigpu.png and/or phyriadfg_pipeline.png; Phyriager gets trazado_1.png. Phynned, PHarvard and climx get none today",
+            "How it's built: mechanism bullets — e.g. PhyriadFG's three pipelined threads C(iGPU) -> F(second GPU) -> P(primary GPU) over lock-free SPSC rings with a governor control word; climx's cron-fetch/validate/partition into ~350 B gzip static files and the composite (ides, idmun) key that a regression test defends",
+            "Measured: MeasuredTable, rendered only when the project actually has instrumented rows — climx and PHarvard today, Phynned with one row, Phyriager and PhyriadFG with none",
+            "Honest scope: ClaimList quoting each project's own limits",
+            "Links: Cluster of Source (GitHub) and, for climx only, Live site"
+          ]
+        },
+        {
+          "path": "/engineering",
+          "purpose": "The colophon, and the load-bearing page of this whole design. It states how the site is built, what gates it, what it reused from climx, and what it cannot do — turning the implementation into an argument the reader can check by opening the repo.",
+          "sections": [
+            "What this page is: one paragraph — the site is a work sample, so its own construction is on the record",
+            "Constraints: 2 runtime dependencies (react, react-dom, verified in package.json), no router library, no CSS framework, no web fonts, no analytics, no third-party scripts",
+            "The gate: the literal ci.yml order — lint -> typecheck -> coverage -> build -> upload-pages-artifact, then a deploy job gated on needs:checks and main-only; plus the coverage thresholds on src/router/** and src/lib/**",
+            "This build: BuildStamp — commit sha, build date, test count, all generated at prebuild, with 'unknown' printed honestly when a value cannot be obtained",
+            "Where the machinery came from: a provenance table naming climx's router.tsx, 404.html + main.tsx shim, the five primitives, the reset a11y block and the token mechanism — stating the reuse rather than hiding it",
+            "Known limitations: deep links return HTTP 404 + shim HTML to non-JS clients (inherent to a static SPA on Pages, declared not fixed); no prerender; Lighthouse not yet run on this site",
+            "Link to /lab"
+          ]
+        },
+        {
+          "path": "/lab",
+          "purpose": "The living styleguide — the five primitives and the token scales rendered with themselves, in whichever theme the reader is in. Earns its route only because this design actually grows the token set; if the dark palette and the new color roles are cut, this route goes with them.",
+          "sections": [
+            "Stack — column with scale gaps",
+            "Cluster — wrapping row, demoed with the six real skill-group labels",
+            "Grid — auto-fill columns from a minimum, no media queries",
+            "Box — plain vs surface, padding steps",
+            "Text — the 100-700 type scale",
+            "Color roles — swatches for every --color-* token, which is what makes the dark-theme swap visible instead of asserted",
+            "Spacing — --space-1..8 drawn as bars",
+            "Focus states — link, button and card focus-visible outlines side by side"
+          ]
+        }
+      ],
+      "thesis": "Bet everything on verifiable specifics: port climx's router, deep-link shim and a11y block so the page becomes four real routes, then fill those routes with numbers that carry their instrument and date and with limitations quoted from each project's own README — so the page's credibility comes from what a reader can check, not from what it looks like.",
+      "visualDirection": {
+        "color": "The existing palette kept — #ffffff bg, #fafafa surface, #111111 text, #5b5b5b muted, #2255cc accent, #e4e4e4 border — plus --color-accent-weak #e8eefc and --color-warning #8a5a00 / --color-warning-weak #fdf3e0 for StatusChip, which is the first real consumer the warning role has had. Net-new: a dark palette (#0f1115 bg, #161a21 surface, #e8eaed text, #9aa3af muted, #7aa2f7 accent, #262b34 border), defined only as token overrides in two blocks — prefers-color-scheme guarded with :root:not([data-theme='light']), and :root[data-theme='dark'] for the toggle. Every pairing above clears 7:1 on text and 4.5:1 on accents. Color is never the only carrier of meaning: StatusChip prints its status as words.",
+        "density": "Comfortable for prose, tight for data. Prose blocks are capped at --measure (66ch) even though .page is 60rem, so the reading column never widens past comfort while a table or a diagram can use the full width. Section rhythm is --space-7 (48px) between top-level sections and --space-3 (12px) inside a card — the same steps the existing SkillsTable rows already use. Cards are equal-height by Grid row (height:100% from climx's EstadoCard .link) so a two-line description and a four-line one do not produce a ragged grid.",
+        "layout": "One centered column, .page max-width 60rem (up from 44rem, because project pages hold a four-column table and a wide diagram). Every layout on all four routes is Stack / Cluster / Grid / Box / Text plus exactly two page-level rules — .page and .prose. No sixth primitive is added; that constraint is the /lab page's actual claim, and breaking it silently would make /lab a lie. Responsiveness comes from Grid's auto-fill minmax and rem type, exactly as climx does it; the single media query in the codebase stays SkillsTable's 560px collapse, joined by the tokens.css dark block.",
+        "motion": "None. No scroll reveals, no parallax, no entrance animations, no skeleton shimmer. The only transitions are the 120ms color change on link hover and focus. Because there is nothing to reduce, no prefers-reduced-motion rule is needed — which is the honest version of respecting it, rather than a rule that exists to be pointed at.",
+        "typography": "system-ui for prose, --font-mono for everything that is an instrument reading. That is a rule with a hard edge: project tags, status chips, route paths, filenames, measured values, instruments, dates, the commit sha and the nav wordmark are mono; sentences never are. The type scale gains --font-size-700 (2.441rem, continuing the existing 1.25 ratio) for page h1s and otherwise stays the ported six steps. Headings choose their level semantically and their size separately — the Text primitive already enforces that split by keeping `as` and `size` independent."
+      },
+      "whatItRefuses": "\"It refuses climx's 32 state photographs, on both available grounds: nothing in that repo records an author, licence or source for a single one (climx credits every municipality photo and says of these only that they came from the 2023 project — that contrast is the tell), and they are pictures of Mexican geography, not of Phyriager, PhyriadFG, Phynned, PHarvard, climx or the operator. A mangrove above a card about core pinning is template grammar, and a reader spots it in a second. It refuses every other form of decoration that would imply engineering it does not contain: no hero image, no gradient, no drop shadow, no scroll animation, no icon set, no web font, no analytics. It refuses a separate /about route, because the material — one paragraph, one freelance entry, one education line, three languages — fits on home and a padded page reads as padding. It refuses placeholder Measured sections: a project with no instrumented number shows nothing, never 'coming soon', which is why the Phyriager and PhyriadFG pages will look emptier than the climx one. It refuses to print a bundle size in BuildStamp, because that number is unknowable before the build it would describe and a committed stale one is exactly the fake evidence this page exists to argue against. It refuses to reprint climx's live Lighthouse scores without their caveat, since they were measured at the pre-rename URL. It refuses to port src/lib/data, src/lib/geo, SearchCombobox and ErrorState however good that code is — a page that imports its content at build time has no cache, no staleness, no network failure mode and nothing to search, and shipping them would be cargo-culting the donor. It refuses a sharp devDependency to convert three images once. And it refuses react-router, a CSS framework, and a component library, because the site's entire argument is that this much was built and gated by hand.\""
+    }
+  ],
+  "verdicts": [
+    {
+      "lens": "climx-reuse-auditor",
+      "score": 7,
+      "strengths": [
+        "The load-bearing entry is real reuse, verified byte-for-byte. F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx (3,868 B) exports exactly Router/Link/useParams/navigate plus matchPath/stripBase for tests, and computes `const BASE = import.meta.env.BASE_URL.replace(/\\/$/, '')`. The portfolio's vite.config.ts sets `base: '/portfolio/'`, so the copy works unchanged, as claimed. `fallback` is a REQUIRED prop on Router (`{ routes: Route[]; fallback: ComponentType }`), which independently justifies porting NotFound.tsx. Without this file there is no /projects/:slug and the whole design collapses into the single page that already exists. This is climx doing structural work, not being namedropped.",
+        "The 404-shim entry is correct, complete, and correctly ordered. I confirmed climx\\public\\404.html contains `var base = '/climx/';` with the `~and~` encoding, and that the matching 8-line restore block sits above createRoot in climx\\src\\main.tsx. I also confirmed `ls F:\\Phyriad\\projects\\portfolio\\public` fails (no public/ dir) and that portfolio\\src\\main.tsx has no restore block. The design's insistence that these ship in the same commit as the router is the single most useful operational statement in the document.",
+        "The reset.css diff was done first-hand and every claim checks out. Diffing the two files: the portfolio dropped `input,button,textarea,select { font: inherit }`, the whole `button { ... }` base rule, `button:focus-visible` (it kept only `a:focus-visible`), `.skip-link`, `.skip-link:focus`, and `.page`'s `display:flex; flex-direction:column; gap: var(--space-6)`. climx's `.page` is `max-width: 64rem`, the portfolio's is `44rem`. Five blocks plus the width: all six claims true. The skip-link is genuinely required by the new app shell and 64rem is genuinely required by an 18rem auto-fill grid, so this is structural, not tidying.",
+        "MEASUREMENTS.md is the best call in the document and every number survives checking. F:\\Phyriad\\projects\\climx\\docs\\planning\\MEASUREMENTS.md really is a Date | Stage | Metric | Measured | Instrument | Cap table, and I verified in it: 9,852 records to 2,463 files, all-lite.json 44,266 B gzip, 51/51 tests, lib coverage 98.92%, bundle 66.66 KB gzip against the 150 KB M4 cap, state images 123 MB to 1.12 MB, photo coverage 1,474/2,463 (59.8%), Lighthouse 90/100 home and 100/98 municipio, and the self-inflicted 404 (989 of 2,463 municipios had no sidecar). The design's own contentGap that those Lighthouse numbers were taken against swately.github.io/project-tw/ is also true — the header of that section says exactly that.",
+        "The refusals are disciplined and mostly correct, which is itself evidence the author read the repo rather than skimmed it. Refusing src\\lib\\** , SearchCombobox, ForecastCard, skyIcon, CommonsGallery, NearestMunicipio, ErrorState and scripts\\*.mjs on the grounds that a build-time content.ts import has no fetch that can fail is the right call and matches the container's no-speculative-layers rule. The estados-photo refusal is factually grounded too: climx\\src\\pages\\CreditsPage.tsx credits every municipality photo but says only that the state photos \"provienen del proyecto original (2023)\" — no author, no license, exactly as the design states.",
+        "No assets are invented. I confirmed on disk: PhyriadFG\\docs\\diagrams\\phyriadfg_multigpu.png = 89,350 B, phyriadfg_pipeline.png = 64,286 B, Phyriager\\screenshots\\trazado_1.png = 167,722 B, documentos_varios\\cv.pdf = 172,883 B. Every byte count in the design matches. The claim that climx has no favicon to inherit is also true — climx\\public\\ holds only 404.html, data/ and img/.",
+        "The primitives claim is honest rather than padded. Diffing all seven files: Box.tsx, Box.module.css, Stack.tsx, Cluster.tsx, Grid.tsx and primitives.test.tsx are byte-identical between the two repos; Text.module.css differs only by the four-line `.mono` block. The design says \"already ported verbatim\" rather than claiming credit for porting them, which is the correct framing."
+      ],
+      "fatalFlaws": [],
+      "requiredFixes": [
+        "Reclassify EstadoCard.module.css from structural to cosmetic. Once the design drops the `.img` rule (its own choice, no screenshots exist) and builds ProjectCard as `Box as=\"li\" variant=\"surface\"` with a Link on the TITLE rather than an <a> wrapping the card, almost nothing transfers. climx's `.link` gives `background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--space-2)` — the portfolio's Box.module.css `.surface` already has all three, verbatim. `height: 100%` is already in portfolio\\src\\components\\ProjectCard.module.css `.card`. `text-decoration:none; color: var(--color-text)` only apply to a whole-card anchor this design does not build, and `overflow: hidden` exists solely to clip the image it is dropping. The actual residue is three lines: `.link:hover .name, .link:focus-visible .name { color: var(--color-accent); text-decoration: underline; }`. Keep the rule — it is good — but stop calling a three-line hover rule structural reuse.",
+        "Reclassify MuniHeader.tsx and CreditsPage.tsx from structural to cosmetic, and fix what MuniHeader actually donates. The design's own words give it away: \"Its fallback discipline, not its markup\" and \"Only the PATTERN: native <details>/<summary>\". The MuniHeader `useState(imgFailed)` machinery exists only to swap in `estadoImg(ides)`; the portfolio has no fallback image, so it collapses to `onError → hide` and ProjectFigure is ~10 new lines. Ironically the one directly copyable thing — MuniHeader.module.css's `.img { width:100%; height:13rem; object-fit:cover; border-radius:var(--space-2) }` — is not claimed at all. Claim that instead. And <details>/<summary> is an HTML element: CreditsPage's substance is useFetch + a two-source join + groupByState over 1,474 rows, all explicitly discarded, and it ships no CSS module, so there is nothing left to inherit.",
+        "Reclassify the ARCHITECTURE.md entry from structural to cosmetic, or drop it. The heading \"Honest weakest point\" is real (I read it — it names the hand-rolled router as the highest execution risk), but the design's stated use is \"Its ... STANCE is the design's organizing idea\". A stance is not reuse, and the artifact it produces (DetailsGroup) is already credited to CreditsPage in a separate entry, so this double-counts. The same applies more mildly to the app.tsx entry, whose transferable content — the skip-link, the .page div, the `<Router routes fallback>` call — is already fully covered by the router.tsx and reset.css entries.",
+        "Mine F:\\Phyriad\\projects\\climx\\docs\\planning\\aap\\ or say why not. Nine files sit there unmentioned — AAP_OBJECTIVE.md, CANDIDATE_D1/D2/D3.md, SCORECARD_adoption-skeptic / budget-auditor / performance-realist .md, SYNTHESIS.md, SEAL_NOTE.md — and climx's own README points at them under Provenance: \"The architecture was selected through a documented design search — three candidate architectures, adversarial review, feasibility veto\". ARCHITECTURE.md's own header records the verdict chain and the fact that the idmun collision \"was the FATAL defect the AAP's adversarial phase caught in 2 of 3 candidates\". For a recruiter-scan lens this is climx's rarest artifact — a documented adversarial architecture selection is scarcer than a bundle-size number — and the design mined README, ARCHITECTURE and MEASUREMENTS while skipping the folder all three point to. It is not even listed as refused.",
+        "Specify the coverage gate, and add climx\\vite.config.ts to the resource list. The design promises \"the 80% gate climx wires on src/lib/**\" twice but never lists the file. climx's config reads `coverage: { provider: 'v8', include: ['src/lib/**'], thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 } }` — note it NARROWS `include` to the gated layer. The portfolio's config today is `include: ['src/**']` with no thresholds. Pasting climx's `thresholds` block on top of the portfolio's existing `include: ['src/**']` gates HomePage, ProjectPage, AboutPage and PrimitivesLab too and fails CI on the first run. Say explicitly whether you narrow `include` or use a per-glob threshold key.",
+        "Reconcile the PHarvard ProofStrip number before it is printed in the largest type on the page. PHarvard\\README.md line 26 says \"1,409 LUT4 of 6,864 (21 %), 625 registers (9 %), 12 of 26 block RAMs (46 %)\" with \"Fmax 20.4 MHz\". PHarvard\\syn\\VENDOR_VS_ESTIMATE.md describes the same 2026-08-01 post-bring-up configuration — same 625 registers, same 12 of 26 block RAMs — as \"1,402 LUT4 (20 %) ... post-route Fmax 21.744 MHz\". The repo contradicts itself, and the design's ProofStrip leads with 1,409 and its EvidenceRow with 20.4 MHz. On a page whose entire thesis is that the claims are checkable, the first number a recruiter clicks through on must not be the one the source disputes.",
+        "Extend the Text primitive's type unions, or the design does not compile. portfolio\\src\\primitives\\Text.tsx declares `size?: 100 | 200 | 300 | 400 | 500 | 600` and `as?: 'p' | 'span' | 'strong' | 'small' | 'h1' | 'h2' | 'h3' | 'dt' | 'dd'`. The design specifies `Text as=h1 size=700` for the name and adds `--font-size-700` to tokens.css, but adding the token is not enough — the union needs `| 700`. Separately, MetricList as a `<dl>` has no primitive that renders one: neither Stack's nor Box's `as` union includes 'dl'. Both are small edits, but the design's claim that \"no new layout mechanism is introduced anywhere\" quietly implies primitive edits it does not name.",
+        "Reconsider the 'no last-updated mechanism' content gap against climx\\src\\lib\\data\\staleness.ts. The design declares \"there is no mechanism to derive one\" while refusing the entire src/lib layer wholesale. Refusing fetchWithCache/useFetch/hooks is correct — there is no fetch. But staleness.ts is twenty JSX-free, zero-dependency lines (`ageHours`, `isStale`, `ageLabel`) that turn one timestamp into a human label, and it is exactly the mechanism the gap says does not exist. Either port the label half over a build-time constant, or state that you saw it and rejected it — do not declare the problem unsolvable while the solution sits in the donor repo."
+      ],
+      "implementable": true
+    }
+  ]
+}

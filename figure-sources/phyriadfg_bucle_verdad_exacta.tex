@@ -1,0 +1,80 @@
+% PhyriadFG — la evaluación contra verdad exacta (scene_truth, B1): ocho pasos en SERPENTINA, no un lazo
+% (el paso 8 no vuelve al 1; el nombre de archivo "bucle" se conserva por los enlaces existentes).
+% Build (MiKTeX, figure contract v1, portfolio/figure-contract/README.md §1):
+%   latex -interaction=nonstopmode phyriadfg_bucle_verdad_exacta.tex
+%   dvisvgm --no-fonts --bbox=papersize -o phyriadfg_bucle_verdad_exacta.svg phyriadfg_bucle_verdad_exacta.dvi 2> dvisvgm.log
+%   (any "failed to create" in dvisvgm.log = FAILED build)
+%   svgo --multipass phyriadfg_bucle_verdad_exacta.svg -o phyriadfg_bucle_verdad_exacta.min.svg
+% Colours: phyriad-figure-colors.sty (copy it next to this file). Ink = TeX black; ONE accent (figAccent) on
+% the comparison against exact truth (step 8); figMuted for the secondary notes (dump modes, cut pairs).
+% Redrawn 2026-10-10 with the dossier's Anexo corrections 3, 5 and 7 (PORTFOLIO_DOSSIER.md).
+% Every box matches the code/records (repo-relative, PhyriadFG):
+%   tools/scene_truth/scene_zoo.py:1-30     closed-form 3-D scene, rendered exactly at any t; per-pixel id/depth/
+%                                           flow/visibility labels; inputs and truth come from the same renderer
+%   tools/scene_truth/scene_zoo.py:462-523  source_k<K>/ manifests; barcode = BASE index in every frame
+%   tools/motion_truth/play_frames.ps1      the player (invoked from tools/scene_truth/scene_live.ps1:85)
+%   tools/scene_truth/scene_live.ps1:14-18  play_frames.ps1 presents source_k<K>/ at base_fps/K in its own window;
+%                                           the FG captures it and --qdump writes each sampled generated frame
+%                                           with the two real frames it came from; scene_align -> scene_report
+%   tools/scene_truth/scene_live.ps1:20-28  --qdump is a sampler on the sync path; -Gdump = every tick, async path
+%   tools/scene_truth/scene_align.py:3-22   barcodes give (N, N1); pair_ok iff N1-N == k, else filed as a CUT
+%   tools/scene_truth/scene_report.py:531-537  exact_phase(): the FG's own phase per frame, from align.json
+%   docs/evidence/B1_FIRST_FG_ROW.md:28-29  truth rendered at t = tA + t_fg (tB - tA) for each generated frame
+%   docs/evidence/B1_FIRST_FG_ROW.md:42-47  the row and its two rulers (nearest real frame, exact-flow oracle2)
+%   public CHANGELOG.md:157-158 (0.5.3)    "matched against an analytically exact rendering of the same scene at
+%                                           that frame's own phase" (the public statement of this evaluation)
+% Made with my soul - Swately <3
+\documentclass[border=12pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{amsmath}
+\usepackage{phyriad-figure-colors}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Latex, line width=0.6pt,
+  box/.style={draw, rounded corners, minimum height=1.6cm, align=center, font=\small, text width=3.6cm},
+  accentbox/.style={box, draw=figAccent, fill=figFillAccent, line width=1.1pt},
+  elab/.style={midway, above, font=\footnotesize, align=center},
+  note/.style={font=\footnotesize, align=center},
+]
+
+% ── fila superior: lo que se le muestra al FG (izquierda -> derecha) ───
+\node[box] (scene) at (0,0) {\textbf{1. Escena 3-D analítica}\\función cerrada del\\tiempo (\texttt{scene\_zoo.py})};
+\node[box, right=16mm of scene] (corp) {\textbf{2. Corpus}\\cada $k$-ésimo cuadro base;\\código de barras con\\el índice base};
+\node[box, right=16mm of corp] (play) {\textbf{3. Reproductor}\\presenta el corpus\\en su propia ventana\\(\texttt{play\_frames.ps1})};
+\node[box, right=16mm of play] (fg) {\textbf{4. PhyriadFG}\\captura la ventana\\y genera $I_t$\\(el mismo ejecutable,\\más un flag de volcado)};
+
+\draw[->] (scene) -- (corp);
+\draw[->] (corp) -- (play);
+\draw[->] (play) -- (fg) node[elab]{píxeles};
+
+% ── fila inferior: lo que se mide (derecha -> izquierda) ───────────────
+\node[box, below=22mm of fg] (dump) {\textbf{5. Volcado}\\por cuadro generado:\\(previo, siguiente,\\generado, $t$ del FG)};
+\node[box, left=16mm of dump] (align) {\textbf{6. Alineación}\\códigos de barras $\to$\\par real $(N, N_1)$;\\si $N_1{-}N\neq k$: corte};
+\node[box, left=16mm of align] (truth) {\textbf{7. Verdad exacta}\\la escena evaluada en\\$t_A + t_{FG}\,(t_B - t_A)$};
+\node[accentbox, left=16mm of truth] (score) {\textbf{8. Comparación}\\posición, forma, masa\\inventada, nitidez;\\por objeto y por fase};
+
+\draw[->] (fg) -- (dump) node[midway, left, note, align=right, text=figMuted, xshift=-1mm]
+  {\texttt{-{}-qdump}: muestreo, ruta síncrona\\\texttt{-{}-gdump}: cada tick, ruta asíncrona};
+\draw[->] (dump) -- (align);
+\draw[->] (align) -- (truth) node[elab]{fase propia\\del FG};
+\draw[->, draw=figAccent, line width=1.1pt] (truth) -- (score);
+
+% la misma escena produce la entrada y la verdad
+\draw[->, dashed] (scene) -- (truth)
+  node[midway, anchor=south west, note, xshift=1mm, align=left] {mismo render,\\solo cambia $t$};
+
+% cortes apartados, y las reglas de la comparación (notas centradas bajo su caja)
+\node[note, text=figMuted, below=5mm of align, text width=4.6cm] (cut)
+  {un par que no está a $k$ cuadros (costura del bucle del reproductor) se puntúa aparte, como corte};
+\draw[->, dashed, draw=figMuted] (align) -- (cut);
+\node[note, below=5mm of score, text width=4.2cm] (rules)
+  {frente a dos reglas: el cuadro real más cercano y un warp con flujo exacto (oráculo)};
+
+\end{tikzpicture}
+\end{document}

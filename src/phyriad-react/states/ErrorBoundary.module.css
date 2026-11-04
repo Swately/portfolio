@@ -1,0 +1,26 @@
+/* Same grammar as ErrorSummary — the 2px error border is the "something is
+   wrong here" frame — but content, not navigation: no links to fields, a
+   retry action instead. */
+.boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--phy-space-xs);
+  border: 2px solid var(--phy-error);
+  padding: var(--phy-space-m);
+}
+
+.title {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-base);
+  font-weight: 600;
+  color: var(--phy-error);
+}
+
+.message {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  color: var(--phy-ink);
+}
+
+/* Made with my soul - Swately <3 */

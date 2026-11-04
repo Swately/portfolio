@@ -1,0 +1,14 @@
+/* A decision is a unit of reading: the rule above separates it from the next, nothing else boxes it. */
+.decision {
+  padding-block-start: var(--phy-space-s);
+  border-block-start: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.list {
+  margin: 0;
+  padding-inline-start: var(--phy-space-l);
+  display: grid;
+  gap: var(--phy-space-xs);
+}
+
+/* Made with my soul - Swately <3 */

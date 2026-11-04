@@ -1,0 +1,94 @@
+/* A three-column readout: name, measured value, and what the threshold is. The
+   label column is fixed so the values line up and a bad one is obvious. */
+.metric {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 10rem) 1fr;
+  gap: var(--phy-space-s);
+  align-items: baseline;
+  padding-block: var(--phy-space-3xs);
+  border-block-end: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.metric:last-child {
+  border-block-end: none;
+}
+
+/* Pass/fail carried by weight and the accent, not by green/red alone — a
+   colour-only signal is invisible to a good share of readers. */
+.good {
+  font-weight: 700;
+}
+
+.bad {
+  font-weight: 700;
+  color: var(--phy-accent);
+  text-decoration: underline wavy;
+  text-underline-offset: 0.2em;
+}
+
+.stepName {
+  inline-size: 3rem;
+  flex: none;
+}
+
+.pairName {
+  inline-size: 5rem;
+  flex: none;
+}
+
+.spaceBar {
+  display: inline-block;
+  /* Never shrinks: the bar's box IS the measurement (reviewer finding, 0.16.0). */
+  flex: none;
+  block-size: var(--phy-space-s);
+  background: var(--phy-accent);
+}
+
+.swatch {
+  inline-size: var(--phy-space-l);
+  block-size: var(--phy-space-l);
+  border: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.wideStrip {
+  inline-size: 44rem;
+  padding: var(--phy-space-m);
+  font-size: var(--phy-text-sm);
+}
+
+/* Demo cells: visible edges are the whole point — the comparison is about where
+   a boundary lands, so the boundary has to be drawable. */
+.demoCell {
+  background: var(--phy-paper-2);
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  padding: var(--phy-space-xs);
+  min-block-size: 2.5rem;
+}
+
+.demoNested {
+  outline: 1px dashed var(--phy-ink-muted);
+  outline-offset: 2px;
+}
+
+/* Below ~40rem the three-column readout cannot hold a label, a value and a
+   note side by side: at 320 px the value overlapped the note (measured in the
+   S8.1 gate). Reflow to one column so the instrument obeys WCAG 1.4.10 itself. */
+@media (width < 40rem) {
+  .metric {
+    grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+}
+
+/* In the lab the colour IS the meaning (swatches, ruler bars): keep it even
+   under forced colors, and draw an edge so a swatch never disappears into the
+   backplate. */
+@media (forced-colors: active) {
+  .swatch,
+  .spaceBar {
+    forced-color-adjust: none;
+    outline: 1px solid CanvasText;
+  }
+}
+
+/* Made with my soul - Swately <3 */

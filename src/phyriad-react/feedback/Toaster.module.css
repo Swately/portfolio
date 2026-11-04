@@ -1,0 +1,55 @@
+/* Fixed at the inline-end top; never part of layout (WINDOW_ROSTER C1). The
+   region itself lets pointer events through so an empty stack blocks nothing;
+   each toast takes them back. */
+.region {
+  position: fixed;
+  inset-block-start: var(--phy-space-m);
+  inset-inline-end: var(--phy-space-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-xs);
+  inline-size: min(24rem, calc(100% - 2 * var(--phy-space-m)));
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  gap: var(--phy-space-s);
+  align-items: flex-start;
+  padding: var(--phy-space-s);
+  background: var(--phy-paper);
+  color: var(--phy-ink);
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  border-inline-start: 3px solid var(--phy-ink);
+}
+
+.success {
+  border-inline-start-color: var(--phy-accent);
+}
+
+.error {
+  border-inline-start-color: var(--phy-error);
+}
+
+.text {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.body {
+  font-size: var(--phy-text-sm);
+  color: var(--phy-ink-muted);
+}
+
+@media (forced-colors: active) {
+  .toast {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Made with my soul - Swately <3 */

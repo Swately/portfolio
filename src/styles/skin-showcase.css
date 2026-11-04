@@ -1,0 +1,158 @@
+/*
+ * The "showcase" skin (docs/planning/SHOWCASE_SKIN_SPEC.md): dark-first, surfaces instead of lines, the
+ * project figure as each card's cover. THE DEFAULT LOOK since tokens 2.0.0 (operator, 2026-10-20): every
+ * rule applies when <html> has no data-palette or has "showcase"; data-palette="oxide" or "maid" (src/lib/
+ * skin.ts, ?palette=oxide) returns the site to its look before the skin. Nothing here is a shadow; elevation
+ * is tone. The colours and the radius are the substrate's own showcase palette.
+ */
+
+/* Hook rendered for projects without a figure; hidden except under the skin. */
+.skin-typecover {
+  display: none;
+}
+
+/* ---- Palette: in the substrate since tokens 1.6.0 -------------------------------------------------
+ * The colours, the third surface (--phy-paper-3) and the 8 px radius are the vendored tokens' own
+ * `showcase` palette, gated by the tokens testbench. This sheet keeps only what is the portfolio's: the
+ * pill radius and the component rules below. */
+:root:is(:not([data-palette]), [data-palette='showcase']) {
+  --skin-pill: 999px;
+}
+
+/* A surface: tone, the radius, and a transparent border that forced colours paint visible, so the edge
+   tone gave comes back exactly where tone disappears. */
+:root:is(:not([data-palette]), [data-palette='showcase']) :is(.skin-card, .skin-spine, .skin-tile) {
+  background: var(--phy-paper-2);
+  border: 1px solid transparent;
+  border-radius: var(--phy-radius);
+}
+
+/* ---- Home: the shelf of cards ---------------------------------------------------------------------- */
+/* Out of the reading measure like .phy-wide, then at most two columns: three images do not make a grid. */
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-shelf {
+  --skin-shelf-w: max(100%, min(62rem, 100vw - 2 * var(--phy-space-l)));
+  inline-size: var(--skin-shelf-w);
+  margin-inline: calc(50% - var(--skin-shelf-w) / 2);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+  gap: var(--phy-space-l);
+  align-items: start;
+}
+
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-card {
+  /* a card is a block, not a line of text: the substrate's narrow-mode cap on li (the measure) would
+     leave it 507 px wide, flush left, in a 720 px shelf (measured at 768) */
+  max-inline-size: none;
+  padding: var(--phy-space-m);
+  overflow: clip;
+}
+
+/* The cover leads the card, edge to edge, at the figure's own aspect ratio (no crop: these are diagrams). */
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-cover {
+  order: -1;
+  margin: calc(-1 * var(--phy-space-m)) calc(-1 * var(--phy-space-m)) var(--phy-space-xs);
+  border: 0;
+  border-radius: 0;
+  background: var(--phy-paper-3);
+  padding: var(--phy-space-s);
+}
+
+/* No figure, no picture: the name, large, on the raised surface. */
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-typecover {
+  display: flex;
+  align-items: end;
+  order: -1;
+  min-block-size: 8rem;
+  margin: calc(-1 * var(--phy-space-m)) calc(-1 * var(--phy-space-m)) var(--phy-space-xs);
+  padding: var(--phy-space-m);
+  background: var(--phy-paper-3);
+  font-family: var(--phy-font-prose);
+  font-size: var(--phy-text-xl);
+  line-height: var(--phy-leading-tight);
+  color: var(--phy-ink);
+}
+
+/* ---- Headline figures as raised tiles -------------------------------------------------------------- */
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-tile {
+  padding: var(--phy-space-s);
+}
+
+/* ---- Figures, charts, tables: each on a surface ---------------------------------------------------- */
+/* --phy-paper is redefined in the scope of each surface, so everything the substrate paints with it there
+   (the scroll-shadow gradients, the sticky row labels, a plate's paper) matches the surface it sits on. */
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-figure > :first-child,
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-surface,
+:root:is(:not([data-palette]), [data-palette='showcase']) .phy-scroll-x:has(> table) {
+  --phy-paper: var(--phy-paper-2);
+  background-color: var(--phy-paper-2);
+  border: 1px solid transparent;
+  border-radius: var(--phy-radius);
+}
+
+:root:is(:not([data-palette]), [data-palette='showcase']) .phy-scroll-x:has(> table) {
+  padding: var(--phy-space-s);
+}
+
+/* The header row is raised and keeps the one structural line (3:1); body rows part by tone, not lines. */
+:root:is(:not([data-palette]), [data-palette='showcase']) .phy-scroll-x > table thead th {
+  background: var(--phy-paper-3);
+}
+
+:root:is(:not([data-palette]), [data-palette='showcase']) .phy-scroll-x > table tbody :is(th, td) {
+  border-block-end-color: transparent;
+}
+
+:root:is(:not([data-palette]), [data-palette='showcase'])
+  .phy-scroll-x
+  > table
+  tbody
+  tr:nth-child(even)
+  > * {
+  background: var(--phy-paper-3);
+}
+
+/* ---- Chips ----------------------------------------------------------------------------------------- */
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-tag {
+  background: var(--phy-paper-3);
+  border-color: transparent;
+  border-radius: var(--skin-pill);
+  padding-inline: var(--phy-space-s);
+}
+
+/* provisional: word, colour AND edge, never colour alone */
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-provisional .skin-tag {
+  border-color: var(--phy-accent);
+}
+
+/* ---- Navigation: pills on the surface, no new destination ------------------------------------------ */
+:root:is(:not([data-palette]), [data-palette='showcase']) :is(.skin-pill, .skin-pills a, footer a) {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--phy-space-3xs) var(--phy-space-s);
+  border: 1px solid transparent;
+  border-radius: var(--skin-pill);
+  background: var(--phy-paper-2);
+  color: var(--phy-ink);
+  text-decoration: none;
+}
+
+:root:is(:not([data-palette]), [data-palette='showcase'])
+  :is(.skin-pill, .skin-pills a, footer a):is(:hover, :focus-visible) {
+  background: var(--phy-paper-3);
+  text-decoration: underline;
+}
+
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-pills {
+  gap: var(--phy-space-xs);
+}
+
+:root:is(:not([data-palette]), [data-palette='showcase']) footer button {
+  border-radius: var(--skin-pill);
+}
+
+/* The spine: a surface panel; its rail and 2 px current bar stay square and carry the state by weight. */
+:root:is(:not([data-palette]), [data-palette='showcase']) .skin-spine {
+  padding: var(--phy-space-s);
+}
+
+/* Made with my soul - Swately <3 */

@@ -1,0 +1,124 @@
+{
+  "schema": "phyriad-matrix/1",
+  "id": "phyriadfg-approach-comparison",
+  "title": "Comparación de enfoque entre PhyriadFG, NVIDIA DLSS-G, AMD FSR 3 FG, Lossless Scaling y RIFE, según dónde corre cada sistema, qué necesita del juego y qué expone.",
+  "note": "Comparación de enfoque, no de rendimiento ni de calidad. PhyriadFG no tiene en su texto público ninguna medición contra estas alternativas, así que no se afirma ninguna ventaja. Fuentes externas leídas de primera mano el 2026-10-09 y releídas el 2026-10-10: [V1] es la página primaria leída; [V2] es primaria parcial (solo el resumen o el abstract). No incluido: AMD AFMF (a nivel de driver: amd.com dio timeout y solo hay fuentes secundarias) y NVIDIA Optical Flow SDK (sin fuente primaria leída).",
+  "status": "approach-only",
+  "options": ["PhyriadFG", "NVIDIA DLSS-G", "AMD FSR 3 FG", "Lossless Scaling (LSFG)", "RIFE"],
+  "rows": [
+    {
+      "attribute": "Dónde corre",
+      "kind": "enfoque",
+      "cells": [
+        "Proceso externo; captura DDA o WGC; reparte roles en iGPU, segunda GPU y GPU principal (diseño; la versión 0.6.0 está medida solo en una GPU)",
+        "Dentro del motor (Streamline)",
+        "Dentro del motor; maneja el swapchain",
+        "Aplicación externa",
+        "Red neuronal (investigación, interpolación de vídeo)"
+      ]
+    },
+    {
+      "attribute": "Qué necesita del juego",
+      "kind": "enfoque",
+      "cells": [
+        "Nada: solo la imagen final («with no access to the game engine, its motion vectors, or its depth»)",
+        "Profundidad y vectores de movimiento; recomienda buffers sin HUD y de UI",
+        "Vectores de movimiento y profundidad a resolución de render",
+        "Ninguna integración; el juego debe estar en ventana o pantalla completa sin bordes («Only windowed and borderless fullscreen modes are supported.»)",
+        "Fotogramas de vídeo de entrada (el número no consta en el abstract leído)"
+      ]
+    },
+    {
+      "attribute": "Qué expone",
+      "kind": "enfoque",
+      "cells": [
+        "Ejecutable único con flags (--window, --monitor, --capture-api); latencia en vivo",
+        "API de integración",
+        "SDK abierto (FidelityFX)",
+        "Aplicación de usuario final (Steam)",
+        "Modelo y algoritmo publicado"
+      ]
+    },
+    {
+      "attribute": "En qué se diferencia el enfoque",
+      "kind": "enfoque",
+      "cells": [
+        "(es el proyecto: ver las filas anteriores)",
+        "Para la desoclusión y el HUD recibe datos del motor (profundidad, vectores de movimiento, buffers sin HUD y de UI); PhyriadFG solo dispone de la imagen final y, según su propio README, solo puede mitigarlos.",
+        "Consume vectores de movimiento y profundidad del juego e integra su swapchain; PhyriadFG no toca el proceso del juego. La misma página menciona que FSR 3 también calcula flujo óptico propio.",
+        "Ambos capturan la salida y no necesitan integración (el README de PhyriadFG lo nombra como análogo). Lo que PhyriadFG declara como propio es el reparto multi-GPU por rol y un flujo óptico por bloques documentado: una diferencia de arquitectura, no una ventaja medida.",
+        "RIFE aprende el flujo intermedio con una red entrenada y se evalúa sobre vídeo; PhyriadFG estima el flujo por búsqueda de bloques (MV y SAD sobre pirámide) sobre la salida de un juego en vivo, sin modelo entrenado. Sin comparación de calidad."
+      ]
+    },
+    {
+      "attribute": "Fuente y nivel",
+      "kind": "enfoque",
+      "cells": [
+        "README.md y docs/ARCHITECTURE.md del propio proyecto",
+        "Streamline, ProgrammingGuideDLSS_G.md [V1]",
+        "gpuopen.com, FidelityFX Super Resolution 3 [V1]",
+        "Página del vendedor en Steam [V1]",
+        "arXiv:2011.06294 [V2], solo el abstract"
+      ]
+    }
+  ],
+  "sources": [
+    [
+      {
+        "text": "README.md",
+        "href": "https://github.com/Swately/PhyriadFG/blob/main/README.md#L3"
+      },
+      {
+        "text": "docs/ARCHITECTURE.md",
+        "href": "https://github.com/Swately/PhyriadFG/blob/main/docs/ARCHITECTURE.md#L22"
+      }
+    ],
+    [
+      {
+        "text": "github.com/NVIDIAGameWorks/Streamline",
+        "href": "https://github.com/NVIDIAGameWorks/Streamline/blob/main/docs/ProgrammingGuideDLSS_G.md"
+      }
+    ],
+    [
+      {
+        "text": "gpuopen.com/fidelityfx-super-resolution-3",
+        "href": "https://gpuopen.com/fidelityfx-super-resolution-3/"
+      }
+    ],
+    [
+      {
+        "text": "store.steampowered.com/app/993090",
+        "href": "https://store.steampowered.com/app/993090/Lossless_Scaling/"
+      }
+    ],
+    [{ "text": "arxiv.org/abs/2011.06294", "href": "https://arxiv.org/abs/2011.06294" }]
+  ],
+  "quotes": [
+    [
+      "\"PhyriadFG runs outside the game: it captures the already-rendered output, estimates the motion between real frames, synthesizes intermediate frames, and presents them — with no access to the game engine, its motion vectors, or its depth.\" (README.md:3-5)",
+      "\"A frame generator that works on any game because it only sees the final image (like Lossless Scaling Frame Generation), not an in-engine FG.\" (README.md:15-16)"
+    ],
+    [
+      "\"DLSS-G requires the following buffers for frame generation:\"",
+      "\"For the best image quality, it is critical to provide a Hudless (pre-UI) buffer and a UI buffer.\"",
+      "\"DLSS-G runs optical flow in interop mode in Vulkan by default.\""
+    ],
+    [
+      "\"FSR 3 Frame Generation requires some additional input on setup and dispatch, and swapchain handling.\"",
+      "\"Optical Flow enhanced from AMD Fluid Motion Frames.\""
+    ],
+    [
+      "\"This feature creates additional frames to make games look smoother.\"",
+      "\"It's compatible with most games, even those that don't have built-in frame generation or scaling\"",
+      "\"Only windowed and borderless fullscreen modes are supported.\""
+    ],
+    [
+      "\"We propose RIFE, a Real-time Intermediate Flow Estimation algorithm for VFI.\"",
+      "\"RIFE uses a neural network named IFNet that can estimate the intermediate flows end-to-end with much faster speed.\""
+    ]
+  ],
+  "origin": {
+    "label": "PhyriadFG/docs/PORTFOLIO_DOSSIER.md, sección 6.3 (no publicado)",
+    "note": "Transpuesta el 2026-10-14 (una opción por columna). No incluye la comparación medida contra Lossless Scaling: el operador la retiró del texto público el 2026-09-29."
+  }
+}

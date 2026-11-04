@@ -1,0 +1,34 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "phyriager-vlm-latencia",
+  "title": "Latencia de un modelo de visión local según la resolución del cuadro (qwen2.5vl:3b en una GTX 1080 Ti)",
+  "takeaway": "La latencia da un salto entre 720p y 1080p y luego se aplana, mientras la memoria de vídeo no cambia; por eso el agente percibe a 384×216 y solo mira en detalle a 768×432.",
+  "kind": "line",
+  "unit": "s",
+  "xLabel": "resolución del cuadro (px)",
+  "yLabel": "latencia por llamada (s)",
+  "series": [
+    {
+      "name": "latencia por llamada",
+      "emphasis": true,
+      "points": [
+        { "x": "384×216", "y": 1.2 },
+        { "x": "768×432", "y": 1.6 },
+        { "x": "1280×720", "y": 4.5 },
+        { "x": "1920×1080", "y": 15.8 },
+        { "x": "2560×1440", "y": 16.3 },
+        { "x": "3840×2160", "y": 16.8 }
+      ]
+    }
+  ],
+  "instrument": "build-voyager/measure_inspect_extensive.py: barrido 16:9 con POST a :11435 /api/chat, latencia por llamada y VRAM pico por sondeo de nvidia-smi. El script no está en el remoto público: la cifra es citable por el registro, la medición no es reproducible desde el repositorio publicado.",
+  "source": {
+    "label": "docs/PHYRIAGER_LOGBOOK.md, E-1 (2026-05-31), tabla Raw: «| 1920×1080 | 2.1 | 15.8 s | 10068 MB | 8.3 M |»",
+    "url": "https://github.com/Swately/Phyriager/blob/main/docs/PHYRIAGER_LOGBOOK.md"
+  },
+  "notes": [
+    "Un solo barrido, sin repeticiones: no hay medida de variación entre corridas.",
+    "La memoria de vídeo pico fue 10068 MB en las seis resoluciones, según la misma tabla.",
+    "No mide la calidad de la percepción: el mismo registro anota que el modelo de 3b contó mal una cuadrícula de prueba a todas las resoluciones, así que más píxeles no mejoraron el acierto."
+  ]
+}

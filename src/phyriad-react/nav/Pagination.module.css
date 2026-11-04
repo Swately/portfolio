@@ -1,0 +1,28 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--phy-space-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+}
+
+.current {
+  font-weight: 700;
+  color: var(--phy-ink);
+  /* the one non-link number: weight + no underline says "you are here" */
+}
+
+.inert {
+  color: var(--phy-ink-muted);
+  opacity: 0.6;
+}
+
+.ellipsis {
+  color: var(--phy-ink-muted);
+}
+
+/* Made with my soul - Swately <3 */

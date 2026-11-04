@@ -1,0 +1,158 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "phyriadfg-rampa-retencion-053",
+  "title": "Rampa de retención 0.5.3 (1.0/1.6 contra 1.2/3.0): cambio de error por corpus, incluido donde pierde",
+  "takeaway": "La rampa 1.0/1.6 reduce el error a 6.7 y 13.4 px/par, pero la esfera empeora a 6.7 px/par (+11.1 %) y caja y esfera empeoran a 3.4 px/par (+2.0 %, +2.2 %).",
+  "kind": "bar",
+  "unit": "%",
+  "xLabel": "movimiento por par de cuadros fuente (corpus)",
+  "yLabel": "cambio de error, nuevo contra anterior (negativo = mejor)",
+  "series": [
+    {
+      "name": "posición de la esfera",
+      "emphasis": true,
+      "points": [
+        { "x": "3.4 px/par (sc_live2 k=4)", "y": 2.2 },
+        { "x": "6.7 px/par (sc_live k=8)", "y": 11.1 },
+        { "x": "13.4 px/par (sc_v4 k=4)", "y": -27.1 }
+      ]
+    },
+    {
+      "name": "posición de la caja",
+      "points": [
+        { "x": "3.4 px/par (sc_live2 k=4)", "y": 2.0 },
+        { "x": "6.7 px/par (sc_live k=8)", "y": -15.1 },
+        { "x": "13.4 px/par (sc_v4 k=4)", "y": -24.9 }
+      ]
+    },
+    {
+      "name": "masa inventada de la caja",
+      "points": [
+        { "x": "3.4 px/par (sc_live2 k=4)", "y": -8.0 },
+        { "x": "6.7 px/par (sc_live k=8)", "y": -25.6 },
+        { "x": "13.4 px/par (sc_v4 k=4)", "y": -43.6 }
+      ]
+    }
+  ],
+  "instrument": "scene_truth: 28 capturas en vivo sobre 5 corpus sintéticos; cada cuadro generado se compara con la escena analítica exacta a su propia fase; el valor anterior se restaura por flag en el mismo binario",
+  "source": {
+    "label": "CHANGELOG.md público de PhyriadFG (rama public, punta 2ea1637), líneas 156-177",
+    "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L163"
+  },
+  "notes": [
+    "PIERDE: la posición de la esfera empeora a 6.7 px/par (+11.1 %), y en tres rondas separadas (+5.4 / +10.7 / +11.1 %, CHANGELOG.md:170). El CHANGELOG lo llama el precio del cambio: retener un píxel ayuda a una superficie que gira mal emparejada y daña a una que se traslada bien emparejada (:171-172).",
+    "PIERDE: la fila de 3.4 px/par (sc_live2 k=4) también tiene signo adverso: caja +2.0 %, esfera +2.2 % y nitidez 0.9419 -> 0.9415 (CHANGELOG.md:164). El CHANGELOG no dice si esta fila se reproduce entre rondas.",
+    "NO MEDIDA: la fila de 1.7 px/par (sc_v05 k=4) no se dibuja como resultado; dos rondas discrepan en el SIGNO, sobre valores absolutos de 0.16 px (CHANGELOG.md:172-173). Su fila tabulada (:163) queda solo en provenance.",
+    "Signo: negativo es mejor en todas las columnas de error; la nitidez es absoluta, anterior -> nueva, y mayor es mejor (CHANGELOG.md:168).",
+    "Nitidez, anterior -> nueva (no dibujada; otra unidad): 3.4 px/par 0.9419 -> 0.9415 (empeora); 6.7 px/par 0.9279 -> 0.9296; 13.4 px/par 0.8913 -> 0.9030 (CHANGELOG.md:164-166).",
+    "Panel estático (no dibujado: sus -56.2 / -84.8 / -95.0 % comprimirían el eje hasta hacer ilegibles las pérdidas de +2.0 / +2.2 %): 3.4 px/par -56.2 %, 6.7 px/par -84.8 %, 13.4 px/par -95.0 % (CHANGELOG.md:164-166).",
+    "Reproducción: la posición de la caja a 6.7 px/par se reproduce en tres rondas (-13.7 / -14.2 / -15.1 %), igual que la masa inventada en todas las filas y el panel estático (CHANGELOG.md:168-170). Se dibuja una sola cifra por celda, la de la tabla.",
+    "Alcance: 28 capturas en vivo, 5 corpus sintéticos de 1.7 a 13.4 px de movimiento por par (CHANGELOG.md:156-157), k = 4 salvo sc_live (k = 8); números fuera de línea sobre escena sintética con verdad exacta, no de un juego, y no dicen cómo se ve el cambio a ojo (:175-176). La resolución de estos cinco corpus no figura en el CHANGELOG (no verificada para esta gráfica).",
+    "--st-hold-lo 1.2 --st-hold-hi 3.0 restaura exactamente el comportamiento anterior (CHANGELOG.md:176-177)."
+  ],
+  "made_by": "Made with my soul - Swately <3",
+  "provenance": [
+    {
+      "what": "change",
+      "line": 156,
+      "quote": "- **`single_track`'s hold ramp ships at 1.0 / 1.6 (was 1.2 / 3.0).** Twenty-eight live captures",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L156"
+    },
+    {
+      "what": "method",
+      "line": 157,
+      "quote": "across five synthetic corpora spanning 1.7 to 13.4 px of motion per source pair, every generated",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L157"
+    },
+    {
+      "what": "method",
+      "line": 158,
+      "quote": "frame matched against an analytically exact rendering of the same scene at that frame's own phase,",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L158"
+    },
+    {
+      "what": "method",
+      "line": 159,
+      "quote": "and the old value restored BY FLAG from the same binary:",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L159"
+    },
+    {
+      "what": "row 1.7 px/pair (NOT MEASURED, not drawn): box position -5.8, box hallucinated mass -10.6, sphere position -6.4, static panel -, sharpness 0.9665 -> 0.9696",
+      "line": 163,
+      "quote": "| sc_v05 k=4 | 1.7 | -5.8 % | -10.6 % | -6.4 % | - | 0.9665 -> 0.9696 |",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L163"
+    },
+    {
+      "what": "row 3.4 px/pair: box position +2.0, box hallucinated mass -8.0, sphere position +2.2, static panel -56.2, sharpness 0.9419 -> 0.9415",
+      "line": 164,
+      "quote": "| sc_live2 k=4 | 3.4 | +2.0 % | -8.0 % | +2.2 % | -56.2 % | 0.9419 -> 0.9415 |",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L164"
+    },
+    {
+      "what": "row 6.7 px/pair: box position -15.1, box hallucinated mass -25.6, sphere position +11.1, static panel -84.8, sharpness 0.9279 -> 0.9296",
+      "line": 165,
+      "quote": "| sc_live k=8 | 6.7 | **-15.1 %** | -25.6 % | **+11.1 %** | -84.8 % | 0.9279 -> 0.9296 |",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L165"
+    },
+    {
+      "what": "row 13.4 px/pair: box position -24.9, box hallucinated mass -43.6, sphere position -27.1, static panel -95.0, sharpness 0.8913 -> 0.9030",
+      "line": 166,
+      "quote": "| sc_v4 k=4 | 13.4 | **-24.9 %** | **-43.6 %** | **-27.1 %** | -95.0 % | 0.8913 -> **0.9030** |",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L166"
+    },
+    {
+      "what": "sign rule",
+      "line": 168,
+      "quote": "Negative is better everywhere except the last column. Three separate measurement rounds reproduce",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L168"
+    },
+    {
+      "what": "reproduction",
+      "line": 169,
+      "quote": "the box's position at 6.7 px/pair (-13.7 / -14.2 / -15.1 %), the hallucinated mass everywhere, the",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L169"
+    },
+    {
+      "what": "loss at 6.7 px/pair, three rounds",
+      "line": 170,
+      "quote": "static panel, and **the sphere's position getting WORSE at 6.7 px/pair (+5.4 / +10.7 / +11.1 %)**.",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L170"
+    },
+    {
+      "what": "price of the change",
+      "line": 171,
+      "quote": "That last one is the price of this change and it is real: holding a pixel helps a wrongly-matched",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L171"
+    },
+    {
+      "what": "1.7 px/pair not measured",
+      "line": 172,
+      "quote": "rotating surface and hurts a correctly-matched translating one. The 1.7 px/pair row reads **not",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L172"
+    },
+    {
+      "what": "1.7 px/pair not measured",
+      "line": 173,
+      "quote": "measured** -- two rounds disagree in SIGN there, on absolute values of 0.16 px.",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L173"
+    },
+    {
+      "what": "offline only",
+      "line": 175,
+      "quote": "These are offline numbers from a synthetic scene with exact ground truth, not from a game, and",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L175"
+    },
+    {
+      "what": "offline only / restore",
+      "line": 176,
+      "quote": "they say nothing about how the change looks to an eye. **`--st-hold-lo 1.2 --st-hold-hi 3.0`",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L176"
+    },
+    {
+      "what": "restore",
+      "line": 177,
+      "quote": "restores the previous behaviour exactly.**",
+      "url": "https://github.com/Swately/PhyriadFG/blob/main/CHANGELOG.md#L177"
+    }
+  ]
+}

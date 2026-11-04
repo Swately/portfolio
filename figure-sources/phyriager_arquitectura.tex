@@ -1,0 +1,44 @@
+% Phyriager - architecture: three processes, one honesty boundary.
+% Colours: figure-contract roles (phyriad-figure-colors.sty). Ink = TeX black; one accent (the frontier).
+% Build: latex phyriager_arquitectura.tex && dvisvgm --no-fonts -o phyriager_arquitectura.svg phyriager_arquitectura.dvi 2> dvisvgm.log
+%        (a "failed to create" line in dvisvgm.log = failed build) && svgo --multipass phyriager_arquitectura.svg -o phyriager_arquitectura.min.svg
+\documentclass[border=10pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{phyriad-figure-colors}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+\hyphenpenalty=10000\exhyphenpenalty=10000
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily\small, >=Latex, line width=0.7pt,
+  box/.style={draw, fill=figFill, rounded corners=2pt, align=center, minimum height=1.5cm, text width=3.9cm},
+  lab/.style={font=\sffamily\footnotesize, align=center, text=figMuted},
+]
+% --- the game side
+\node[box] (mod) {\textbf{Mod} (Java/Fabric)\\toma fija: publica percepci\'on\\filtrada y aplica la orden\\como entrada real de jugador\\[1pt]\footnotesize sin l\'ogica de decisi\'on};
+% --- the brain
+\node[box, right=4.8cm of mod] (brain) {\textbf{Cerebro} (C++23)\\percibe, planifica, act\'ua\\solvers a 20\,Hz, reflejos,\\verifica cada resultado\\[1pt]\footnotesize sin LLM en el bucle motor};
+% --- HTTP surfaces
+\node[box, right=3.4cm of brain] (http) {\textbf{Superficies HTTP}\\observar \;$\cdot$\; actuar\\crear rutinas \;$\cdot$\; resultados\\lecciones heredables\\[1pt]\footnotesize un LLM juega sin acceso al c\'odigo};
+% --- LLM above
+\node[box, above=1.5cm of http] (llm) {\textbf{LLM jugador}\\cualquier modelo\\lee, decide, escribe rutinas};
+\node[box, above=1.5cm of brain] (rt) {\textbf{Router de LLM}\\solo delibera;\\tope de gasto por hora};
+% --- server
+\node[box, below=1.5cm of mod] (srv) {\textbf{Servidor Fabric}\\mundo compartido\\con otros jugadores};
+
+\draw[<->, thick] (mod) -- (brain) node[midway, above, lab]{memoria compartida}
+  node[midway, below=3pt, lab, text width=4.4cm]{ABI v6 con magia y versi\'on: se niega a conectar si hay deriva};
+\draw[<->, thick] (brain) -- (http);
+\draw[<->, thick] (http) -- (llm);
+\draw[<->, thick] (brain) -- (rt);
+\draw[<->, thick] (mod) -- (srv) node[midway, right, lab]{protocolo de cliente\\normal};
+
+% --- the one thing to look at: the honesty frontier
+\begin{scope}[on background layer]
+  \node[draw=figAccent, dashed, line width=1.1pt, rounded corners=4pt, inner sep=7pt, fit=(mod)(srv), label={[font=\sffamily\footnotesize, text=figAccent]below:frontera de honestidad: solo lo que recibe un cliente, solo entrada de jugador}] {};
+\end{scope}
+\end{tikzpicture}
+\end{document}
+
+% Made with my soul - Swately <3

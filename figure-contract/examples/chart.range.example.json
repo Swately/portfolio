@@ -1,0 +1,27 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "example-range",
+  "title": "EXAMPLE: error con dispersión entre dos corridas (cifras inventadas)",
+  "takeaway": "Ejemplo de forma: cada punto lleva su intervalo y las dos corridas que lo producen.",
+  "kind": "range",
+  "unit": "px",
+  "series": [
+    {
+      "name": "método",
+      "emphasis": true,
+      "points": [
+        { "x": "k=2", "y": 0.31, "lo": 0.29, "hi": 0.33, "n": 2 },
+        { "x": "k=4", "y": 0.22, "lo": 0.21, "hi": 0.23, "n": 2 }
+      ]
+    }
+  ],
+  "instrument": "EXAMPLE: cifras inventadas para probar la forma del archivo",
+  "source": {
+    "label": "figure-contract/examples",
+    "url": "figure-contract/examples/chart.range.example.json"
+  },
+  "runs": [
+    { "id": "r1", "file": "figure-contract/examples/run1.csv" },
+    { "id": "r2", "file": "figure-contract/examples/run2.csv" }
+  ]
+}

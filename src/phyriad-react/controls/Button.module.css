@@ -1,0 +1,60 @@
+/* C · Tinta — chosen from three rendered directions (operator, 2026-08-29).
+   The doctrine: buttons are INK and the oxide accent stays exclusive to
+   links, so button-vs-link is a difference in colour SYSTEM, not just shape.
+   Identity walls hold: radius 0, no shadow, hairline borders, interaction-only
+   motion. Focus is NOT declared here — the base layer's global :focus-visible
+   (2px accent outline) already covers buttons; duplicating it would just be a
+   second place to keep in sync. */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--phy-space-xs);
+  min-block-size: 44px;
+  padding-inline: var(--phy-space-m);
+  border: var(--phy-rule-width) solid transparent;
+  border-radius: var(--phy-radius);
+  background: none;
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  font-weight: 500;
+  line-height: var(--phy-leading-ui);
+  color: var(--phy-ink);
+  cursor: pointer;
+  transition:
+    background var(--phy-transition),
+    border-color var(--phy-transition),
+    color var(--phy-transition);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* One per view, ideally: the strongest block on the page. */
+.primary {
+  background: var(--phy-ink);
+  color: var(--phy-paper);
+}
+.primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--phy-ink) 80%, var(--phy-paper));
+}
+.primary:active:not(:disabled) {
+  background: color-mix(in srgb, var(--phy-ink) 90%, var(--phy-paper));
+}
+
+/* The default. Hairline sibling of .phy-target links — but in ink, never oxide. */
+.secondary {
+  border-color: var(--phy-ink-muted);
+}
+.secondary:hover:not(:disabled) {
+  border-color: var(--phy-ink);
+  background: var(--phy-paper-2);
+}
+.secondary:active:not(:disabled) {
+  background: var(--phy-rule);
+}
+
+/* Made with my soul - Swately <3 */

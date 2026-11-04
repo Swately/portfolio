@@ -1,0 +1,7 @@
+.footer {
+  margin-block-start: var(--phy-space-2xl);
+  padding-block-start: var(--phy-space-m);
+  border-block-start: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+/* Made with my soul - Swately <3 */

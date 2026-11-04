@@ -1,0 +1,52 @@
+.tree,
+.group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  cursor: default;
+}
+
+.item:focus-visible {
+  outline: none;
+}
+
+.item:focus-visible > .row {
+  outline: 2px solid var(--phy-accent);
+  outline-offset: -2px;
+}
+
+/* Indent by level with padding, not nested margins, so the focus ring and the
+   selection band span the full row. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--phy-space-2xs);
+  padding-block: var(--phy-space-3xs);
+  padding-inline-start: calc(
+    (var(--tree-level, 1) - 1) * var(--phy-space-m) + var(--phy-space-2xs)
+  );
+  padding-inline-end: var(--phy-space-2xs);
+  min-block-size: 24px;
+}
+
+.item[aria-selected='true'] > .row {
+  background: var(--phy-paper-2);
+  font-weight: 700;
+}
+
+.twisty {
+  inline-size: 1em;
+  flex: none;
+  color: var(--phy-ink-muted);
+  font-size: var(--phy-text-sm);
+}
+
+.label {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Made with my soul - Swately <3 */

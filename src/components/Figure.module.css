@@ -1,0 +1,42 @@
+.figure {
+  /* Block margins only: the inline margins are .phy-wide's breakout (measured:
+     `margin: 0` here cancelled it and the figure sat flush left of the text). */
+  margin-block: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-xs);
+}
+
+.viewport {
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+}
+
+/* The legibility floor. Below this width these diagrams' labels stop being
+   readable, so the image refuses to shrink further and the region scrolls
+   instead. On a desktop column wider than 32rem the min never binds and
+   nothing scrolls. */
+.img {
+  width: 100%;
+  height: auto;
+}
+
+/* A figure that is not made of contract colours: the light scheme is forced on the box, so the page paper is
+   light inside it and the SVG (whose dark block follows the parent color-scheme) stays in its light look. */
+.plate {
+  color-scheme: light;
+  background: var(--phy-paper);
+}
+
+.equivalent {
+  margin: 0;
+  padding-inline-start: var(--phy-space-l);
+  display: grid;
+  gap: var(--phy-space-xs);
+}
+
+.caption {
+  display: block;
+}
+
+/* Made with my soul - Swately <3 */

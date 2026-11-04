@@ -1,0 +1,29 @@
+/* Headline figures. Rhythm by space only: no card, no surface (design v2). The row is a grid whose columns
+   follow the room it has, so it needs no breakpoint of its own. */
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--phy-space-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  min-inline-size: 0;
+}
+
+.figure {
+  display: grid;
+  gap: var(--phy-space-2xs);
+  /* the value is the figure: it keeps its line even when it is long */
+  align-content: start;
+}
+
+.value {
+  font-family: var(--phy-font-mono);
+  line-height: var(--phy-leading-tight);
+  color: var(--phy-ink);
+}
+
+/* Made with my soul - Swately <3 */

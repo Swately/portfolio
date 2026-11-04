@@ -1,0 +1,44 @@
+.host {
+  display: inline-block;
+}
+
+.trigger {
+  anchor-name: var(--phy-anchor);
+}
+
+/* Inverse colours: paper text on ink — the highest-contrast pair in both
+   schemes, and the same voice as ::selection. */
+.tip {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  max-inline-size: 20rem;
+  padding: var(--phy-space-2xs) var(--phy-space-s);
+  background: var(--phy-ink);
+  color: var(--phy-paper);
+  font-size: var(--phy-text-sm);
+  border: 0;
+  pointer-events: none;
+}
+
+.tip[hidden] {
+  display: none;
+}
+
+@supports (anchor-name: --a) {
+  .tip {
+    position-anchor: var(--phy-anchor);
+    inset-block-end: anchor(top);
+    inset-inline-start: anchor(left);
+    margin-block-end: 6px;
+    position-try-fallbacks: flip-block, flip-inline;
+  }
+}
+
+@media (forced-colors: active) {
+  .tip {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Made with my soul - Swately <3 */

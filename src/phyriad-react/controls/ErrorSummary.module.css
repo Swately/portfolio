@@ -1,0 +1,28 @@
+/* The one place the error colour is allowed to be a BORDER around content:
+   the failed-submit box. 2px, not the hairline — this state has to survive a
+   glance. Links inside stay OXIDE: the doctrine says links are oxide, and an
+   error-coloured link would un-say what the colour system says. */
+.summary {
+  border: 2px solid var(--phy-error);
+  padding: var(--phy-space-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-xs);
+}
+
+.title {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-base);
+  font-weight: 600;
+  color: var(--phy-error);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-2xs);
+  margin: 0;
+  padding-inline-start: 1.25em;
+}
+
+/* Made with my soul - Swately <3 */

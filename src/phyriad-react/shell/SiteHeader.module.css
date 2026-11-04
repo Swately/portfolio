@@ -1,0 +1,17 @@
+.header {
+  margin-block-end: var(--phy-space-l);
+}
+
+/* A separator drawn in CSS rather than typed into the markup: the dot is
+   presentation, and a screen reader should not read "dot" between every item. */
+.meta li {
+  list-style: none;
+}
+
+.meta li:not(:last-child)::after {
+  content: '·';
+  margin-inline-start: var(--phy-space-xs);
+  color: var(--phy-ink-muted);
+}
+
+/* Made with my soul - Swately <3 */

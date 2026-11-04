@@ -1,0 +1,32 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "phynned-cache-latency-by-ccd",
+  "title": "Latencia por acceso con 64 MB, según el chiplet donde corre (7950X3D)",
+  "takeaway": "Con 64 MB fijados a cada chiplet, el de V-Cache tardó 48.5 ns por salto contra 58.7 ns del de frecuencia: 1.21 veces más rápido.",
+  "kind": "bar",
+  "unit": "ns por salto",
+  "xLabel": "chiplet",
+  "yLabel": "ns por lectura dependiente (menos es mejor)",
+  "series": [
+    {
+      "name": "64 MB de conjunto de trabajo",
+      "emphasis": true,
+      "points": [
+        { "x": "V-Cache (procesador lógico 4)", "y": 48.5, "n": 4 },
+        { "x": "Frecuencia (procesador lógico 20)", "y": 58.7, "n": 4 }
+      ]
+    }
+  ],
+  "instrument": "Micro-benchmark de cadena de punteros con el tamaño corregido, fijado al procesador lógico 4 (V-Cache) o 20 (frecuencia), mínimo de 4 repeticiones, equipo sin carga, en un AMD Ryzen 9 7950X3D. El código del micro-benchmark no está en el repositorio.",
+  "source": {
+    "label": "docs/research/ON_BOX_FACTS.md, sección 6.3",
+    "url": "https://github.com/Swately/Phynned/blob/main/docs/research/ON_BOX_FACTS.md"
+  },
+  "notes": [
+    "Una máquina, n pequeño (el mínimo de 4 repeticiones; no hay intervalo), confiabilidad no medida: no se calculó la correlación entre corridas, por eso la gráfica no dibuja dispersión.",
+    "Línea fuente, tal como está impresa: - **V-Cache CCD: 48.5 ns/hop (204 cyc/hop)** · **frequency CCD: 58.7 ns/hop (246 cyc/hop)**",
+    "Línea fuente del cociente: → the **V-Cache CCD is 1.21× faster** for this cache-sensitive workload. Recalculado aquí: 58.7 / 48.5 = 1.21 y 246 / 204 = 1.21 ciclos.",
+    "Cuál chiplet tiene el V-Cache se comprobó contra el sistema operativo: «L3 #0: 96 MB, logical processors 0–15 → the V-Cache CCD» (sección 6.1, GetLogicalProcessorInformationEx).",
+    "Límite que declara el propio archivo: una cadena de punteros aleatoria de 64 MB está limitada por la TLB, lo que acota el beneficio visible a unos 1.2 veces; es una comprobación del mecanismo, no una predicción para ningún juego."
+  ]
+}

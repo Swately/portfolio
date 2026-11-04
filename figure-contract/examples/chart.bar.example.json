@@ -1,0 +1,24 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "example-bar",
+  "title": "EXAMPLE: tiempo por etapa (cifras inventadas, no son una medición)",
+  "takeaway": "Ejemplo de forma: una frase que dice lo que el lector debe ver en la gráfica.",
+  "kind": "bar",
+  "unit": "ms",
+  "series": [
+    {
+      "name": "etapa",
+      "emphasis": true,
+      "points": [
+        { "x": "captura", "y": 1.2 },
+        { "x": "flujo óptico", "y": 2.1 },
+        { "x": "warp", "y": 0.8 }
+      ]
+    }
+  ],
+  "instrument": "EXAMPLE: cifras inventadas para probar la forma del archivo",
+  "source": {
+    "label": "figure-contract/examples",
+    "url": "figure-contract/examples/chart.bar.example.json"
+  }
+}

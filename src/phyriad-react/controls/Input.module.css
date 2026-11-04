@@ -1,0 +1,48 @@
+/* Shared skin for the text controls (Input + TextArea): paper field, hairline
+   ink-muted border, radius 0, no shadow. Focus comes from the base layer's
+   global :focus-visible — not duplicated here. */
+
+.control {
+  min-block-size: 44px;
+  inline-size: 100%;
+  padding-inline: var(--phy-space-s);
+  border: var(--phy-rule-width) solid var(--phy-ink-muted);
+  border-radius: var(--phy-radius);
+  background: var(--phy-paper);
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-base);
+  line-height: var(--phy-leading-ui);
+  color: var(--phy-ink);
+  transition: border-color var(--phy-transition);
+}
+
+.control::placeholder {
+  color: var(--phy-ink-muted);
+  opacity: 1; /* Firefox dims placeholders by default; the token already carries the contrast */
+}
+
+.control:hover:not(:disabled) {
+  border-color: var(--phy-ink);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* Invalid keys off the ATTRIBUTE the field wired, so what CSS paints and what
+   assistive tech announces cannot disagree. 2px, not the hairline: the state
+   has to survive a glance, and colour alone must not carry it (the error text
+   below the control is the real message). */
+.control[aria-invalid='true'] {
+  border-color: var(--phy-error);
+  border-width: 2px;
+}
+
+.multiline {
+  min-block-size: auto;
+  padding-block: var(--phy-space-xs);
+  resize: vertical;
+}
+
+/* Made with my soul - Swately <3 */

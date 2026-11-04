@@ -1,0 +1,16 @@
+/*
+ * Project token layer.
+ *
+ * The design system itself is `phyriad-tokens`, the container's web substrate
+ * (catalog/web/tokens/), vendored here as phyriad.tokens.css + phyriad.base.css
+ * so this repository stays clonable on its own — the same vendoring pattern
+ * Phynned uses for the C++ pillars. To update: re-copy both files and re-run the
+ * substrate's `node testbench.mjs`.
+ *
+ * The numeric alias layer that used to live here is GONE: the primitives now take
+ * the substrate's own names (gap="m", size="lg"), so there is one vocabulary for
+ * one scale instead of two. This file is only the import seam.
+ */
+@import '../phyriad-react/phyriad.tokens.css';
+
+/* Made with my soul - Swately <3 */

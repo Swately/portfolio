@@ -1,0 +1,196 @@
+{
+  "angle": "D2 craft-demonstrator",
+  "thesis": "Bet that the honest way to prove engineering ability is to make the artifact itself auditable: spend climx's real machinery (router, GH-Pages deep-link shim, BASE_URL asset helper, mandatory 404 fallback) on three routes, make \"no claim without evidence\" a non-optional field in a discriminated union so M1 is a compile-time property rather than an editorial promise, and put a `/colofon` route on the page that states exactly what was reused from climx and what was deliberately left behind — so a reader who opens the repo finds the page's claims about itself already checkable.",
+  "routes": [
+    {
+      "path": "/",
+      "purpose": "The 20-second answer: who he is, what he builds, five projects with their real declared status visible in the grid itself, and one click to each repo. Serves the named workload alone — nothing below it is required to pass the screen.",
+      "sections": [
+        "Eduardo Ramos Mendoza — Ingeniero en Sistemas Computacionales (h1 + cluster: Ciudad de México · correo · github.com/Swately)",
+        "Qué construyo (two-sentence Spanish profile, translated from src/content.ts)",
+        "Proyectos (subtítulo mudo: «Ordenados por la evidencia que puedo enseñar, no por preferencia.») — Grid de 5 tarjetas: nombre → /proyectos/:slug, StatusBadge, una línea, y el cluster de evidencia (repositorio · sitio en vivo cuando existe)",
+        "Herramientas (SkillsTable existente, traducida)",
+        "Pie: idiomas · enlace «Cómo está hecha esta página»"
+      ]
+    },
+    {
+      "path": "/proyectos/:slug",
+      "purpose": "One route, five instances (phyriager, phyriadfg, phynned, pharvard, climx). Where a claim becomes a number, a figure, or a file path. This is the route that spends the router's :param capability, which is the single thing climx's router does that a hand-rolled switch would not.",
+      "sections": [
+        "nav breadcrumb: «Inicio / <Proyecto>»",
+        "h1 <Proyecto> + StatusBadge + una frase de estado citada de su propio README (con fecha cuando el README la trae)",
+        "Qué es (2–3 frases)",
+        "Cómo funciona — <figure> con la imagen real del proyecto y pie en español (SÓLO PhyriadFG y Phyriager; los otros tres no llevan figura y no se disimula)",
+        "Evidencia — EvidenceList: cada afirmación con su número, su ruta de archivo en mono y su enlace al repositorio",
+        "Límites declarados — los propios avisos del proyecto («no puede superar la tasa de refresco», «el catálogo empírico es provisional», «el mod compila pero no está validado en vivo», «el objetivo no es la velocidad», «Lighthouse pendiente de re-medición tras el renombrado»)",
+        "Repositorio (cluster de enlaces)"
+      ]
+    },
+    {
+      "path": "/colofon",
+      "purpose": "The craft-demonstrator's thesis as page content: how this page is built, the climx reuse ledger with its refusals, the design system rendered with itself, the measured build numbers, and the page's own weakest point. It is also the only place where the claim «construida con los recursos de climx» carries evidence.",
+      "sections": [
+        "Cómo está hecha esta página (React 19 · TS estricto · Vite · Vitest · CSS Modules sobre tokens · sin backend · 2 dependencias en runtime)",
+        "Qué reutilicé de climx (router, shim 404 de GitHub Pages, página de respaldo obligatoria, helper de rutas con BASE_URL + degradación de imagen, primitivos y tokens, la misma cadena de calidad)",
+        "Qué dejé fuera a propósito (capa de datos, capa geográfica, el combobox ARIA, los componentes de clima, y las fotos de estado — con la razón de cada uno)",
+        "El sistema de diseño, renderizado consigo mismo (PrimitivesShowcase: Stack, Cluster, Grid, Box, Text y la escala tipográfica)",
+        "Números medidos (tabla con fecha e instrumento, en la forma de MEASUREMENTS.md de climx)",
+        "Punto más débil de esta página"
+      ]
+    }
+  ],
+  "evidenceModel": "Every rendered assertion about a project is a value in `src/content.ts` typed as `Claim = { text: string; evidence: Evidence }`, where `Evidence = {kind:'repo';url} | {kind:'live';url;label} | {kind:'doc';repoUrl;path;value} | {kind:'figure';src;alt;caption;path}`. The `evidence` field is NOT optional, so a claim written without proof fails `tsc --noEmit` — M1 becomes a compile-time property, not an editorial habit. `EvidenceList` is the only component permitted to render a `Claim`, and it always emits the evidence node beside the text: a repo/live claim emits an `<a>`; a doc claim emits the number inline plus its source file path in mono type plus one `<a>` to the repo root; a figure claim emits `<figure><img><figcaption>` plus the path of the file inside the project. Deliberate constraint: repo-ROOT links only, never deep blob URLs — that keeps the quality veto's \"every link resolves\" to six URLs to check by hand instead of about twenty, and GitHub renders README.md at the repo root, which is where every status and number on the page actually comes from. A Vitest invariant over `content.ts` asserts (a) every project has at least one claim, (b) every claim's evidence carries a non-empty url/path, (c) every status string is the literal string its README uses where the README uses a version string. On `/` each project carries exactly three assertions (name, status, one-line summary) plus one evidence cluster, so all three are one click from the README that states them. Net: M1 is enforced twice mechanically (type + test) and verified once by hand by enumerating the rendered DOM in `npm run preview`.",
+  "climxPorts": [
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\router\\router.tsx",
+      "adaptation": "Verbatim copy. Only the header comment's climx/CLIMX-A references are rewritten; the public contract (Router, Link, useParams, navigate) and the exported matchPath/stripBase stay identical. No code change is needed for the base path: `import.meta.env.BASE_URL` already resolves to '/portfolio/' from the portfolio's own vite.config.ts (read first-hand: `base: '/portfolio/'`).",
+      "structuralJustification": "COUNTS. Deletion test against GitHub Pages at /portfolio/: delete this file and app.tsx has no Router and no Link, /proyectos/:slug and /colofon cease to exist, and the design collapses to one scrolling page. It is the only source of the :param capability the project route depends on. Unambiguously structural."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\public\\404.html",
+      "to": "F:\\Phyriad\\projects\\portfolio\\public\\404.html",
+      "adaptation": "Two-line change plus a transplant. In 404.html: `var base = '/climx/'` becomes `'/portfolio/'` and `<title>climx</title>` becomes the operator's name; the `~and~` escaping and the `l.replace` bounce are untouched. The other half of the same inventory resource is the 8-line restore block at the top of F:\\Phyriad\\projects\\climx\\src\\main.tsx, transplanted verbatim into F:\\Phyriad\\projects\\portfolio\\src\\main.tsx above `createRoot` (verified first-hand: the portfolio's main.tsx currently has no such block).",
+      "structuralJustification": "COUNTS. Deletion test against the fixed host referent (Pages, project path): with the shim gone, https://swately.github.io/portfolio/proyectos/climx returns GitHub's own 404 page. Every deep link — the exact thing a CV or an application email would carry — dies, while the site still works if you always enter at the root. That is a lost capability, not a style, and it is host-dependent in exactly the way AT0 fix 3 declares structural."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\pages\\NotFound.tsx",
+      "adaptation": "Near-verbatim: 11 lines, already Spanish («Página no encontrada» / «Volver al inicio»), which suits O2 with no translation. Adapted only to render through the Text primitive and inside the shared <main> so E7's no-hardcoded-values rule and M5's landmark requirement hold; one extra Link to /colofon.",
+      "structuralJustification": "COUNTS, and the deletion test here is mechanical rather than aesthetic: `Router`'s prop type is `{ routes: Route[]; fallback: ComponentType }` — `fallback` is NOT optional (read first-hand in router.tsx). Delete this file and `npm run typecheck` and `npm run build` fail, which is an M4 gate failure, and at runtime an unknown URL would have nothing to render. Small file, unambiguous result."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\lib\\asset.ts + F:\\Phyriad\\projects\\portfolio\\src\\components\\ProjectFigure.tsx",
+      "adaptation": "Two mechanisms extracted from one file. `estadoImg(ides)` is generalized into `asset(path: string)` returning `${import.meta.env.BASE_URL}${path}` in src/lib/asset.ts (with a unit test). The `<img alt loading=\"lazy\" onError=hide>` pair becomes ProjectFigure: a <figure> with a Spanish <figcaption>, `loading=\"lazy\"`, and an onError that degrades to a text line naming the missing file rather than merely `display:none` — an improvement on the donor, because on this page a missing figure should still tell the reader what was supposed to be there. The <li>/Link wrapper and the whole estado/ides domain are dropped.",
+      "structuralJustification": "COUNTS. Deletion test at /portfolio/: replace `asset('img/phyriager-trazado.png')` with a literal `/img/...` and the browser requests https://swately.github.io/img/... — outside the project path — so every figure on the site 404s. This is the same host-dependency class as the 404 shim, and it has a real consumer today (two images verified on disk: phyriadfg_multigpu.png 89,350 B and trazado_1.png 167,722 B, both opened first-hand), so it is not a speculative layer. The onError half is the weaker half and I say so: without it a broken image shows the browser's broken-image icon instead of a sentence — degraded, not disabled."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\docs\\planning\\MEASUREMENTS.md",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\content.ts (the climx project's `claims` array)",
+      "adaptation": "Content port, not code. Selected dated rows become `{kind:'doc'}` claims: 9,852 SMN records partitioned into 2,463 per-municipio files (2026-07-28); all-lite.json 44,266 B gzip; a municipio payload 463 B gzip after the 2026-07-31 redesign; home bundle 66.66 KB gzip against a 150 KB cap; 51/51 tests and lib coverage 98.92% lines (2026-07-31). Each renders with its date, its instrument, and the path `docs/planning/MEASUREMENTS.md` in mono. EXCLUDED on purpose: both Lighthouse rows — that file records them measured against https://swately.github.io/project-tw/, the pre-rename URL, and E5 says Lighthouse is not an available instrument here, so they cannot be re-run to justify printing them.",
+      "structuralJustification": "COUNTS, but this is my one hedged entry and I flag it rather than let a recount find it. Deletion test: strip these numbers and the climx card is the only project entry left with a live URL but no measured evidence body — the page would render status and capability assertions whose only backing is a link, which is a real M1 degradation for that project. That is a capability of the page (its evidence density), not of its runtime. If the A2 recount rules that M6's \"structural\" applies only to code that the deployed page executes, this entry drops and M6 = 4, which still clears the floor. I am not counting it twice and I am not padding behind it."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\router\\router.test.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\router\\router.test.tsx",
+      "adaptation": "Ported with route names swapped: the composite-key test `/estado/:ides/municipio/:idmun` becomes `/proyectos/:slug`, the page stubs become Home/Project/Colophon/NotFound stubs. The malformed-percent-escape regression (`/x/%E0%A4%A` must not throw) is kept verbatim — it guards a real production defect climx caught on its live site and it is exactly what a reader auditing this repo should find. Takes the suite from 6 tests to about 15.",
+      "structuralJustification": "DOES NOT COUNT toward M6, and I will not argue otherwise. Deleting this file breaks nothing on the deployed page: the router still routes, every link still resolves, M1/M2/M3/M5 are unaffected. It protects the M4 gate and it is central to D2's bet that the repo is the work sample, but M6's deletion test is scored against the page and this fails it."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\styles\\reset.css",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\styles\\reset.css",
+      "adaptation": "Paste back the five blocks the portfolio dropped (diffed first-hand): `.skip-link` / `.skip-link:focus`, the `button` base style, `input,button,textarea,select {font: inherit}`, `button:focus-visible` (the portfolio kept only the `a:focus-visible` half), and `.page`'s flex-column + gap. `.page`'s `max-width: 44rem` is KEPT at the portfolio's value, not climx's 64rem — a reading column, not a data grid.",
+      "structuralJustification": "DOES NOT COUNT. The skip link itself is markup in app.tsx and works for a keyboard user with or without this CSS; without the CSS it simply stops hiding itself and sits visibly above the h1. Ugly, not broken. This is the M5(b) polish and it is a style block, which M6 excludes by name."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.module.css",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\components\\ProjectCard.module.css",
+      "adaptation": "The `.link` rule adopted whole for the project card: flex column, `height: 100%` so cards in a Grid row stretch equal, `overflow: hidden` with radius, `text-decoration: none` with inherited color, and the hover/focus-visible rule that moves the accent and the underline onto the TITLE rather than the whole card. The `.img` rule is dropped — the home grid carries no images in this design.",
+      "structuralJustification": "DOES NOT COUNT. Delete it and the cards lose equal-height stretch and the title hover treatment; the links still work and the page still reads. Cosmetic by M6's own wording."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\components\\PrimitivesShowcase.tsx",
+      "adaptation": "Ported as a SECTION of /colofon rather than as its own /lab route, because the inventory's own caveat applies: it earns a route only if the design pass grows the token set, and this design adds exactly one token (--color-warning). Structure kept (Stack gaps, wrapping Cluster, auto-fill Grid, the 100–600 type scale); every string replaced — the Cluster demo's Mexican state names become the five primitive names, and the trailing `<Link to=\"/\">` becomes part of the colophon's own navigation.",
+      "structuralJustification": "DOES NOT COUNT. Delete it and /colofon loses one section; the route, the page and every other claim survive. It is an exhibit, and a self-referential deletion test (\"deleting a page removes that page\") is the weakest possible reading of M6. Declining it."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\app.tsx",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\app.tsx",
+      "adaptation": "The 25-line shell adopted as the portfolio's app.tsx: skip-link anchor, one `.page` div carrying `id=\"contenido\"`, `<Router routes={routes} fallback={NotFound} />`, and a plain `Route[]` array. The portfolio's current one-page body moves out to src/pages/HomePage.tsx unchanged in content.",
+      "structuralJustification": "DOES NOT COUNT, and counting it would be a trick. app.tsx must exist in any design; what makes this version work is the Router (already counted) and NotFound (already counted). The shell is where those two are mounted, not a third resource."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\src\\styles\\tokens.css",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\styles\\tokens.css",
+      "adaptation": "One line: `--color-warning: #b45309`, the single token the portfolio dropped when it took climx's token file. It gains a consumer here — StatusBadge's `experimental` variant. Contrast arithmetic done first-hand from the token values: #b45309 on --color-surface #fafafa = 4.81:1, on --color-bg #ffffff = 5.02:1, both above the WCAG AA 4.5:1 floor M5(c) requires.",
+      "structuralJustification": "DOES NOT COUNT. It is a color. Delete it and the badge inherits the body color; the status text still reads and M2 is unaffected because M2 measures the text, not the hue. Listed because it is a genuine (tiny) port with a real consumer, not because it moves a metric."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\README.md",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\content.ts (climx summary) + ColophonPage",
+      "adaptation": "The «Why it's built the way it is» bullets compressed, not rewritten: no backend / $0 / no API keys and the CORS-cron-partition reason; the idmun trap (570 distinct values for 2,463 municipios, every path composite-keyed, guarded by a regression test); «hand-rolled where it teaches, dependencies where it doesn't» with the 2-runtime-dependency count. In Spanish, which the source already largely supports in tone.",
+      "structuralJustification": "DOES NOT COUNT. Prose. Delete it and the climx card loses its best sentences but every metric holds. Included in the ledger because it is the highest-value CONTENT in the donor and the honest thing is to name it as content, not to launder it into the M6 count."
+    },
+    {
+      "from": "F:\\Phyriad\\projects\\climx\\docs\\ARCHITECTURE.md",
+      "to": "F:\\Phyriad\\projects\\portfolio\\src\\pages\\ColophonPage.tsx (§ «Punto más débil de esta página»)",
+      "adaptation": "The STANCE is ported, not the text: climx's ARCHITECTURE.md carries an «Honest weakest point» section naming its own router as the highest execution risk. /colofon gets the same section about itself, written fresh about this page. Nothing is quoted.",
+      "structuralJustification": "DOES NOT COUNT. A section convention is not a resource doing structural work; deleting it changes nothing mechanical. Listed because it is the single strongest thing this design takes from climx and it would be dishonest to leave it off the ledger just because it scores nothing."
+    }
+  ],
+  "newFiles": [
+    "F:\\Phyriad\\projects\\portfolio\\src\\router\\router.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\router\\router.test.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\HomePage.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\ProjectPage.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\ProjectPage.test.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\ColophonPage.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\pages\\NotFound.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\PrimitivesShowcase.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\StatusBadge.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\StatusBadge.module.css",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\EvidenceList.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\EvidenceList.module.css",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\ProjectFigure.tsx",
+    "F:\\Phyriad\\projects\\portfolio\\src\\components\\ProjectFigure.module.css",
+    "F:\\Phyriad\\projects\\portfolio\\src\\lib\\asset.ts",
+    "F:\\Phyriad\\projects\\portfolio\\src\\lib\\asset.test.ts"
+  ],
+  "scopeBudget": {
+    "routeCount": 3,
+    "newFileCount": 16,
+    "closesUnderE8": true
+  },
+  "metricSelfEstimates": [
+    {
+      "metric": "M1",
+      "estimate": "100%. Enforced twice mechanically before it is measured: `evidence` is a non-optional field on `Claim`, so an unevidenced claim fails typecheck, and a Vitest invariant over content.ts asserts every claim's evidence carries a non-empty url/path. On `/` each project renders exactly three assertions (name, status, one-line summary) against one evidence cluster containing the repo link (and the live link for climx); on `/proyectos/:slug` every assertion is a Claim rendered by EvidenceList, which always emits the evidence node beside the text. Residual risk I am naming rather than hiding: prose written directly in JSX — a section subtitle, the profile sentence, a figcaption — is not seen by the type system, so the hand enumeration is the real instrument and the type system is only a strong prior.",
+      "instrument": "Enumerate every rendered assertion of fact per route in the DOM under `npm run preview` (production build over dist/), count those with an attached evidence node; plus `npm test` for the content invariant."
+    },
+    {
+      "metric": "M2",
+      "estimate": "5/5. Phyriager `0.1.0-experimental` rendered as the literal version string plus its README's own qualifier («el mod compila pero no se ha validado en vivo en un servidor»); PhyriadFG `0.4.0-experimental`; Phynned `0.2.0-experimental` plus its README's own «provisional y en revalidación» about the X3D catalog; PHarvard «Corre en silicio · ISA completa verificada en la placa, 2026-08-01»; climx «En producción» with the live URL. Three of five carry a warning-colored badge and two do not, so the grid is visibly non-uniform — the failure mode the objective calls out (five equal polished tiles) is structurally excluded. Honest caveat: the PHarvard and climx badges are Spanish phrases, not byte-identical README strings, so a strict reading of \"MATCHES that project's own README\" depends on the diff being read as fact-level, not string-level; the three version strings are byte-identical on purpose.",
+      "instrument": "Diff the rendered page text for each project against F:\\Phyriad\\projects\\<name>\\README.md, first-hand, five times."
+    },
+    {
+      "metric": "M3",
+      "estimate": "(a) ~66–72 kB gzip JS against the 150 kB cap. The measured baseline is 62.40 kB; this design adds ~120 lines of router, three page components and four small components — all synchronous React with no new dependency, so the delta is a few kB, not a step change (climx, which carries this router plus a whole data layer, measures 66.66 kB gzip). CSS ~1.8–2.5 kB gzip against the 1.12 kB baseline (four new CSS modules). (b) Heaviest single view is `/proyectos/phyriager`: 167,722 B PNG (measured on disk) + ~70 kB transferred JS + ~2 kB CSS + ~1 kB HTML ≈ 240 KB transferred, well under 500 KB. `/proyectos/phyriadfg` is lighter (89,350 B PNG). The other three project routes and `/` carry no images at all.",
+      "instrument": "(a) `npm run build` output, read verbatim. (b) `npm run preview` over dist/ with the browser network panel on `/portfolio/proyectos/phyriager`, transferred-bytes column."
+    },
+    {
+      "metric": "M4",
+      "estimate": "Green. No new runtime dependency (E3/K6 untouched: `dependencies` stays react + react-dom). The typecheck risk concentrates in the ported router under `noUncheckedIndexedAccess` — climx compiles it under the same tsconfig options (diffed: the two tsconfigs differ only in comments), and its `path[i] as string` casts already exist for exactly that reason. Milestone M-1 exists to prove this before any content work.",
+      "instrument": "`npm run lint`, `npm run typecheck`, `npm test`, `npm run build` — four commands run first-hand, output quoted."
+    },
+    {
+      "metric": "M5",
+      "estimate": "All three sub-conditions pass. (a) jsx-a11y clean: the only new patterns are <a> from Link (real href, always), <img alt> on ProjectFigure with a written Spanish alt (not empty — these figures carry information), native <figure>/<figcaption>, and no click handlers on non-interactive elements. (b) Landmarks on every route: app.tsx supplies the skip link and #contenido; each page component renders <main>, project pages and the colophon render <nav> for the breadcrumb/back link, HomePage renders <header> and <footer>. Every interactive element is a native <a> or <summary> — there is no custom widget in this design, on purpose. (c) Contrast computed by hand from tokens.css: text #111111 on #ffffff = 18.9:1; muted #5b5b5b on #ffffff = 6.79:1 and on --color-surface #fafafa = 6.51:1; accent #2255cc on #ffffff = 6.48:1; the one new token --color-warning #b45309 on #fafafa = 4.81:1. Lowest value on the page is 4.81:1, above the 4.5:1 floor with little margin — that margin is the thing to re-check if the palette moves.",
+      "instrument": "`npm run lint` for (a); a DOM read of the rendered page under `npm run preview` plus a keyboard pass (Tab through every route) for (b); relative-luminance arithmetic on the token hex values for (c)."
+    },
+    {
+      "metric": "M6",
+      "estimate": "4 firm, 5 as I count it. Firm: (1) router.tsx — delete it and the multi-route site collapses; (2) the 404.html + main.tsx restore pair — delete it and every deep link 404s on Pages at /portfolio/; (3) NotFound.tsx — the Router's `fallback` prop is non-optional, so deleting it fails typecheck and build; (4) the EstadoCard asset helper + onError degrade, ported to src/lib/asset.ts + ProjectFigure — delete the BASE_URL prefix and every figure 404s outside the project path. Fifth, hedged and declared: MEASUREMENTS.md as the climx card's evidence body. Eight further ports are listed in the ledger and explicitly NOT counted (router tests, the reset.css a11y block, EstadoCard.module.css, PrimitivesLab, the app shell, --color-warning, the climx README prose, the ARCHITECTURE.md stance) — they are real reuse that fails the deletion test, and padding the count with them would be the defect the objective warns about. M6 is a floor, not a maximand; I am not farming it.",
+      "instrument": "Per-resource deletion test executed against a production build served at a project path (`npm run build` + `npm run preview`, base '/portfolio/'): remove the resource, rebuild, and record whether the page breaks, loses a capability, or merely looks different."
+    }
+  ],
+  "milestones": [
+    "M-1 Router lands, page still works. Port router.tsx, router.test.tsx, NotFound.tsx and public/404.html; transplant the restore block into main.tsx; adopt climx's app.tsx shell with the skip link; paste back the dropped reset.css blocks; move the current one-page body verbatim into src/pages/HomePage.tsx behind route '/'. Content unchanged, still English at this point. RUNNABLE: the site renders exactly as today. MEASURABLE: `npm test` goes from 6 to ~15 green; all four M4 commands green; `npm run preview` at /portfolio/no-existe shows the Spanish 404 page and /portfolio/ still renders; M6 provisionally 3 by deletion test.",
+    "M-2 Content model and Spanish copy. Extend src/content.ts with slug, status (literal README string + qualifier), the Evidence/Claim discriminated union, per-project claim arrays and límites-declarados bullets; rewrite every existing string in Spanish; fix index.html to lang=\"es\" with a Spanish meta description; add the content invariant test (every project has claims, every claim has non-empty evidence, every version-string status is byte-identical to its README). RUNNABLE: home page renders in Spanish from the new model. MEASURABLE: `npm test` green including the invariant; M2 diffed first-hand against the five READMEs → target 5/5 confirmed or corrected here, before any layout work depends on it.",
+    "M-3 Home route and status legibility. HomePage assembled; ProjectCard rewritten as a whole-card Link using the ported EstadoCard .link CSS; StatusBadge + its CSS module; --color-warning added to tokens.css; ordering rule («ordenados por la evidencia que puedo enseñar») rendered as a muted subtitle. RUNNABLE: the 20-second view is complete and shippable on its own — if the build stopped here it would still be a defensible page. MEASURABLE: `npm run build` gzip JS/CSS recorded; `npm run lint` jsx-a11y clean; contrast arithmetic recomputed on the new token; Tab pass over the whole route.",
+    "M-4 Project routes and the two real figures. ProjectPage + ProjectPage.test.tsx, EvidenceList (+CSS), ProjectFigure (+CSS), src/lib/asset.ts (+test); copy phyriadfg_multigpu.png and trazado_1.png into public/img/ under portfolio-scoped names. RUNNABLE: all five /proyectos/:slug routes render with evidence and límites. MEASURABLE: `npm run preview` network panel on /portfolio/proyectos/phyriager for M3(b) transferred bytes; M1 enumerated per route by hand; M6 deletion test on asset.ts re-run at the project path (break the BASE_URL prefix, confirm the 404); every external link clicked once — this is where the quality veto is actually discharged.",
+    "M-5 Colophon, measured numbers, gate. ColophonPage + PrimitivesShowcase; the reuse ledger written as page content (ported / left behind, with reasons); the «Números medidos» table filled from THIS milestone's own M4 run, dated and with the instrument named; «Punto más débil de esta página» written; a coverage threshold on src/router/** added to vite.config.ts now that a logic layer exists (the file's own comment says to revisit exactly then). RUNNABLE: all three routes plus the fallback complete. MEASURABLE: the four M4 commands quoted verbatim into the colophon table; final recount of M1, M2, M3(a)(b), M5(a)(b)(c) and M6 against the deployed-shape preview."
+  ],
+  "contentGaps": [
+    "Public-repo status of the five GitHub URLs is unverifiable from disk. The whole evidence model rests on `github.com/Swately/<repo>` resolving for Phyriager, PhyriadFG, Phynned, PHarvard and climx. Only climx's live URL is asserted anywhere I read (its README's «Live at» line). If any repo is private, that project's claims lose their only evidence and the quality veto fails on a broken link — the operator must confirm all five before M-4 closes, and any private repo must be demoted to a no-link entry, which drops M1.",
+    "climx's own test count is inconsistent across its sources: README.md says 41 tests, docs/planning/MEASUREMENTS.md records 41/41 (2026-07-28), 50/50 (2026-07-29) and 51/51 (2026-07-31). The page must print one dated figure with its instrument. Resolution needed: either cite the 2026-07-31 row verbatim with its date, or re-run climx's suite for a current number. I am not printing an undated \"41 tests\".",
+    "climx's live Lighthouse numbers (90/100 home, 100/98 municipio) cannot be used. MEASUREMENTS.md records them measured against https://swately.github.io/project-tw/, the pre-rename URL, and E5 states Lighthouse is not installed here, so they cannot be re-measured. The strongest presentation number available for the climx card is therefore excluded and the card leans on bundle/coverage/dataset figures instead.",
+    "Three of five project routes have no figure and none can be fabricated (K1). There is no screenshot of climx live, of Phynned's UI, or of PHarvard's board and its seven-of-seven display. All three are minutes of work for the operator and none exists on disk today, so the layout must read as deliberate rather than unfinished with two figures out of five — that asymmetry is a design constraint I am accepting, not solving.",
+    "The PhyriadFG diagram I ported is in ENGLISH on a Spanish page (opened first-hand: title «PhyriadFG — external-capture, multi-GPU frame generation», labels Game / Capture / Optical flow / Warp+blend+present / Display, thread letters C/F/P). No Spanish version exists and generating one would be inventing an asset. The Spanish figcaption has to carry the reading, and the language seam stays visible.",
+    "Every Spanish string on the page is net-new authoring. src/content.ts is English throughout, ported from documentos_varios/cv.tex, which is also English and stays the source of truth for the underlying facts. Nothing is machine-translatable without a fact check — each string is a translation of something I verified in a README, and a second pass by the operator is the only guard against a translation quietly becoming a new claim.",
+    "No favicon, no OG/social image, and no dark-mode support exist in either repo (grepped climx: not one @media, prefers-color-scheme or prefers-reduced-motion rule anywhere in src; public/ has no brand asset, and the portfolio's public/ directory does not exist at all). None is required by M1–M6, so this design does not add them — but a link shared into Slack or LinkedIn will unfurl bare, and a reader on a dark-mode phone gets a white page. Declared, not fixed.",
+    "The measured numbers that will appear in /colofon's «Números medidos» table do not exist yet — they are outputs of the M-5 gate run itself. The instrument exists (`npm run build`, `npm test`), so this is a sequencing gap rather than a missing input, but the route cannot be authored with placeholder figures and must be filled last."
+  ],
+  "weakestPoint": "D2's bet is that the reader opens the repo, and nothing on the page can make them. The named workload is a recruiter who decides in twenty seconds on `/` — and `/` alone is served by roughly three of my sixteen new files. The router, the 404 shim, the fallback, the asset helper, the ported test suite and the entire colophon are invisible to that reader unless they choose to go deeper, which means this design spends its whole file budget and all of its payload growth on a second audience it cannot summon. If the reader stops at the home route, I have built with sixteen files what D3 would have built with three, and the extra thirteen bought nothing the metrics reward — M6 is a floor, not a maximand, so the reuse past four resources scores exactly zero, and my own M-3 milestone admits the page is shippable before most of it lands. The concrete technical corollary: my strongest claim, that M1 is a compile-time property, is only true for text that goes through `Claim`. A section subtitle, the profile sentence, a figcaption or a colophon paragraph written straight into JSX is an unevidenced assertion the type system never sees — so the guarantee I am selling is one careless line of prose away from being false, and the real instrument for M1 remains a human enumerating the rendered DOM."
+}

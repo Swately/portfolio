@@ -1,0 +1,66 @@
+.status {
+  white-space: nowrap;
+}
+
+/* Direction E: the page body and the spine share ONE grid cell, so the spine's sticky range is the whole
+   body. The body re-creates what the shell's subgrid did for its direct children: the section rhythm
+   (styles/tokens.css, 2xl) and, in the wide mode, each block centred at the measure. In the narrow mode
+   blocks take the width and the substrate caps the text inside them, as before. */
+.spined {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.body {
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-2xl);
+}
+
+@container (width >= 52rem) {
+  .body > * {
+    inline-size: 100%;
+    max-inline-size: var(--phy-measure);
+    margin-inline: auto;
+  }
+}
+
+/* Where the spine shows (SectionSpine.module.css, same threshold), the static signposts step aside, so
+   one list of sections is in the page at any width. */
+@media (width >= 90rem) {
+  .topNav {
+    display: none;
+  }
+
+  /* The spine sits just outside the data band (D-32, SectionSpine.module.css); a table sized by its
+     columns (react 1.2.0) is capped at that band so it never runs under the spine (measured at 1440
+     before any cap: the matrix ran from x 55, the spine to x 190). */
+  .body {
+    --phy-table-max: min(90rem, 100vw - 26rem);
+  }
+}
+
+/* The claims are an ORDERED list (anchors #afirmacion-N are its numbers); the
+   flow gap is the Stack's m step. */
+.claims {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-m);
+}
+
+.claim {
+  border-left: 2px solid var(--phy-rule);
+  padding-left: var(--phy-space-m);
+}
+
+.limit {
+  list-style: disc;
+  margin-left: var(--phy-space-l);
+}
+
+/* Made with my soul - Swately <3 */

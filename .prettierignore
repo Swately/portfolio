@@ -1,0 +1,17 @@
+dist/
+coverage/
+node_modules/
+package-lock.json
+
+# The AAP record. AAP_OBJECTIVE.md is byte-frozen (AINV-12 checks it at the final
+# gate), so a formatter must not touch it — climx excludes the same folder for the
+# same reason. Learned the hard way here: a prettier --write reflowed the frozen
+# objective after ATF had already verified it. Content survived intact; the
+# exclusion is so it cannot happen again.
+docs/planning/aap/
+
+# Vendored substrate: byte-identical to catalog/web/react/src by contract, and
+# `npm run substrate:check` enforces that. Formatting it here would rewrite code
+# this project does not own and put the copy permanently out of sync — which is
+# exactly what happened the first time this line was missing.
+src/phyriad-react/

@@ -1,0 +1,128 @@
+.table {
+  border-collapse: collapse;
+  inline-size: 100%;
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  color: var(--phy-ink);
+}
+
+.caption {
+  text-align: start;
+  font-weight: 600;
+  padding-block-end: var(--phy-space-xs);
+  caption-side: top;
+}
+
+.table :is(th, td) {
+  text-align: start;
+  padding-block: var(--phy-space-xs);
+  padding-inline-end: var(--phy-space-m);
+  border-block-end: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.table th {
+  font-weight: 600;
+}
+
+.table thead th {
+  border-block-end-width: 2px;
+  border-block-end-color: var(--phy-ink-muted);
+}
+
+/* 1.2.0. A word in a cell never breaks. The page sets `overflow-wrap: anywhere` (reflow insurance at
+   320 px) and cells inherited it, which lowers a cell's minimum width to about one character: the
+   automatic layout then squeezed columns until headers broke letter by letter, and the scroll region
+   around the table was never used. Measured before: a 16-column table fitted in 489 px at a 1280 px
+   window with 64 broken cells; the PhyriadFG matrix in the portfolio had 33. A link or code inside a
+   cell may still break — a URL is a single token as wide as 629 px in one of those matrices. */
+.table :is(th, td) {
+  overflow-wrap: normal;
+}
+
+.table :is(th, td) :is(a, code) {
+  overflow-wrap: anywhere;
+}
+
+/* The width the columns need: the first column, then one --phy-col per other column. --phy-cols is
+   set by Table from the header row. */
+.region {
+  --phy-table-need: calc(var(--phy-col-head) + (var(--phy-cols, 1) - 1) * var(--phy-col));
+}
+
+/* width="content": between the block the table sits in and the window. Table measures the room from
+   the block to each window edge (--phy-table-left/right, in px); the page gutter is kept. The table
+   grows evenly while both sides have room and into the larger side once one runs out, so it is centred
+   in a centred layout and never crosses the window edge in any layout. Before the measurement (or with
+   no room) the rooms are 0 and the table is its block's width, as with width="measure". The window
+   bound is also stated in CSS, so a stale measurement can never make the table wider than the window.
+   Two classes, so it beats the centred layout's block cap. */
+.region.content {
+  --phy-room-start: max(0px, var(--phy-table-left, 0px) - var(--phy-space-l));
+  --phy-room-end: max(0px, var(--phy-table-right, 0px) - var(--phy-space-l));
+  /* --phy-table-max: an optional cap a consumer sets when something else holds part of the margin (the
+     portfolio's sticky section list sits outside its 62rem band, so there it caps tables at the band). */
+  --phy-table-w: clamp(
+    100%,
+    min(var(--phy-table-need), var(--phy-table-max, var(--phy-table-need))),
+    min(100% + var(--phy-room-start) + var(--phy-room-end), 100vw - 2 * var(--phy-space-l))
+  );
+  --phy-table-extra: calc(var(--phy-table-w) - 100%);
+  inline-size: var(--phy-table-w);
+  max-inline-size: none;
+  margin-inline-start: calc(
+    -1 *
+      min(
+        var(--phy-room-start),
+        max(var(--phy-table-extra) / 2, var(--phy-table-extra) - var(--phy-room-end))
+      )
+  );
+}
+
+/* columns="even": fixed layout, the first column its own width and the rest an equal share; never
+   narrower than the need, so below it the region scrolls instead of the columns collapsing. */
+.even .table {
+  table-layout: fixed;
+  inline-size: max(100%, var(--phy-table-need));
+}
+
+/* A fixed layout does not read minimum content, so the collapse above cannot happen here, and a token
+   wider than its column (a URL or a path written as plain text) would spill over the next cell
+   instead. break-word breaks only what cannot fit a line on its own; every word that fits stays whole.
+   Measured before: four plain-text paths and URLs ran 13 to 75 px into the neighbouring column. */
+.even .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.even .table tr > :first-child {
+  inline-size: var(--phy-col-head);
+}
+
+/* stickyFirst: the row labels stay while the table scrolls sideways. Paper behind them, so the cells
+   passing underneath do not show through. */
+.sticky .table tr > :first-child {
+  position: sticky;
+  inset-inline-start: 0;
+  background: var(--phy-paper);
+}
+
+/* surface (1.3.0): on a .phy-surface, rows part by tone. The header keeps its 2 px rule, the one line that
+   carries structure (and the one forced colours keep); body cells lose theirs, and even rows take the third
+   surface. Sticky row labels already paint --phy-paper, which the surface redefines to itself; on even
+   rows this rule paints them the row's tone instead. */
+.surfaced {
+  padding: var(--phy-space-s);
+}
+
+.surfaced .table thead th {
+  background: var(--phy-paper-3);
+}
+
+.surfaced .table tbody :is(th, td) {
+  border-block-end-color: transparent;
+}
+
+.surfaced .table tbody tr:nth-child(even) > * {
+  background: var(--phy-paper-3);
+}
+
+/* Made with my soul - Swately <3 */

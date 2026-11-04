@@ -1,0 +1,386 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "phyriadfg-transferencia-por-gpu",
+  "title": "Ancho de banda de copia entre la RAM y cada GPU (256 MiB, host cached, mediana)",
+  "takeaway": "Copiar entre la RAM y la GTX 1080 Ti va a ~3 GB/s, unas 8 veces más lento que en la RTX 4090 (~27 GB/s); la GPU integrada queda en ~20 GB/s.",
+  "kind": "range",
+  "unit": "GB/s",
+  "xLabel": "GPU",
+  "yLabel": "GB/s (1 GB = 1e9 B)",
+  "series": [
+    {
+      "name": "H->D (la GPU lee RAM)",
+      "emphasis": true,
+      "points": [
+        { "x": "RTX 4090", "y": 26.9, "lo": 26.9, "hi": 26.9, "n": 3 },
+        { "x": "GPU integrada AMD", "y": 20.6, "lo": 19.3, "hi": 21.5, "n": 3 },
+        { "x": "GTX 1080 Ti", "y": 3.2, "lo": 3.2, "hi": 3.2, "n": 3 }
+      ]
+    },
+    {
+      "name": "D->H (la GPU escribe RAM)",
+      "points": [
+        { "x": "RTX 4090", "y": 26.4, "lo": 26.4, "hi": 26.4, "n": 3 },
+        { "x": "GPU integrada AMD", "y": 20.7, "lo": 19.3, "hi": 22.1, "n": 3 },
+        { "x": "GTX 1080 Ti", "y": 3.3, "lo": 3.3, "hi": 3.3, "n": 3 }
+      ]
+    }
+  ],
+  "instrument": "hostbw.exe (Vulkan, timestamps de GPU): ancho de banda de buffer de host por GPU, mediana de 25 repeticiones tras 4 de calentamiento, GB/s = bytes / tiempo",
+  "source": {
+    "label": "NO PUBLICA: medición local hostbw (2026-10-08 a 2026-10-09; copia en docs/portfolio/runs/, carpeta local no publicada), no está en la rama public",
+    "url": "docs/portfolio/runs"
+  },
+  "runs": [
+    { "id": "run1", "file": "docs/portfolio/runs/run1.txt" },
+    { "id": "run2", "file": "docs/portfolio/runs/run2.txt" },
+    { "id": "run3", "file": "docs/portfolio/runs/run3.txt" }
+  ],
+  "notes": [
+    "Alcance: una sola máquina (escritorio del operador; dispositivos enumerados RTX 4090, AMD Radeon(TM) Graphics integrada, GTX 1080 Ti), 2026-10-08; transferencias sintéticas, no un juego, sin el FG corriendo, no es el pipeline del FG.",
+    "y = mediana de las tres medianas por corrida (run1..run3); lo/hi = mínimo y máximo de esas tres medianas; n = 3 corridas independientes. Cada valor por corrida está en provenance con archivo:línea y la línea citada.",
+    "Solo filas de 256 MiB, host cached. Las filas de 64 MiB de los mismos archivos se excluyen: la lectura de VRAM de la 4090 a 64 MiB (3771.9 GB/s, run1.txt:4) probablemente cabe en la caché del chip (inferencia, no medida).",
+    "La 'VRAM' de la GPU integrada es RAM del sistema. Su lectura directa varía entre corridas en otra fila del mismo bench (run3.txt:33: 32.5 GB/s frente a 56.8 en run1.txt:33).",
+    "Lectura de VRAM por shader (256 MiB, mediana; escala ajena a la gráfica, no dibujada): RTX 4090 1108.4 / 1111.2 / 1107.4 GB/s (run1..3.txt:11); GTX 1080 Ti 423.6 / 423.6 / 423.5 (:43); GPU integrada 62.9 / 60.3 / 62.6 (:27).",
+    "Puente de imagen desde la RTX 4090 (stage2_image_xfer, rebote por host sin P2P, UNA sola corrida, todos los datos verificados CORRECT; otra unidad, ms, no dibujado): a la GTX 1080 Ti 2.905 ms a 1920x1080 (8.3 MB; stage2_run1.txt:8) y 11.618 ms a 3840x2160 (33.2 MB; :9); a la GPU integrada 0.799 ms a 1080p (:13) y 3.570 ms a 4K (:14).",
+    "La predicción del documento de diseño para el puente 4090->1080 Ti a 1080p (1.71 ms, 'predict §7.9', stage2_run1.txt:8) subestimó el valor medido (2.905 ms).",
+    "No medido: P2P entre las dos NVIDIA (no hay: rebote por host), corridas repetidas del puente, ancho y generación del enlace PCIe (el instrumento no los lee).",
+    "Archivos fuente copiados al repositorio local en docs/portfolio/runs/ (run1..3.txt = banco hostbw, stage2_run1.txt = banco stage2); las rutas de source y runs son relativas a la raiz del repositorio PhyriadFG. La carpeta no se publica (excluida de la proyeccion)."
+  ],
+  "made_by": "Made with my soul - Swately <3",
+  "provenance": [
+    {
+      "series": "H->D",
+      "x": "RTX 4090",
+      "run": "run1",
+      "value": 26.9,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 15,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)       26.9 GB/s median      26.9 best"
+    },
+    {
+      "series": "H->D",
+      "x": "RTX 4090",
+      "run": "run2",
+      "value": 26.9,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 15,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)       26.9 GB/s median      26.9 best"
+    },
+    {
+      "series": "H->D",
+      "x": "RTX 4090",
+      "run": "run3",
+      "value": 26.9,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 15,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)       26.9 GB/s median      26.9 best"
+    },
+    {
+      "series": "D->H",
+      "x": "RTX 4090",
+      "run": "run1",
+      "value": 26.4,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 16,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)      26.4 GB/s median      26.4 best"
+    },
+    {
+      "series": "D->H",
+      "x": "RTX 4090",
+      "run": "run2",
+      "value": 26.4,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 16,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)      26.4 GB/s median      26.4 best"
+    },
+    {
+      "series": "D->H",
+      "x": "RTX 4090",
+      "run": "run3",
+      "value": 26.4,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 16,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)      26.4 GB/s median      26.4 best"
+    },
+    {
+      "series": "H->D",
+      "x": "GPU integrada AMD",
+      "run": "run1",
+      "value": 20.6,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 31,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)       20.6 GB/s median      20.7 best"
+    },
+    {
+      "series": "H->D",
+      "x": "GPU integrada AMD",
+      "run": "run2",
+      "value": 19.3,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 31,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)       19.3 GB/s median      19.4 best"
+    },
+    {
+      "series": "H->D",
+      "x": "GPU integrada AMD",
+      "run": "run3",
+      "value": 21.5,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 31,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)       21.5 GB/s median      21.5 best"
+    },
+    {
+      "series": "D->H",
+      "x": "GPU integrada AMD",
+      "run": "run1",
+      "value": 20.7,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 32,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)      20.7 GB/s median      20.7 best"
+    },
+    {
+      "series": "D->H",
+      "x": "GPU integrada AMD",
+      "run": "run2",
+      "value": 19.3,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 32,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)      19.3 GB/s median      19.4 best"
+    },
+    {
+      "series": "D->H",
+      "x": "GPU integrada AMD",
+      "run": "run3",
+      "value": 22.1,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 32,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)      22.1 GB/s median      22.2 best"
+    },
+    {
+      "series": "H->D",
+      "x": "GTX 1080 Ti",
+      "run": "run1",
+      "value": 3.2,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 47,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)        3.2 GB/s median       3.2 best"
+    },
+    {
+      "series": "H->D",
+      "x": "GTX 1080 Ti",
+      "run": "run2",
+      "value": 3.2,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 47,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)        3.2 GB/s median       3.2 best"
+    },
+    {
+      "series": "H->D",
+      "x": "GTX 1080 Ti",
+      "run": "run3",
+      "value": 3.2,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 47,
+      "quote": "256 MiB  host cached    copy H->D  (GPU reads RAM)        3.2 GB/s median       3.3 best"
+    },
+    {
+      "series": "D->H",
+      "x": "GTX 1080 Ti",
+      "run": "run1",
+      "value": 3.3,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 48,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)       3.3 GB/s median       3.3 best"
+    },
+    {
+      "series": "D->H",
+      "x": "GTX 1080 Ti",
+      "run": "run2",
+      "value": 3.3,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 48,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)       3.3 GB/s median       3.3 best"
+    },
+    {
+      "series": "D->H",
+      "x": "GTX 1080 Ti",
+      "run": "run3",
+      "value": 3.3,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 48,
+      "quote": "256 MiB  host cached    copy D->H  (GPU writes RAM)       3.3 GB/s median       3.3 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "RTX 4090",
+      "run": "run1",
+      "value": 1108.4,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 11,
+      "quote": "256 MiB  VRAM read (shader, device-local)              1108.4 GB/s median    1111.2 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "RTX 4090",
+      "run": "run2",
+      "value": 1111.2,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 11,
+      "quote": "256 MiB  VRAM read (shader, device-local)              1111.2 GB/s median    1113.6 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "RTX 4090",
+      "run": "run3",
+      "value": 1107.4,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 11,
+      "quote": "256 MiB  VRAM read (shader, device-local)              1107.4 GB/s median    1109.9 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "GPU integrada AMD",
+      "run": "run1",
+      "value": 62.9,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 27,
+      "quote": "256 MiB  VRAM read (shader, device-local)                62.9 GB/s median      63.1 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "GPU integrada AMD",
+      "run": "run2",
+      "value": 60.3,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 27,
+      "quote": "256 MiB  VRAM read (shader, device-local)                60.3 GB/s median      60.6 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "GPU integrada AMD",
+      "run": "run3",
+      "value": 62.6,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 27,
+      "quote": "256 MiB  VRAM read (shader, device-local)                62.6 GB/s median      62.9 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "GTX 1080 Ti",
+      "run": "run1",
+      "value": 423.6,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 43,
+      "quote": "256 MiB  VRAM read (shader, device-local)               423.6 GB/s median     424.6 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "GTX 1080 Ti",
+      "run": "run2",
+      "value": 423.6,
+      "file": "docs/portfolio/runs/run2.txt",
+      "line": 43,
+      "quote": "256 MiB  VRAM read (shader, device-local)               423.6 GB/s median     424.5 best"
+    },
+    {
+      "series": "notes: VRAM read",
+      "x": "GTX 1080 Ti",
+      "run": "run3",
+      "value": 423.5,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 43,
+      "quote": "256 MiB  VRAM read (shader, device-local)               423.5 GB/s median     424.8 best"
+    },
+    {
+      "series": "notes: bridge ms",
+      "x": "RTX 4090 -> GTX 1080 Ti, 1920x1080",
+      "run": "stage2_run1",
+      "value": 2.905,
+      "file": "docs/portfolio/runs/stage2_run1.txt",
+      "line": 8,
+      "quote": "1920x1080 (  8.3 MB) bridge=shared    leg1(PCIe D→H)=0.315 ms  leg2(PCIe H→D)=2.590 ms  total=2.905 ms  | predict §7.9=1.71 ms | data=CORRECT"
+    },
+    {
+      "series": "notes: bridge ms",
+      "x": "RTX 4090 -> GTX 1080 Ti, 3840x2160",
+      "run": "stage2_run1",
+      "value": 11.618,
+      "file": "docs/portfolio/runs/stage2_run1.txt",
+      "line": 9,
+      "quote": "3840x2160 ( 33.2 MB) bridge=shared    leg1(PCIe D→H)=1.258 ms  leg2(PCIe H→D)=10.360 ms  total=11.618 ms  | predict §7.9=7.07 ms | data=CORRECT"
+    },
+    {
+      "series": "notes: bridge ms",
+      "x": "RTX 4090 -> GPU integrada AMD, 1920x1080",
+      "run": "stage2_run1",
+      "value": 0.799,
+      "file": "docs/portfolio/runs/stage2_run1.txt",
+      "line": 13,
+      "quote": "1920x1080 (  8.3 MB) bridge=shared    leg1(PCIe D→H)=0.315 ms  leg2(iGPU H→D)=0.484 ms  total=0.799 ms  | predict §7.9=0.00 ms | data=CORRECT"
+    },
+    {
+      "series": "notes: bridge ms",
+      "x": "RTX 4090 -> GPU integrada AMD, 3840x2160",
+      "run": "stage2_run1",
+      "value": 3.57,
+      "file": "docs/portfolio/runs/stage2_run1.txt",
+      "line": 14,
+      "quote": "3840x2160 ( 33.2 MB) bridge=shared    leg1(PCIe D→H)=1.258 ms  leg2(iGPU H→D)=2.313 ms  total=3.570 ms  | predict §7.9=0.00 ms | data=CORRECT"
+    },
+    {
+      "series": "notes: instrument header",
+      "x": null,
+      "run": "run1",
+      "value": null,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 1,
+      "quote": "[hostbw] host-buffer bandwidth per GPU; GPU timestamps; median / best of 25 (4 warmup); GB/s = bytes / time, 1 GB = 1e9 B"
+    },
+    {
+      "series": "notes: stage2 header",
+      "x": null,
+      "run": "stage2_run1",
+      "value": null,
+      "file": "docs/portfolio/runs/stage2_run1.txt",
+      "line": 1,
+      "quote": "[stage2_image_xfer] cross-DEVICE VkImage host-bounce (no P2P) — RENDER_ASSISTANT §4/§6"
+    },
+    {
+      "series": "notes: stage2 verification",
+      "x": null,
+      "run": "stage2_run1",
+      "value": null,
+      "file": "docs/portfolio/runs/stage2_run1.txt",
+      "line": 17,
+      "quote": "[OK] all transfers verified CORRECT"
+    },
+    {
+      "series": "notes: excluded 64 MiB row",
+      "x": "RTX 4090",
+      "run": "run1",
+      "value": 3771.9,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 4,
+      "quote": "64 MiB  VRAM read (shader, device-local)              3771.9 GB/s median    3927.3 best"
+    },
+    {
+      "series": "notes: iGPU direct read",
+      "x": "GPU integrada AMD",
+      "run": "run1",
+      "value": 56.8,
+      "file": "docs/portfolio/runs/run1.txt",
+      "line": 33,
+      "quote": "256 MiB  host cached    shader read direct (no copy)     56.8 GB/s median      57.4 best"
+    },
+    {
+      "series": "notes: iGPU direct read",
+      "x": "GPU integrada AMD",
+      "run": "run3",
+      "value": 32.5,
+      "file": "docs/portfolio/runs/run3.txt",
+      "line": 33,
+      "quote": "256 MiB  host cached    shader read direct (no copy)     32.5 GB/s median      38.7 best"
+    }
+  ]
+}

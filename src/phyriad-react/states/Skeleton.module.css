@@ -1,0 +1,35 @@
+/* The blink, not the shimmer: an opacity pulse from the raised-surface tone.
+   The gradient sweep is the recognizable template signature; the operator
+   asked for the parpadeo. */
+.skeleton {
+  display: block;
+  background: var(--phy-paper-2);
+  border-radius: var(--phy-radius);
+  animation: phy-skeleton-pulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes phy-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+/* State feedback or not, motion dies when the user says so. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    opacity: 0.75;
+  }
+}
+
+/* A background-only surface vanishes under forced colors: give it the system-colour border. */
+@media (forced-colors: active) {
+  .skeleton {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Made with my soul - Swately <3 */

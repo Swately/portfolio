@@ -1,0 +1,29 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-2xs);
+}
+
+.label {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  font-weight: 500;
+  color: var(--phy-ink);
+}
+
+.description {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-xs);
+  color: var(--phy-ink-muted);
+}
+
+/* The colour never carries the meaning alone (WCAG 1.4.1): the message is
+   text, sits under the control it describes, and is bold besides. */
+.error {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  font-weight: 600;
+  color: var(--phy-error);
+}
+
+/* Made with my soul - Swately <3 */

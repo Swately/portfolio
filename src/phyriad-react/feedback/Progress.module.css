@@ -1,0 +1,22 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--phy-space-xs);
+  inline-size: 100%;
+}
+
+.bar {
+  flex: 1;
+  min-inline-size: 4rem;
+  block-size: 0.5rem;
+  accent-color: var(--phy-ink);
+}
+
+.label,
+.value {
+  font-size: var(--phy-text-sm);
+  color: var(--phy-ink-muted);
+  white-space: nowrap;
+}
+
+/* Made with my soul - Swately <3 */

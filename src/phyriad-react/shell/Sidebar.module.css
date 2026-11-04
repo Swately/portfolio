@@ -1,0 +1,22 @@
+.sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sidebar-gap);
+}
+
+.side {
+  flex-basis: var(--sidebar-width);
+  flex-grow: 1;
+}
+
+/* flex-grow 999 lets the content region absorb all the slack while both regions
+   share a line, so the sidebar keeps its basis instead of splitting the space
+   evenly. min-inline-size is the switch: when the content can no longer hold
+   that share, the line wraps and the two stack. */
+.content {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: var(--sidebar-content-min);
+}
+
+/* Made with my soul - Swately <3 */

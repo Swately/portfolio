@@ -1,0 +1,42 @@
+.figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-xs);
+}
+
+.figure :is(img, svg, video, canvas) {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+/* The reserved box: the media fills it and is clipped to it, so a late image
+   never moves the caption or the text below (layout shift is the metric the
+   lab reads as CLS). */
+.box {
+  inline-size: 100%;
+  overflow: hidden;
+  background: var(--phy-paper-2);
+}
+.box > :is(img, video, canvas, svg) {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* A figure shrink-wraps its media by default (a 220px SVG makes a 220px figure).
+   A ratio box has no intrinsic width, so a shrink-wrapped figure would give it
+   100% of nothing — measured: 0 x 0 in the first gate. With a box the figure
+   fills its containing block instead; the box then has a definite width and
+   the ratio yields its height. */
+.figure:has(> .box) {
+  inline-size: 100%;
+}
+
+.caption {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  color: var(--phy-ink-muted);
+}
+
+/* Made with my soul - Swately <3 */

@@ -1,0 +1,74 @@
+.host {
+  display: inline-block;
+}
+
+/* The button is the anchor; the name arrives as a custom property set on the
+   host, so the menu (which lives in the top layer but stays a DOM child) can
+   read the same name. */
+.trigger {
+  anchor-name: var(--phy-anchor);
+}
+
+/* The UA centres a popover with inset: 0 + margin: auto; undo that, then
+   position by anchor where the engine has it. On engines without anchor
+   positioning, placeMenu() writes top/left inline. */
+.menu {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  min-inline-size: 12rem;
+  max-inline-size: min(20rem, 100vw - 2 * var(--phy-space-m));
+  padding: var(--phy-space-2xs) 0;
+  background: var(--phy-paper);
+  color: var(--phy-ink);
+  border: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.menu[hidden] {
+  display: none;
+}
+
+@supports (anchor-name: --a) {
+  .menu {
+    position-anchor: var(--phy-anchor);
+    inset-block-start: anchor(bottom);
+    inset-inline-start: anchor(left);
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+  }
+}
+
+.item {
+  display: block;
+  inline-size: 100%;
+  text-align: start;
+  padding: var(--phy-space-xs) var(--phy-space-s);
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: default;
+}
+
+.item:hover {
+  background: var(--phy-paper-2);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--phy-accent);
+  outline-offset: -2px;
+}
+
+.item[aria-disabled='true'] {
+  color: var(--phy-ink-muted);
+}
+
+@media (forced-colors: active) {
+  .menu {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Made with my soul - Swately <3 */

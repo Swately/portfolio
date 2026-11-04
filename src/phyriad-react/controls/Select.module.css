@@ -1,0 +1,38 @@
+.wrap {
+  position: relative;
+  display: block;
+}
+
+/* Border-drawn chevron in a token colour — see Select.tsx for why it is not
+   a data-URI SVG. pointer-events: none so it never steals the click. */
+.wrap::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--phy-space-s);
+  translate: 0 -50%;
+  border-inline: 4px solid transparent;
+  border-block-start: 5px solid var(--phy-ink-muted);
+  pointer-events: none;
+}
+
+/* A list box (multiple/size) has no popup, so no chevron either. */
+.wrap:has(select[multiple])::after,
+.wrap:has(select[size])::after {
+  display: none;
+}
+
+.select {
+  appearance: none;
+  /* room for the chevron so the longest option never sits under it */
+  padding-inline-end: calc(var(--phy-space-s) * 2 + 8px);
+}
+
+.select[multiple],
+.select[size] {
+  min-block-size: auto;
+  padding-block: var(--phy-space-xs);
+  padding-inline-end: var(--phy-space-s);
+}
+
+/* Made with my soul - Swately <3 */

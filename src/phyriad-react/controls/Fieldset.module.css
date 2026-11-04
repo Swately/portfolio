@@ -1,0 +1,42 @@
+/* The native fieldset chrome (border, padding, legend float) is reset; the
+   SEMANTICS are the point, the look belongs to the system. */
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-2xs);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.legend {
+  padding: 0;
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  font-weight: 500;
+  color: var(--phy-ink);
+}
+
+.description {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-xs);
+  color: var(--phy-ink-muted);
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--phy-space-2xs);
+  padding-block-start: var(--phy-space-3xs);
+}
+
+.error {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  font-weight: 600;
+  color: var(--phy-error);
+}
+
+/* Made with my soul - Swately <3 */

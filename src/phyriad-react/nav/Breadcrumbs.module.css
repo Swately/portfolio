@@ -1,0 +1,29 @@
+.trail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--phy-space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+}
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--phy-space-xs);
+}
+
+/* CSS-drawn separator: text for the eye, absent from the a11y tree. */
+.crumb + .crumb::before {
+  content: '/';
+  color: var(--phy-rule);
+}
+
+.crumb [aria-current='page'] {
+  color: var(--phy-ink-muted);
+}
+
+/* Made with my soul - Swately <3 */

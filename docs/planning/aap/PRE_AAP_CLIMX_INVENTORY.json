@@ -1,0 +1,222 @@
+{
+  "resources": [
+    {
+      "name": "Hand-rolled router",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\router\\router.tsx",
+      "whatItIs": "~120 lines, zero deps. Exports Router, Link, useParams, navigate (page-facing contract) plus matchPath/stripBase for tests. History API + popstate + a module-level listener Set; BASE_URL prefix stripped/re-added so a GH-Pages project path works; Link only intercepts unmodified left-clicks; matchPath wraps decodeURIComponent in try/catch so a malformed percent-escape falls to 404 instead of blanking the app. This is the single thing that turns the portfolio from one scrolling page into /, /projects/:slug, /about, /lab.",
+      "portValue": "high",
+      "portEffort": "verbatim-copy",
+      "verified": true
+    },
+    {
+      "name": "GH-Pages deep-link shim (404.html + main.tsx restore)",
+      "path": "F:\\Phyriad\\projects\\climx\\public\\404.html",
+      "whatItIs": "Standard spa-github-pages pair. 404.html rewrites /climx/<path> to /climx/?/<path> with & escaped as ~and~; the 8-line block at the top of climx's src/main.tsx unwinds it via history.replaceState BEFORE createRoot. Mandatory the moment the portfolio gets a router — without it every shared deep link 404s on Pages. Portfolio's src/main.tsx currently has no restore block (verified by reading it).",
+      "portValue": "high",
+      "portEffort": "small-adapt",
+      "verified": true
+    },
+    {
+      "name": "Router test suite",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\router\\router.test.tsx",
+      "whatItIs": "9 tests: literal match, :param extraction, length-mismatch rejection, URI decoding, the malformed-escape regression, stripBase, Link navigation, popstate/back, fallback. Ports with the router; only route names and page stubs change. The portfolio currently ships 6 tests total, so this roughly doubles a suite that is itself part of what the page is claiming.",
+      "portValue": "medium",
+      "portEffort": "small-adapt",
+      "verified": true
+    },
+    {
+      "name": "reset.css blocks the portfolio dropped",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\styles\\reset.css",
+      "whatItIs": "Diffed against the portfolio's copy: the portfolio kept the reset but dropped .skip-link / .skip-link:focus, the button:focus-visible + a:focus-visible outline rule, the button base style, `input,button,textarea,select {font: inherit}`, and .page's flex-column + gap. The skip link is the visible a11y gap (climx's app.tsx renders one, the portfolio's does not). These are ~20 lines, copy-paste.",
+      "portValue": "medium",
+      "portEffort": "verbatim-copy",
+      "verified": true
+    },
+    {
+      "name": "App shell pattern",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\app.tsx",
+      "whatItIs": "25 lines: skip-link anchor, a single .page div carrying id=\"contenido\", and <Router routes={routes} fallback={NotFound}/>. The route table is a plain array of {path, page}. Direct template for the portfolio's shell once it stops being one page.",
+      "portValue": "medium",
+      "portEffort": "small-adapt",
+      "verified": true
+    },
+    {
+      "name": "PrimitivesLab — living styleguide page",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\pages\\PrimitivesLab.tsx",
+      "whatItIs": "A /lab route that renders the five primitives with themselves: Stack gaps, a wrapping Cluster of chips, a Grid of auto-fill cells, the whole 100–600 type scale. Structure copies cleanly; every string is Spanish and the Cluster demo is literally Mexican state names, so all copy is replaced. On a portfolio it is a defensible 'show the system, not just the output' page — but it is also 5 primitives, so it earns its route only if the design pass actually grows the token set.",
+      "portValue": "medium",
+      "portEffort": "small-adapt",
+      "verified": true
+    },
+    {
+      "name": "NotFound page",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\pages\\NotFound.tsx",
+      "whatItIs": "11 lines: <main>, an h1, a Link home. Trivial, but it is the router's mandatory fallback prop, so it comes along. Two Spanish strings to translate.",
+      "portValue": "medium",
+      "portEffort": "verbatim-copy",
+      "verified": true
+    },
+    {
+      "name": "EstadoCard.module.css — whole-card link pattern",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.module.css",
+      "whatItIs": "The card CSS worth stealing even with no images: .link is a flex column with height:100% (so cards in a Grid row stretch equal), overflow:hidden with radius so a bleed image is clipped by the card, text-decoration:none + inherited text color, and hover/focus-visible moving the accent+underline onto the TITLE rather than the whole card. Image rule is width:100%/height:7rem/object-fit:cover. Applies to ProjectCard as-is minus the .img rule.",
+      "portValue": "medium",
+      "portEffort": "small-adapt",
+      "verified": true
+    },
+    {
+      "name": "EstadoCard.tsx — card-with-image component",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\components\\EstadoCard.tsx",
+      "whatItIs": "<li> wrapping one Link that contains an <img alt=\"\" loading=\"lazy\"> plus a bold Text name, with onError hiding the img so a missing file degrades to a text-only card instead of a broken-image icon. Also exports estadoImg(ides) — the BASE_URL-aware asset path helper. The onError + BASE_URL helper pair is the reusable part; it only pays off if the portfolio gets real screenshots.",
+      "portValue": "medium",
+      "portEffort": "small-adapt",
+      "verified": true
+    },
+    {
+      "name": "CreditsPage — grouped native <details> list",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\pages\\CreditsPage.tsx",
+      "whatItIs": "Joins two fetched indexes and renders ~1,474 rows as native <details>/<summary> groups (no JS disclosure state, no library). The data join and the Spanish copy are worthless here; the transferable idea is the pattern — per-project 'what I actually built' detail collapsed behind a native summary, keyboard- and find-in-page-friendly, zero state. That is maybe 15 lines once rewritten.",
+      "portValue": "medium",
+      "portEffort": "rewrite",
+      "verified": true
+    },
+    {
+      "name": "MEASUREMENTS.md — the measured-numbers log",
+      "path": "F:\\Phyriad\\projects\\climx\\docs\\planning\\MEASUREMENTS.md",
+      "whatItIs": "Not code — the highest-value CONTENT in the donor repo. Dated, instrumented numbers for the climx card: 9,852 SMN records to 2,463 per-municipio files across 32 states; all-lite.json 44,266 B gzip; a municipio payload 344–463 B gzip; 66.66 KB gzip home bundle against a 150 KB budget; 51/51 tests, lib coverage 98.9% lines / 100% funcs; state images 123 MB to 1.12 MB; Wikidata join 2,377/2,463 (96.5%); photo coverage 1,474/2,463 (59.8%); LIVE Lighthouse mobile 90/100 home and 100/98 municipio. It also records a self-inflicted 404 bug found in production and the fix. Concrete, verifiable numbers are exactly what a project card usually lacks.",
+      "portValue": "high",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "climx README — 'Why it's built the way it is'",
+      "path": "F:\\Phyriad\\projects\\climx\\README.md",
+      "whatItIs": "Four bullets that already read like portfolio prose: no backend / $0 / no API keys and why (SMN has no CORS, so a cron Action fetches, validates, partitions 5 MB into ~350 B static files); the dataset trap (idmun is per-state, 570 values for 2,463 municipios, 85.7% collide — every path composite-keyed, with a regression test); 'hand-rolled where it teaches, dependencies where it doesn't' with the 2-runtime-dep count; the CI gate list. Compress, don't rewrite.",
+      "portValue": "high",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "ARCHITECTURE.md — the design record",
+      "path": "F:\\Phyriad\\projects\\climx\\docs\\ARCHITECTURE.md",
+      "whatItIs": "136 lines. Source for the climx card's technical body: the CORS/cron/partition pipeline with the exact cron expression and the schema guard, the composite-key wall, the hand-rolled-by-design list with its declared react-router escape hatch, the milestone plan, the metrics contract, and an 'Honest weakest point' section naming the router as the highest execution risk. That last section is the kind of thing that makes a portfolio read as engineering rather than marketing — worth quoting the stance, not the section.",
+      "portValue": "high",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "tokens.css",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\styles\\tokens.css",
+      "whatItIs": "4px-base spacing scale (--space-1..8), semantic color roles, a 6-step rem type scale, two line-heights, and a comment documenting the breakpoints as the one sanctioned literal repetition. ALREADY PORTED: the portfolio has the same mechanism with its own palette (#2255cc accent, white bg) plus --font-mono, and dropped --color-warning. Nothing left to take except --color-warning if a warning state ever appears.",
+      "portValue": "high",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "The five primitives + their test",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\primitives",
+      "whatItIs": "Box (padding step, plain|surface), Stack (column, gap step, align), Cluster (wrapping row, gap/align/justify), Grid (auto-fill from a min width — no media queries), Text (type step, muted/bold, semantic `as`). Each writes its props into CSS custom properties and forwards native props + ref. ALREADY PORTED verbatim; the portfolio's Text adds a `mono` variant. Zero remaining work.",
+      "portValue": "high",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "Toolchain: ci.yml, vite.config.ts, tsconfig, eslint.config, .prettierrc, test/setup.ts",
+      "path": "F:\\Phyriad\\projects\\climx\\.github\\workflows\\ci.yml",
+      "whatItIs": "ci.yml = checks job (npm ci, lint, typecheck, coverage, build, upload-pages-artifact) then a deploy job gated on `needs: checks` and main-only. tsconfig is strict + noUncheckedIndexedAccess + noUnusedLocals/Parameters. eslint flat config = typescript-eslint recommended + react-hooks + jsx-a11y. ALL ALREADY PORTED (diffed: portfolio differs only in node 24 vs 22 and comment text). climx additionally wires an 80% coverage threshold on src/lib/**; the portfolio deliberately has no threshold because it has no logic layer — that comment stays true unless the router lands, at which point src/router/** becomes a coherent gate target.",
+      "portValue": "high",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "build-state-images.mjs — batch WebP converter",
+      "path": "F:\\Phyriad\\projects\\climx\\scripts\\build-state-images.mjs",
+      "whatItIs": "86 lines of sharp: read a source dir, resize({width:640}).webp({quality:75}), write keyed filenames, print per-file KB and a total, exit non-zero listing anything missing. The name-mapping table is climx-specific junk; the 3-line conversion core plus the report-and-fail-loudly shape is the tool the portfolio needs the day real screenshots exist. Worth nothing today — there is nothing to convert.",
+      "portValue": "low",
+      "portEffort": "small-adapt",
+      "verified": true
+    },
+    {
+      "name": "MuniHeader — figure with credit + fallback chain",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\components\\MuniHeader.tsx",
+      "whatItIs": "A <figure> with a cover image and a <figcaption> carrying author/license links, whose real content is the fallback discipline: `file === null` means 'no photo' so it renders the state image WITHOUT requesting a .webp that cannot exist, and onError only degrades once. Genuinely careful code. On a portfolio with no images and no attribution obligations it does nothing; it becomes relevant only if third-party imagery ever appears.",
+      "portValue": "low",
+      "portEffort": "small-adapt",
+      "verified": true
+    },
+    {
+      "name": "ErrorState",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\components\\ErrorState.tsx",
+      "whatItIs": "Box variant=surface with role=\"alert\", a bold headline, a muted message, and an optional Retry button. 30 lines, primitives-only, translates in a minute. But the portfolio renders from a static src/content.ts import — there is no fetch that can fail, so there is no consumer. Adding it now would be exactly the speculative wrapper the house rules forbid.",
+      "portValue": "low",
+      "portEffort": "verbatim-copy",
+      "verified": true
+    },
+    {
+      "name": "Data layer (fetchWithCache, useFetch, hooks, staleness, types, search, commons)",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\lib\\data",
+      "whatItIs": "Read all seven production modules (the four test files I only line-counted). fetchWithCache = fetch with a localStorage last-good fallback; useFetch derives 'loading' from a key mismatch instead of setting it in the effect (avoids the cascading-render pattern react-hooks v7 flags) and has a retryToken; staleness turns one timestamp into an age label and a 12h stale flag; search does NFD diacritic-stripping with prefix-then-substring ranking; commons.ts wraps the MediaWiki API with a pure parseGallery. Good code, several genuinely nice details. Portfolio value: none. A page that imports its content at build time has no cache, no staleness, no network failure mode, and 5 projects do not need a search box. The useFetch derived-loading trick would be worth lifting IF a live GitHub-stats fetch is ever added — that is a different decision, not a reuse.",
+      "portValue": "none",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "Geo layer (haversine, nearestMunicipio)",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\lib\\geo",
+      "whatItIs": "haversineKm plus a linear nearest-neighbour scan over 2,463 lat/lon rows, which is how climx replaced a Google geocoding key. Correct and tidy. A portfolio has no use for it whatsoever.",
+      "portValue": "none",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "SearchCombobox (hand-rolled ARIA combobox)",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\components\\SearchCombobox.tsx",
+      "whatItIs": "role=combobox input + role=listbox popup, aria-expanded/aria-controls/aria-activedescendant, arrow/Enter/Escape handling, onMouseDown-before-blur, diacritic-insensitive matching, useId for wiring. It is probably the most impressive single component in the repo — and it is worth zero to the portfolio as code, because the portfolio has nothing to search. Its value is as a SENTENCE on the climx card ('hand-rolled ARIA combobox, full keyboard support'), which the README already provides.",
+      "portValue": "none",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "Weather-specific components (AgeBanner, ForecastCard, skyIcon, NearestMunicipio, CommonsGallery)",
+      "path": "F:\\Phyriad\\projects\\climx\\src\\components",
+      "whatItIs": "Read all five. AgeBanner renders the data's true age and shouts when the last pipeline attempt failed; ForecastCard is a per-day card; skyIcon maps SMN sky vocabulary to emoji with an honest fallback; NearestMunicipio wraps the geolocation API; CommonsGallery renders a live Commons category as progressive enhancement. All are domain UI for weather. Nothing here transfers — copying any of them onto a portfolio would be cargo-culting the donor.",
+      "portValue": "none",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "Data-pipeline scripts and their workflows",
+      "path": "F:\\Phyriad\\projects\\climx\\scripts",
+      "whatItIs": "PARTIAL READ — mark-attempt.mjs read in full; fetch-smn.mjs, partition-data.mjs, harvest-muni-images.mjs and pipeline.test.mjs read only through their header/contract comments (118/132/360/180 lines respectively). Plus .github/workflows/data-refresh.yml and data-watchdog.yml, which I did read in full: a 4-hourly fetch-partition-commit-build-deploy job (self-deploying because GITHUB_TOKEN pushes do not chain workflows) and an independent watchdog that asserts the DEPLOYED meta.json is under 12h old and fails loudly. Engineering-wise this is the most interesting part of climx. Portfolio-wise it is worth zero as code and everything as a story — the story is already captured in ARCHITECTURE.md and MEASUREMENTS.md.",
+      "portValue": "none",
+      "portEffort": "n/a",
+      "verified": false
+    },
+    {
+      "name": "State photographs",
+      "path": "F:\\Phyriad\\projects\\climx\\public\\img\\estados",
+      "whatItIs": "32 .webp, all 640x360, 13.8–98.7 KB, 1.2 MB total (verified dimensions by parsing the VP8 headers; opened 9.webp and 20.webp — an aerial of the Zócalo in Mexico City and a mangrove waterway). Built by scripts/build-state-images.mjs from the 2023 v0 school project's src/images/Estados_De_Mexico/PNG. No author, license, or source is recorded for them anywhere in the repo. See verdictOnAssets.",
+      "portValue": "none",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "Municipality photographs + images.json",
+      "path": "F:\\Phyriad\\projects\\climx\\public\\img\\municipios",
+      "whatItIs": "1,474 .webp, 71 MB on disk, harvested from Wikidata P18 / es-wiki lead images and machine-filtered against coats of arms, flags, maps and logos, then audited. Unlike the state photos these ARE properly licensed and attributed — public/data/images.json carries file, filePage, artist, license, licenseUrl per composite key, and CreditsPage renders all of it. Correct provenance, still 100% Mexican municipal scenery. On an engineer's portfolio the licensing is clean and the subject matter is still irrelevant.",
+      "portValue": "none",
+      "portEffort": "n/a",
+      "verified": true
+    },
+    {
+      "name": "AAP design-search record",
+      "path": "F:\\Phyriad\\projects\\climx\\docs\\planning\\aap",
+      "whatItIs": "NOT OPENED. I read docs/REGISTER.md, which registers them: a frozen sha256-sealed objective, three independent candidate architectures, three adversarial scorecards (adoption-skeptic / budget-auditor / performance-realist), a synthesis, a seal note. ARCHITECTURE.md states the adversarial phase caught the idmun-collision defect in 2 of 3 candidates. If that holds up on reading, 'the architecture was chosen by a documented adversarial search that killed two candidates on a real dataset defect' is a strong line for the climx card — but I did not verify the contents.",
+      "portValue": "medium",
+      "portEffort": "n/a",
+      "verified": false
+    }
+  ],
+  "verdictOnAssets": "Filler — and I would not ship them, for two independent reasons.\n\nFIRST, provenance. I read scripts/build-state-images.mjs: these are re-encodes of the 2023 v0 school project's src/images/Estados_De_Mexico/PNG (123 MB of PNG/JPG, per that script's own header). Nothing in the repo records an author, a license, or a source for a single one of them. climx knows this about itself: src/pages/CreditsPage.tsx credits every municipality photo with artist, license and Commons file page from public/data/images.json, and then says of the state photos only \"provienen del proyecto original (2023)\". That contrast is the tell — one set was harvested under a documented free license, the other was inherited from a school project with no paper trail. 640x360 16:9 crops of the sort I opened (an aerial Zócalo plate, a mangrove waterway) look like stock or video stills. Putting unattributed images of unknown origin on the public page whose entire job is to represent the operator professionally is a bad trade for decoration. Note also that they are only 640x360 — as a full-bleed hero on a 1440px screen they will visibly soften.\n\nSECOND, and this stands even if the licensing turned out clean: subject matter. These are photographs of Mexican geography. They are not photographs of Phyriager, PhyriadFG, Phynned, PHarvard, climx, or the operator. A mangrove above a card titled \"Phynned — pins game workloads to the strongest cores of asymmetric CPUs\" is not reuse; it is the visual grammar of a purchased template, and a reader who has seen ten of those pages will read it that way in about a second. The one card where a state photo is not absurd — climx — is exactly the card where it is still wrong: that image is an asset climx *serves*, not a picture of climx. A screenshot of the live site at swately.github.io/climx does that job honestly and takes a minute to capture.\n\nThe premise I was handed said no imagery exists on disk. That is not correct, and it changes the answer. I opened three files:\n- F:\\Phyriad\\projects\\PhyriadFG\\docs\\diagrams\\phyriadfg_multigpu.png — a clean LaTeX/TikZ architecture diagram: Game to Capture (thread C, iGPU) to Optical flow (thread F, GTX 1080 Ti) to Warp+blend+present (thread P, RTX 4090) to Display, with the c_seq/f_seq handoffs and the p_presenting backpressure edge labelled. This is portfolio-grade as-is.\n- F:\\Phyriad\\projects\\Phyriager\\screenshots\\trazado_1.png — 1273x721, an annotated agent frame: the goal chip \"have stone_pickaxe (1/1)\", a red projected-path overlay, and a metadata footer reading \"frame.v1 · sensor-true · 384x216 · FOV 110 fixed · 3.0 Hz\". It shows an agent perceiving and planning, which is the whole claim of the project.\n- F:\\Phyriad\\projects\\Phyriager\\telemetry\\frames\\events_20260710_130058_2822316_stuck.png — 384x216, a raw VLM input frame. Small, but authentic as a \"this is what the agent's eye actually receives\" inset.\n(There are also 27 image files under holith and 62 under PhyShell that I counted but did not open.)\n\nSo the honest recommendation: take the mechanism, not the pixels. The object-fit:cover card CSS, the lazy-loading, the onError degrade-to-text-card, the BASE_URL asset helper, and the sharp 640px/q75 batch converter are all real and reusable. Point them at the diagram and the agent frames above plus two or three fresh screenshots (climx live, a Phyriager run, a PhyriadFG frame-pacing capture). That fills the same visual holes with images that are unambiguously the operator's own work and that actually carry information. Shipping the state photos instead would be borrowing someone else's photographs to decorate a page about your engineering — the exact opposite of what the page is for.",
+  "notes": "HOW I VERIFIED: globbed the tree, then opened every src file except four test files under src/lib/data (line-counted only), plus tokens/reset, all five primitives and their test, both routers files, public/404.html, index.html, main.tsx, all three workflows, all six configs, README.md, docs/ARCHITECTURE.md, docs/REGISTER.md, docs/planning/MEASUREMENTS.md, scripts/build-state-images.mjs and mark-attempt.mjs in full, four other scripts through their header comments only. Wrote nothing. Anything I did not open is marked verified=false above.\n\nWHAT THE PORTFOLIO IS ACTUALLY MISSING (diffed climx against F:\\Phyriad\\projects\\portfolio, first-hand):\n- The primitives, tokens.css, reset.css, ci.yml, tsconfig, eslint.config, .prettierrc and test/setup are already there. The only deltas are cosmetic (node 24 vs 22, comment text) plus the portfolio's own additions (Text `mono`, --font-mono, its own palette, .page max-width 44rem vs 64rem).\n- The portfolio's reset.css DROPPED: .skip-link + .skip-link:focus, the button base style, `input,button,textarea,select {font: inherit}`, `button:focus-visible, a:focus-visible` outlines, and .page's flex-column + gap. Its app.tsx renders no skip link. That is a real a11y gap against a donor that measured Lighthouse Accessibility 100/98 live.\n- Its src/main.tsx has no 404-shim restore block, and vite base is '/portfolio/'. Adding the router means porting all three pieces together (router.tsx, public/404.html with the base string changed, the main.tsx restore block) or deep links silently break on Pages.\n- Its vite.config comments say there is no logic layer worth a coverage threshold. True today; the router would be the first thing that changes that, and src/router/** is the natural gate target.\n\nTWO THINGS CLIMX DOES NOT HAVE, so nothing can be inherited: there is not a single @media, prefers-color-scheme or prefers-reduced-motion rule anywhere in src (grepped), and there is no favicon or brand asset in public/. climx is responsive purely through Grid's auto-fill minmax and rem type — an elegant answer, but it means dark mode, motion preferences and any breakpoint-driven layout are all net-new work on the portfolio, not a port.\n\nTHE SHARPEST REUSE, ranked: (1) router + 404 shim + its tests — the one structural capability the portfolio lacks; (2) MEASUREMENTS.md and the README's \"Why it's built the way it is\" as CONTENT for the climx card — dated, instrumented, verifiable numbers are the scarcest thing on any portfolio; (3) the reset.css a11y block, a 20-line paste; (4) the EstadoCard link-card CSS for ProjectCard; (5) PrimitivesLab as a /lab page, if the design pass grows the token system enough to justify a route. Everything under src/lib, all the weather components, and the whole data pipeline are dead weight for this target no matter how good the code is.\n\nONE CAUTION ON FRAMING: climx's own docs are careful to scope their claims (\"no absolute-optimality claim\", \"Honest weakest point\", \"NOT yet run: Lighthouse\"). If the portfolio quotes climx's numbers, it should carry that same discipline — the MEASUREMENTS entries are dated and instrumented, and the live Lighthouse numbers were measured against https://swately.github.io/project-tw/ before the repo rename, which is worth a re-run before it is printed on a page."
+}

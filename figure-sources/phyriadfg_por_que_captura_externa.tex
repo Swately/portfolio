@@ -1,0 +1,86 @@
+% PhyriadFG — por qué la captura externa: lo que recibe un FG dentro del motor vs lo que recibe PhyriadFG
+% Build (MiKTeX, figure contract v1, portfolio/figure-contract/README.md §1):
+%   latex -interaction=nonstopmode phyriadfg_por_que_captura_externa.tex
+%   dvisvgm --no-fonts --bbox=papersize -o phyriadfg_por_que_captura_externa.svg phyriadfg_por_que_captura_externa.dvi 2> dvisvgm.log
+%   (any "failed to create" in dvisvgm.log = FAILED build)
+%   svgo --multipass phyriadfg_por_que_captura_externa.svg -o phyriadfg_por_que_captura_externa.min.svg
+% Colours: phyriad-figure-colors.sty (copy it next to this file). Ink = TeX black; ONE accent (figAccent) on
+% what PhyriadFG estimates itself (the flow box of thread F); figMuted for the thread/GPU notes.
+% Redrawn 2026-10-10 with the dossier's Anexo corrections 1, 2, 3 and 4 (PORTFOLIO_DOSSIER.md).
+% Sources:
+%   top row    - AMD GPUOpen, "FidelityFX Frame Interpolation 1.1.3",
+%                https://gpuopen.com/manuals/fidelityfx_sdk/techniques/frame-interpolation/, re-read 2026-10-10 via
+%                a summarising fetch [V2]: inputs = presentation colour buffer(s), dilated depth, dilated motion
+%                vectors, camera near/far/FOV, frame-time delta, AND "the optical flow motion vectors"; it is
+%                "designed to work together with the FfxOpticalFlow"; algorithm stage "Compute optical flow
+%                vector field".
+%   bottom row - public README.md:3-5 ("with no access to the game engine, its motion vectors, or its depth"),
+%                README.md:99-100 (disocclusion is the hard case), docs/ARCHITECTURE.md:22 (thread C acquires
+%                the frame by DDA or WGC; iGPU converts+packs), :23 (thread F: MV + SAD via a pyramid plus the
+%                global motion model gme), :24 (thread P: warp to t, blend, quality, present), :33 (pipeline).
+% Made with my soul - Swately <3
+\documentclass[border=12pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{amsmath}
+\usepackage{phyriad-figure-colors}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Latex, line width=0.6pt,
+  box/.style={draw, rounded corners, minimum height=1.25cm, align=center, font=\small},
+  data/.style={draw, dashed, rounded corners, minimum height=1.25cm, align=left, font=\footnotesize, inner sep=4pt},
+  accentbox/.style={box, draw=figAccent, fill=figFillAccent, line width=1.1pt},
+  row/.style={font=\small\bfseries, anchor=west},
+  note/.style={font=\footnotesize, align=center, text=figMuted},
+]
+
+% ── fila inferior: PhyriadFG (se dibuja primero; la fila superior se alinea con ella) ──
+\begin{scope}[yshift=-5.6cm]
+\node[row] at (0,2.0) {PhyriadFG (captura externa)};
+\node[box, text width=2.3cm] (game) at (1.3,0) {Juego\\(caja cerrada)};
+\node[data, right=9mm of game, text width=4.4cm] (pin)
+  {solo los píxeles finales\\de la pantalla\\(captura DDA o WGC)};
+\node[accentbox, right=9mm of pin, text width=3.3cm] (flow)
+  {Flujo óptico estimado\\de los píxeles (MV\,+\,SAD)\\+ modelo global};
+\node[box, right=9mm of flow, text width=3.4cm] (warp)
+  {Warp hacia atrás\\+ mezcla + capas de\\calidad (oclusión)};
+\node[box, right=9mm of warp, text width=1.4cm] (pout) {$I_t$};
+\draw[->] (game) -- (pin);
+\draw[->] (pin) -- (flow);
+\draw[->] (flow) -- (warp) node[midway, above, font=\footnotesize]{MV};
+\draw[->] (warp) -- (pout);
+
+% hilos y GPU bajo cada etapa
+\node[note, anchor=north] at (pin.south)  {hilo C: captura;\\la GPU integrada convierte y empaqueta};
+\node[note, anchor=north] at (flow.south) {hilo F\\segunda GPU};
+\node[note, anchor=north] at (warp.south) {hilo P\\GPU principal};
+\end{scope}
+
+% ── fila superior: FG dentro del motor ──────────────────────────────────
+\node[row] at (0,2.15) {FG dentro del motor (p.\,ej. FSR 3 Frame Interpolation)};
+\node[box, text width=2.3cm] (eng) at (game.center |- 0,0) {Motor del juego};
+\node[data, text width=4.4cm] (ein) at (pin.center |- 0,0)
+  {color del cuadro\\profundidad (depth)\\vectores de movimiento del motor\\cámara: near/far, FOV, $\Delta t$};
+\node[box, text width=3.3cm] (eflow) at (flow.center |- 0,0) {Flujo óptico propio\\(\texttt{FfxOpticalFlow})};
+\node[box, text width=3.4cm] (eint) at (warp.center |- 0,0) {Interpolador\\(dentro del motor)};
+\node[box, text width=1.4cm] (eout) at (pout.center |- 0,0) {$I_t$};
+\draw[->] (eng) -- (ein);
+\draw[->] (ein) -- (eflow);
+\draw[->] (eflow) -- (eint) node[midway, above, font=\footnotesize]{flujo};
+\draw[->] (eint) -- (eout);
+% profundidad, vectores y cámara también llegan directamente al interpolador
+\draw[->] (ein.north) |- ($(eflow.north)+(0,0.55)$) node[pos=0.75, above, font=\footnotesize]{profundidad, vectores y cámara} -| (eint.north);
+
+% ── lo que falta: profundidad y vectores del motor ─────────────────────
+\draw[dashed] (ein.south) -- node[pos=0.45, font=\large, inner sep=1pt] {$\times$}
+  node[pos=0.45, right, font=\footnotesize, align=left, xshift=4mm]
+  {no llegan profundidad ni vectores del motor:\\PhyriadFG estima todo el movimiento solo de la imagen}
+  (pin.north);
+
+\end{tikzpicture}
+\end{document}

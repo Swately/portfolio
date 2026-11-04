@@ -1,0 +1,56 @@
+/* Fixed over the viewport and repeating the grid's OWN declarations — same
+   track count, same gap, same margin — so the columns drawn here land exactly
+   where the layout's columns are. An overlay that computes its tracks any other
+   way is a picture of a grid, not the grid. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--phy-grid-gap);
+  padding-inline: var(--phy-grid-margin);
+}
+
+.col {
+  background: color-mix(in srgb, var(--phy-accent) 10%, transparent);
+  border-inline: 1px solid color-mix(in srgb, var(--phy-accent) 35%, transparent);
+  font-family: var(--phy-font-mono);
+  font-size: var(--phy-text-xs);
+  color: var(--phy-accent);
+  text-align: center;
+  padding-block-start: var(--phy-space-3xs);
+}
+
+.toggle {
+  position: fixed;
+  inset-block-end: var(--phy-space-m);
+  inset-inline-end: var(--phy-space-m);
+  z-index: 10000;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--phy-space-xs);
+  min-block-size: 44px;
+  padding-inline: var(--phy-space-m);
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+  background: var(--phy-paper-2);
+  color: var(--phy-ink);
+  font-family: var(--phy-font-mono);
+  font-size: var(--phy-text-xs);
+  cursor: pointer;
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--phy-accent);
+  outline-offset: 2px;
+}
+
+.toggle kbd {
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  padding-inline: var(--phy-space-3xs);
+  background: var(--phy-paper);
+}
+
+/* Made with my soul - Swately <3 */

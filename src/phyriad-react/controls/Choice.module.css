@@ -1,0 +1,30 @@
+/* Checkbox + Radio share one skin: native inputs with accent-color — zero
+   custom drawing, platform accessibility intact, and the ink doctrine for
+   free. The whole row is ONE label, so the touch target is the row, not the
+   20px box. */
+
+.row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--phy-space-xs);
+  min-block-size: 24px; /* WCAG 2.5.8 floor; the label text widens it further */
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-base);
+  color: var(--phy-ink);
+  cursor: pointer;
+}
+
+.box {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  margin: 0;
+  accent-color: var(--phy-ink);
+  flex-shrink: 0;
+}
+
+.row:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* Made with my soul - Swately <3 */

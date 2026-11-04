@@ -1,0 +1,18 @@
+.box {
+  padding: var(--box-padding);
+}
+
+.surface {
+  background: var(--phy-paper-2);
+  border: 1px solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+}
+
+/* Same as Empty: explicit, not accidental. */
+@media (forced-colors: active) {
+  .surface {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Made with my soul - Swately <3 */

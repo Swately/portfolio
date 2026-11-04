@@ -1,0 +1,47 @@
+.entry {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-xs);
+}
+
+/* The name is the link; it reads as ink and lights up on hover, so the chip
+   beside it never looks like the link (kept from the card). */
+.name {
+  text-decoration: none;
+  color: var(--phy-ink);
+}
+
+.name:hover,
+.name:focus-visible {
+  color: var(--phy-accent);
+  text-decoration: underline;
+}
+
+.status,
+.years {
+  white-space: nowrap;
+}
+
+/* Direction B: the plate. A hairline frame like the dossier's figures, radius from the token (zero), no
+   shadow. The image fits the column (D-28) and is never upscaled past its natural width. */
+.plate {
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+  margin-block: var(--phy-space-xs);
+  line-height: 0;
+}
+
+.plateImg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* A figure not made of contract colours keeps its light look in the dark theme (as Figure's .plate). */
+.light {
+  color-scheme: light;
+  background: var(--phy-paper);
+}
+
+/* Made with my soul - Swately <3 */

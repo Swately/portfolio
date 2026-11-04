@@ -1,0 +1,312 @@
+[
+  {
+    "gateVerdict": "SCORED",
+    "lens": "budget-auditor — every objection below is anchored in a number I recomputed myself against E8/E3/M3, not in the candidate's self-report.",
+    "feasibilityRecompute": {
+      "ownSum": "ROUTES: 3 entries in the Route[] array ('/', '/proyectos/:slug', '/colofon'); the 404 is the `fallback` PROP, not a route entry (verified in climx/src/router/router.tsx: `Router({routes, fallback})`). Either reading is <= 4. CLOSES, margin 1-2.\n\nNEW FILES UNDER src/: I counted the candidate's own newFiles list — 16, and all 16 really are under src/ (public/404.html and public/img/*.png are correctly excluded, since E8's letter bounds files under src/). But the design's own text requires one more file it never lists: evidenceModel says 'A Vitest invariant over content.ts asserts (a)(b)(c)' and milestone M-2 says 'add the content invariant test'. src/ today holds only ProjectCard.test.tsx, primitives.test.tsx and test/setup.ts (I enumerated all 25 files) — there is no content test. That is a 17th new file. MY COUNT: 17 of 18, margin ONE file, not the two the candidate implies. At-risk 18th: E7 bans hardcoded px/hex outside tokens.css, app.module.css contains only `.footer`, and /colofon carries a bespoke «Números medidos» table plus a project-page layout — one CSS module there puts the count at exactly 18. Outside src/ it also creates public/ from scratch (does not exist today): 404.html + 2 PNGs.\n\nM3(a) BYTES: measured, not taken on trust. dist/assets/index-SkKFUUat.js = 196,605 B raw, 61,624 B gzip (my `gzip -c | wc -c`); CSS 2,763 B raw / 1,140 B gzip; index.html 708 B. Added: ~120-line router + 4 pages + 4 components + asset.ts, plus a much larger content.ts (5 projects x claim arrays + límites bullets, all Spanish prose). Delta 8-11 KB gzip => 70-73 kB gzip JS against the 150 KB cap. 52% headroom. CLOSES.\n\nM3(b) TRANSFERRED BYTES, heaviest view /proyectos/phyriager: I first checked whether the named instrument compresses, because that decides this line. It does — node_modules/vite/dist/node/chunks/node.js ~L35700 defines `build_default({threshold=1024, level=-1, gzip=true, mimes})`, which sets Content-Encoding for compressible MIMEs at or above 1024 B. So JS/CSS transfer at gzip size; index.html at 708 B is BELOW the threshold and transfers raw; PNG is not compressible. Sum: trazado_1.png 167,722 B (verified on disk) + JS ~72,000 + CSS ~2,400 + HTML ~750 = ~242,900 B ~= 243 KB against the 500 KB bound. 51% headroom. Second-heaviest /proyectos/phyriadfg: 89,350 + ~75,150 = ~165 KB. CLOSES with real margin — the candidate's 240 KB figure matches mine within 1%, so this is NOT the under-priced line item it usually is.\n\nE3: nothing here needs a package absent from package.json. Router, tests, CSS modules, <figure> — all react + react-dom (the entire `dependencies` block, verified) plus existing devDeps (vitest, @testing-library/*, jsdom, eslint-plugin-jsx-a11y). Zero new packages.\n\nTHE REAL WALL IS NOT PAYLOAD AND NOT E3 — IT IS M6. See underpricedItems.",
+      "fitVerdict": "tight",
+      "underpricedItems": [
+        "The content-invariant test file: required by the candidate's own evidenceModel and milestone M-2, absent from newFiles. Corrects 16 -> 17 under src/, halving the declared margin on the axis the objective itself calls 'the axis on which this build would most plausibly overrun'.",
+        "A CSS module for /colofon's «Números medidos» table and/or the project-page layout: unlisted, but E7 forbids hardcoded px/hex outside tokens.css and app.module.css contains only a `.footer` rule. If needed, the count lands at exactly 18 — the K7 bound, with zero margin.",
+        "M6 priced at 5-hedged-to-4 when it is 4 flat, with ZERO margin against target >= 4 and no recovery path: the candidate has itself already argued — correctly — that all eight remaining ports fail the deletion test, so there is nothing left to promote if a recount rejects any one of the four. This is the line item that hides the wall, and it sits on P2, the operator's literal instruction.",
+        "public/ does not exist today: 3 new files plus a directory tree outside src/. Free under E8's letter, but it is real work the scope figure does not show."
+      ]
+    },
+    "scorecard": [
+      {
+        "metric": "M1",
+        "score": 4,
+        "justification": "Strongest checkable machinery of anything I opened: `evidence` non-optional on `Claim` (so tsc rejects an unevidenced claim), a Vitest invariant over content.ts, and repo-ROOT-only links that cut the quality veto's 'every link resolves' surface to 6 URLs instead of ~20. But 100% is not established: «Límites declarados» is listed as a section SEPARATE from EvidenceList, and at 1-3 bullets x 5 projects that is up to ~15 rendered assertions of fact about a project whose evidence attachment is unspecified. Against a target of exactly 100%, an unspecified 15-assertion population is a hole; the candidate's own weakestPoint names subtitles, the profile sentence and figcaptions but not this, the largest population."
+      },
+      {
+        "metric": "M2",
+        "score": 5,
+        "justification": "5/5, verified by me against the READMEs: Phyriager `0.1.0-experimental` (README L16), PhyriadFG `0.4.0-experimental` (L8), Phynned `0.2.0-experimental` (L8) — three byte-identical version strings; PHarvard's «Corre en silicio · ISA completa verificada en la placa, 2026-08-01» faithfully renders L23 '**runs on silicon.** Full instruction set verified on the board, 2026-08-01'; climx's «En producción» matches L4 'Live at: https://swately.github.io/climx/'. The quoted qualifiers also check out verbatim: Phyriager L17-18 'the mod builds but has not been validated live on a server', Phynned L232 'provisional and under re-validation', PHarvard L8 'The point of this project is not speed'. 3 warning badges vs 2 non-warning makes the grid visibly non-uniform, so the objective's 'five equal polished tiles scores 0' trap is structurally excluded."
+      },
+      {
+        "metric": "M3",
+        "score": 5,
+        "justification": "Both thresholds cleared by roughly 2x on my own arithmetic, from real on-disk bytes: (a) 70-73 kB gzip JS vs the 150 KB cap = 52% headroom, off a baseline I measured at 61,624 B gzip; (b) 242,900 B on /proyectos/phyriager vs the 500 KB bound = 51% headroom, and I confirmed the named instrument (vite preview) actually gzips, so the preview reading will match the deployed shape rather than flatter it. Only two images on the whole site, both verified at the exact bytes cited (167,722 and 89,350). No code-splitting means `/` ships ColophonPage + PrimitivesShowcase JS it never renders — real waste, but ~11 kB against a 150 KB cap, so it does not touch the threshold."
+      },
+      {
+        "metric": "M4",
+        "score": 5,
+        "justification": "The one risk the candidate names — the ported router under `noUncheckedIndexedAccess` — is nil, and stronger than it claimed: `diff projects/portfolio/tsconfig.json projects/climx/tsconfig.json` returns EMPTY. The two configs are byte-identical, not merely comment-different, so router.tsx already compiles under exactly this config. Zero new packages (E3 untouched). Milestone M-1 proves all four commands green before any content work, which is the correct sequencing for a gate."
+      },
+      {
+        "metric": "M5",
+        "score": 3,
+        "justification": "(c) is exact — I recomputed all five contrasts independently from the token hexes: #111111/#ffffff = 18.88, #5b5b5b/#ffffff = 6.79, #5b5b5b/#fafafa = 6.51, #2255cc/#ffffff = 6.48, #b45309/#ffffff = 5.02, #b45309/#fafafa = 4.81. Every figure the candidate reports is right to 2 dp; floor 4.81 vs the 4.5 requirement. But (b) fails its own text twice: the estimate asserts 'Landmarks on every route' then places <header>/<footer> on HomePage only, leaving 2 of 3 routes without them; and M-3's 'ProjectCard rewritten as a whole-card Link' combined with '/'-card sections carrying 'el cluster de evidencia (repositorio · sitio en vivo)' produces an <a> inside an <a> — nested anchors, invalid HTML that jsx-a11y has no core rule for (so (a) stays green) and that directly falsifies the estimate's own 'Every interactive element is a native <a> … there is no custom widget in this design'."
+      },
+      {
+        "metric": "M6",
+        "score": 3,
+        "justification": "My own deletion test against Pages at /portfolio/ gives exactly 4, not 5. Counting: (1) router.tsx — verified it is the sole source of :param and that Link/navigate prefix BASE; (2) the 404.html + main.tsx restore pair — verified portfolio's main.tsx has no restore block and climx's is 8 lines, and AT0 fix 3 names this shim structural by name; (3) NotFound.tsx — verified `Router({ routes, fallback }: { routes: Route[]; fallback: ComponentType })`, fallback non-optional, so deleting the file fails tsc; (4) asset.ts — verified `estadoImg` really is `${import.meta.env.BASE_URL}img/estados/...`, and the FORBIDDEN clause explicitly blesses this mechanism pointed at the operator's own images. The 5th (MEASUREMENTS.md -> content.ts) does NOT survive: deleting numbers from content.ts removes no page CAPABILITY, it lowers M1 — the candidate concedes this itself. So M6 = 4 against target >= 4: margin zero, tie-break (iii) yields nothing, and there is no recovery path because the candidate has already refuted all eight remaining ports on the record."
+      }
+    ],
+    "attackOnCentralClaim": "The claim: make the artifact auditable — spend climx's real machinery on three routes, make «no claim without evidence» a non-optional field so M1 is a compile-time property, and put a /colofon on the page so a reader opening the repo finds its claims about itself already checkable.\n\nIT LARGELY SURVIVES, and I want to be precise about why, because this is the most first-hand-verifiable candidate text I could check. Nearly every checkable number in it checked out: `fallback` really is non-optional in the router signature; `base: '/portfolio/'` really is in vite.config.ts; the two tsconfigs are byte-IDENTICAL (stronger than its own hedged 'differ only in comments'); portfolio's main.tsx really has no restore block; portfolio's reset.css really is missing .skip-link, the button base, `input,button,textarea,select{font:inherit}` and button:focus-visible while keeping a:focus-visible, and .page really is 44rem vs climx's 64rem; PrimitivesLab really has no CSS module; every contrast figure is right to 2 dp; and every MEASUREMENTS.md row it cites exists at the date cited — 9,852 records -> 2,463 files (L14, 2026-07-28), 44,266 B gzip (L15), 66.66 KB gzip (L30), 463 B gz (L73), 51/51 tests + cobertura lib 98.92% (L75-77) — as does the reason for excluding Lighthouse (L45/51-52 record it against project-tw, the pre-rename URL). The README/MEASUREMENTS 41-vs-51 inconsistency it flags is real (climx README L32 says 41). It even correctly caught that index.html is lang=\"en\".\n\nWHERE IT EMBARRASSES ITSELF: the objective's named workload is a recruiter deciding in ~20 seconds on `/`, arriving from a GitHub profile or CV link. That reader never opens the repo, never reaches /colofon, and never observes that `evidence` is non-optional. So the headline over-reaches its own instrument: M1 is measured by hand enumeration of the rendered DOM, which the type system does not perform — the compile-time property raises the AUTHORING floor, not the MEASURED score. The candidate concedes exactly this in weakestPoint; the thesis line does not. Second: the implicit competitor — 'an editorial promise' / 'a hand-rolled switch' — is a partial strawman, because the objective itself already admits a single-route design as legitimate (with the burden of reaching M6>=4 by other means), and the candidate never engages that admissible competitor on the quality of `/`, only on route count. On its own admission ~3 of 17 files serve the scored reader.\n\nWHERE IT WINS: the reader who does open the repo, and — more importantly — the A2/ATF gate itself. Repo-ROOT-only links cut the quality veto to 6 hand-checkable URLs; the invariant test makes M2's byte-identical version strings self-policing; and the ledger's eight explicitly DECLINED ports are the reason my M6 recount landed on the same number it did rather than catching it padding. A candidate that argues against its own score is hard to attack on honesty, and I could not.",
+    "killCriteria": [
+      {
+        "criterion": "K1 — requires content not on disk",
+        "cleared": true,
+        "margin": "Large. Only two images used; I verified both at the exact bytes cited (phyriadfg_multigpu.png 89,350 B, trazado_1.png 167,722 B). Three of five projects are deliberately left figureless and the asymmetry is declared as accepted rather than solved; the missing captures (climx live, Phynned UI, PHarvard board) are listed as gaps, not assumed. Every MEASUREMENTS number traced to a real dated row."
+      },
+      {
+        "criterion": "K2 — structural climx reuse below 3",
+        "cleared": true,
+        "margin": "1. M6 = 4 by my own deletion test (floor is 3). Comfortable against K2 specifically — the problem is the M6 TARGET, not this kill criterion."
+      },
+      {
+        "criterion": "K3 — cannot pass the M4 gate",
+        "cleared": true,
+        "margin": "Large. tsconfigs byte-identical so the ported router compiles as-is; zero new packages; milestone M-1 is explicitly sequenced to prove all four commands before content work."
+      },
+      {
+        "criterion": "K4 — unsupported claim or status hidden behind uniform polish",
+        "cleared": true,
+        "margin": "Good. 5/5 README-faithful (verified), non-uniform badges (3 warning vs 2), and a «Límites declarados» section that renders each project's OWN warnings. Residual exposure is the quality veto, not K4: contentGap #1 is right that the five github.com/Swately URLs are unverifiable from disk, and a private repo fails the veto on a broken link regardless of every metric."
+      },
+      {
+        "criterion": "K5 — not measurable on this machine",
+        "cleared": true,
+        "margin": "Large. Every instrument exists here, and I checked the one that could have silently lied: vite preview really does gzip (threshold 1024, compressible MIMEs), so the M3(b) network-panel reading matches the deployed shape rather than inflating it. Lighthouse dependence explicitly excluded, and I verified the stated reason in MEASUREMENTS.md L45/51-52."
+      },
+      {
+        "criterion": "K6 — new runtime dependency / service / key / recurring cost",
+        "cleared": true,
+        "margin": "Absolute. `dependencies` stays react + react-dom; nothing in the design needs a package absent from package.json."
+      },
+      {
+        "criterion": "K7 — exceeds E8 scope bound",
+        "cleared": true,
+        "margin": "Thin. Routes 3 of 4 (margin 1-2). Files 17 of 18 by MY count — not the 16 reported — so margin ONE file, and a single CSS module for the colophon table under E7 would put it at exactly 18. It clears, but the reported cushion is double the real one."
+      }
+    ],
+    "smugglingCheck": "No smuggling found, and I checked the state photographs specifically because they are the objective's named trap. The candidate ports EstadoCard's MECHANISM — `estadoImg` -> `asset(path)`, loading=\"lazy\", the onError degrade — which §Declared constraints explicitly blesses in its own words ('Their mechanism … is explicitly NOT forbidden and is encouraged, pointed at the operator's own images'). It points that mechanism at phyriadfg_multigpu.png and trazado_1.png, the operator's own work, and states outright that 'the <li>/Link wrapper and the whole estado/ides domain are dropped'; it also drops the `.img` rule (height 7rem, object-fit cover) from EstadoCard.module.css, which is the rule most specific to the photo grid. No public/img/estados/*.webp appears anywhere in the design.\n\nDropped drivers: none reappear. No fetchWithCache, no useFetch, no staleness hooks, no geo layer, no SearchCombobox, no AgeBanner/ForecastCard/skyIcon/NearestMunicipio/CommonsGallery — and the colophon section «Qué dejé fuera a propósito» names 'capa de datos, capa geográfica, el combobox ARIA, los componentes de clima, y las fotos de estado' as deliberate refusals on the page itself, which is the opposite of laundering them in. The one nearby judgement call — PrimitivesLab — is a high-value inventory entry rather than a dropped one, and the candidate respects the inventory's own caveat by demoting it from a route to a section since the design adds exactly one token.",
+    "optimalityHonesty": "No cross-candidate or absolute optimality claim anywhere. It never says 'best design', never compares itself to the other candidates, and its superlatives are all scoped: 'the single strongest thing this design takes from climx', 'the highest-value CONTENT in the donor', 'my strongest claim', 'the weakest possible reading of M6', and 'the weaker half' of its own asset port. It even scores itself DOWN twice unprompted (M6 '4 firm, 5 as I count it', and 'M6 is a floor, not a maximand; I am not farming it'). The only unscoped absolute is the thesis opener — 'the honest way to prove engineering ability is to make the artifact itself auditable' — which asserts a unique method where 'an honest way' is the defensible form. That is a framing overreach, MINOR, and it is the entire F5 exposure.",
+    "defects": [
+      {
+        "class": "F1",
+        "severity": "MAJOR",
+        "finding": "E8 undercount by one file. newFiles lists 16 and scopeBudget reports newFileCount 16, but the design's own evidenceModel ('A Vitest invariant over content.ts asserts (a)(b)(c)') and milestone M-2 ('add the content invariant test') require a test file that does not exist — I enumerated all 25 files under src/ and the only tests are ProjectCard.test.tsx and primitives.test.tsx. Real count 17 of 18. This halves the declared margin on the axis E8 itself calls the most plausible overrun, and it is the count K7 disqualifies on."
+      },
+      {
+        "class": "F2",
+        "severity": "MAJOR",
+        "finding": "Nested anchors. M-3 says 'ProjectCard rewritten as a whole-card Link using the ported EstadoCard .link CSS' while the '/' spec puts 'el cluster de evidencia (repositorio · sitio en vivo cuando existe)' inside that same card — an <a> inside an <a>, which is invalid HTML the browser will restructure. The donor is safe here because EstadoCard's .link wraps only an image and a name; the portfolio card adds links. jsx-a11y has no core rule for nested interactives, so M5(a) stays green and the defect ships silently. It directly falsifies the candidate's own M5 line: 'Every interactive element is a native <a> or <summary> — there is no custom widget in this design, on purpose.'"
+      },
+      {
+        "class": "F2",
+        "severity": "MAJOR",
+        "finding": "M1's largest assertion population is unaccounted for. «Límites declarados» is specified as a section separate from «Evidencia — EvidenceList», i.e. plain bullets, at 1-3 per project x 5 projects = up to ~15 rendered assertions of fact about a project. Under M1's frozen enumeration unit those are claims; if they do not route through EvidenceList they are unevidenced, and M1's target is exactly 100%. The weakestPoint names subtitles, the profile sentence and figcaptions as the JSX-prose leak but omits this, the biggest one."
+      },
+      {
+        "class": "F2",
+        "severity": "MAJOR",
+        "finding": "'M1 is a compile-time property rather than an editorial promise' over-reaches its own instrument. M1 is measured by hand enumeration of the rendered DOM; the type system performs no part of that measurement. The mechanism raises the authoring floor for text routed through `Claim` and does nothing for text that is not — which, per the previous defect and the candidate's own admission, is a large share of the page. The concession appears only in weakestPoint, not in the thesis the design is sold on."
+      },
+      {
+        "class": "F3",
+        "severity": "MAJOR",
+        "finding": "M6 = 4 with zero margin and no recovery path. My independent deletion test at /portfolio/ confirms four (router, 404+restore pair, NotFound, asset helper) and rejects the fifth (MEASUREMENTS.md content), which the candidate itself concedes would drop. Target is >= 4, so it lands exactly on the line, gains nothing from tie-break (iii), and cannot be raised — because the ledger has already argued, correctly, that all eight remaining ports fail the test. On P2, the operator's literal instruction, this candidate has spent its entire argument and has no reserve. This is the line item that hides the real wall, not payload."
+      },
+      {
+        "class": "F2",
+        "severity": "MINOR",
+        "finding": "The asset-helper deletion test uses a strawman substitution. It says 'replace asset(...) with a literal /img/...' and concludes every figure 404s — but the natural replacement is the literal '/portfolio/img/...', which works fine on Pages at the project path. The capability actually lost is base-independence, not image rendering, and with only two images on the entire site the blast radius is two <img> tags. AT0 fix 3 named the ROUTER's BASE_URL handling structural, and that is already inside resource (1). This is the softest of the four counted resources and the one a recount is most likely to strike — which is what would take M6 to 3."
+      },
+      {
+        "class": "F2",
+        "severity": "MINOR",
+        "finding": "NotFound.tsx is an 11-line file counted as a full distinct resource. The deletion test does pass mechanically (I verified `fallback: ComponentType` is non-optional, so tsc fails), but it passes because resource (1) demands it, and an inline `fallback={() => <p>404</p>}` restores the build in one line. The candidate discloses the line count, so this is recorded rather than concealed — but it means two of the four counted resources (this and the asset helper) are thin, against a target with zero margin."
+      },
+      {
+        "class": "F3",
+        "severity": "MINOR",
+        "finding": "M5(b) self-contradiction. The estimate asserts 'Landmarks on every route' and in the same sentence assigns <header> and <footer> to HomePage only, leaving /proyectos/:slug and /colofon with main+nav but no header or footer. M5 requires all three sub-conditions and names header/main/nav/footer explicitly. Cheap to correct, but the candidate's own text is the evidence against it."
+      },
+      {
+        "class": "F3",
+        "severity": "MINOR",
+        "finding": "Quality-veto exposure the candidate correctly flags but cannot close: the five github.com/Swately URLs are unverifiable from disk, and the entire evidence model rests on them resolving. climx's README is the only source that asserts a live URL. A single private repo fails the veto ('every link resolves') outright, regardless of every metric, and would demote that project to a no-link entry — dropping M1 below its 100% target."
+      },
+      {
+        "class": "F5",
+        "severity": "MINOR",
+        "finding": "One unscoped absolute in the thesis: 'the honest way to prove engineering ability is to make the artifact itself auditable'. The defensible form is 'an honest way', or scoped to the declared objective. No cross-candidate optimality claim is made anywhere, so this is the whole of the F5 exposure."
+      }
+    ],
+    "salvageables": [
+      "`evidence` as a NON-OPTIONAL field on `Claim = { text; evidence }`, so a claim written without proof fails `tsc --noEmit`. It does not measure M1, but it raises the authoring floor for everything routed through it, and it costs nothing.",
+      "Repo-ROOT links only, never deep blob URLs — deliberately shrinking the quality veto's 'every link resolves' surface to six hand-checkable URLs instead of ~twenty. A veto-cost argument, not a style preference.",
+      "The Vitest invariant over content.ts, specifically clause (c): every status that is a version string must be byte-identical to the README's. I verified all three are (`0.1.0-experimental`, `0.4.0-experimental`, `0.2.0-experimental`), so the test would pass today and would catch drift later — M2 self-policing.",
+      "Extracting climx's `estadoImg(ides)` into a general `asset(path)` in src/lib/asset.ts with its own unit test, rather than porting the domain-shaped original.",
+      "The onError degrade that renders a text line NAMING the missing file instead of `display:none` — strictly better than the donor for a page whose thesis is that absences should be visible.",
+      "Keeping the malformed-percent-escape regression verbatim when porting router.test.tsx (`/x/%E0%A4%A` must not throw). It guards a real defect climx caught in production and it is the most legible thing in the repo for anyone auditing it.",
+      "The «Límites declarados» section per project, quoting each README's own warnings — I verified all four quoted qualifiers exist verbatim in their sources. This is the concrete mechanism that makes M2/K4 hard to fail, independent of any type machinery.",
+      "Excluding climx's Lighthouse rows because MEASUREMENTS.md records them against https://swately.github.io/project-tw/, the pre-rename URL, and E5 puts Lighthouse out of reach. I confirmed both facts. Declining the page's most flattering available number is the single clearest demonstration of the discipline the objective's P1 asks for.",
+      "Refusing to print an undated '41 tests' because climx's README (41) and MEASUREMENTS.md (41/41, 50/50, 51/51) disagree — verified — and insisting on one dated figure with its instrument.",
+      "Demoting PrimitivesLab from its own /lab route to a SECTION of an existing page, on the inventory's own caveat that it earns a route only if the token set grows and this design adds one token. A route-budget discipline that generalizes.",
+      "The reuse ledger's shape: eight ports listed with an explicit DOES NOT COUNT and the reason. Arguing against your own M6 count is what made the count survive my recount.",
+      "Sequencing M-3 so that `/` alone is complete and shippable before the routes that serve a second audience land — the milestone structure hedges the design's own weakest bet."
+    ],
+    "unverified": "\"I did not run any build, test, lint or preview command — the dist/ I measured is what was on disk (2026-08-27 05:24). My 61,624 B gzip does not exactly reconcile with the objective's 62.40 kB baseline (60.18 KiB vs 62.40 kB); the dist may be stale or Vite's reporter may gzip at a different level. Not load-bearing for either threshold, but I did not close it.\\n\\nNot checked, and NOT passed as good: (1) the public status of the five github.com/Swately repo URLs — no network access used, and the entire evidence model plus the quality veto rests on them; (2) the actual gzip delta of the finished code plus a fully Spanish content.ts — my 8-11 KB is an estimate, not a measurement, though the 52% headroom means it would take a 5x miss to matter; (3) whether GitHub Pages' transfer encoding matches vite preview's — I verified preview gzips, I did not verify Pages does, so M3(b) as MEASURED by the named instrument is sound while M3(b) as EXPERIENCED on the host is inferred; (4) jsx-a11y's actual behavior on the nested-anchor pattern — I reasoned from rule coverage rather than running eslint, so the claim 'lint stays green while the defect ships' is reasoned, not executed (the nested anchors themselves follow directly from the candidate's own two sentences and are not in doubt); (5) phyriadfg_pipeline.png contents — I confirmed only the 64,286 B size, and this candidate does not use it; (6) the six audit_frame*.png (37,710-87,244 B) — sizes confirmed, unused by this candidate, so they never enter the M3(b) sum; (7) whether ColophonPage/ProjectPage can truly be built with zero new CSS modules under E7 — I read app.module.css (one `.footer` rule) and judged it insufficient for a bespoke measurements table, but that is my judgement of unwritten code, which is why I filed it MINOR rather than counting it into the 17.\""
+  },
+  {
+    "gateVerdict": "SCORED",
+    "lens": "credibility-skeptic — attacking P1 (M1 claim-to-proof coverage, M2 status honesty) and consumability, with every objection anchored in a number I recomputed myself",
+    "feasibilityRecompute": {
+      "ownSum": "E8 ROUTES: 3 declared ('/', '/proyectos/:slug', '/colofon'); NotFound is a `fallback` prop, not a member of `routes[]` (verified in climx router.tsx: `Router({routes, fallback})`). 3 of 4 = margin 1. E8 FILES under src/: I recounted the 16 listed and audited for omissions. Mitigations verified first-hand: climx's PrimitivesLab.tsx imports NO module CSS (`ls src/pages/` shows only StatePage.module.css), so PrimitivesShowcase needs none; portfolio ALREADY has src/components/ProjectCard.module.css, so the EstadoCard `.link` port is a rewrite, not a new file; public/404.html and public/img/*.png are outside src/ and correctly excluded. Omissions I found: no CSS module is budgeted for ProjectPage (breadcrumb + 'Límites declarados' list) or for ColophonPage's «Números medidos» table (SkillsTable.module.css may or may not stretch to it). Worst case 18 of 18 — exactly at the bound. M3(a) BYTES: I measured the existing dist/ rather than rebuild (read-only): JS 196,605 B raw -> 61,506 B at gzip -9 (vite's reported 62.40 kB baseline reproduces). Source added by the design, summed from real file sizes: router.tsx 3,868 + NotFound.tsx 258 + PrimitivesShowcase ~3,000 (donor PrimitivesLab is 3,114) + main.tsx restore ~450 + asset.ts ~200 + StatusBadge/EvidenceList/ProjectFigure ~2,900 + ProjectPage ~2,500 + ColophonPage ~6,000 + HomePage ~1,500 (moved, net ~0 against the app.tsx it leaves) + content.ts growing from its measured 3,184 B to ~15,000 B for 5 slugs x (status literal + qualifier + claim array + límites bullets + Spanish prose) = ~+12,000. Net ~+26 KB into the bundle after minification (Spanish string literals do not minify). Gzip at ~3.4x -> +7.6 KB. MY M3(a) = ~69 KB gzip vs the 150 KB cap: 81 KB / 54% headroom. That lands inside the candidate's own 66-72 kB band. CSS: 2,763 B raw / 1,139 B gzip today, +~2,300 B raw of new modules -> ~1.9 KB gzip (candidate said 1.8-2.5; no cap exists). M3(b) HEAVIEST VIEW, /proyectos/phyriager, my sum: compressed transport = 69,000 JS + 1,900 CSS + 750 HTML + 167,722 PNG (trazado_1.png, size confirmed on disk) = 239,372 B = 52% headroom under the 500 KB cap. Uncompressed transport = 222,600 + 5,100 + 750 + 167,722 = 396,172 B = 21% headroom. Both fit. /proyectos/phyriadfg is lighter (phyriadfg_multigpu.png confirmed at 89,350 B). ROUTES x FILES x BYTES all close.",
+      "fitVerdict": "tight",
+      "underpricedItems": [
+        "M3(b)'s ~240 KB figure silently assumes the instrument transfers gzipped. Recomputed uncompressed it is ~396 KB — still inside 500 KB, but headroom falls from 52% to 21%, and the candidate never prices that case even though the objective names `npm run preview` (not the deployed host) as the M3(b) instrument.",
+        "E8 file budget is priced at 16 with no CSS module for ProjectPage or for the colophon's «Números medidos» table. Worst case is 18 of 18 — the bound itself, zero margin, on the one axis the objective made a hard disqualifier (K7).",
+        "E7's house rule («every code file ends with `Made with my soul - Swately <3`») is never mentioned anywhere in the 16-file plan. One line per file, so cheap — but it is an unacknowledged envelope constraint, and the ported climx files carry it while the 9 net-new authored files are unbudgeted for it.",
+        "The `<div className=\"page\" id=\"contenido\">` skip-link target is adopted verbatim from climx with no `tabindex=\"-1\"` (verified first-hand in climx/src/app.tsx). M5(b) is self-scored as passing with no cost booked for this.",
+        "/colofon is priced as a thesis payoff but costs ~3 of 16 files and ~2-3 KB gzip while moving no frozen metric: it cannot raise M1 (it ADDS un-Claim-typed prose), cannot raise M6 (the candidate itself declines both of its ports, PrimitivesShowcase and the ARCHITECTURE stance), and adds M3 payload."
+      ]
+    },
+    "scorecard": [
+      {
+        "metric": "M1",
+        "score": 3,
+        "justification": "Target is 100%. I grepped climx/README.md for the six MEASUREMENTS numbers the design plans to print (66.66 / 98.92 / 51/51 / 44,266 / 463 B / 9,852): 0 hits. Under the design's own 'repo-ROOT links only, never deep blob URLs' rule, 0 of 6 climx doc-claims are one click from a page containing the number — and the README a reader lands on says '41 tests' against the page's '51/51'. Add /colofon's 6 sections, which carry 0 Claim-typed assertions. Roughly 6 of ~40 project claims miss one-click proof outright, plus an entire route the mechanism cannot see."
+      },
+      {
+        "metric": "M2",
+        "score": 5,
+        "justification": "Target 5/5; I diffed all five READMEs first-hand and got 5/5. Phyriager `0.1.0-experimental` + «el mod compila pero no se ha validado en vivo en un servidor» vs 'the mod builds but has not been validated live on a server'; PhyriadFG `0.4.0-experimental`; Phynned `0.2.0-experimental` + «provisional y en revalidación» vs README line 232 'provisional and under re-validation'; PHarvard «Corre en silicio · ISA completa verificada en la placa, 2026-08-01' vs 'runs on silicon' / 'Full instruction set verified on the board, 2026-08-01'. 3 warning badges vs 2 non-warning = the five-equal-tiles failure mode the objective scores 0 is structurally excluded."
+      },
+      {
+        "metric": "M3",
+        "score": 4,
+        "justification": "(a) my recompute ~69 KB gzip vs the 150 KB cap = 54% headroom, measured off the real dist/ (61,506 B gzip -9 today). (b) 239 KB compressed / 396 KB uncompressed vs 500 KB = 52% / 21% headroom. Both clear; not a 5 because the 21% case is unpriced and ~2-3 KB of the growth buys a route that moves no metric."
+      },
+      {
+        "metric": "M4",
+        "score": 5,
+        "justification": "`diff climx/tsconfig.json portfolio/tsconfig.json` returned exit 0 with no output — byte-identical, not 'differ only in comments'. So the router's `path[i] as string` / `pat[i] as string` casts compile under the same `noUncheckedIndexedAccess`. @testing-library/react ^16.3.2 + user-event are already in devDependencies for the ported router.test.tsx (10 `it(` blocks, so 6 -> 16 not ~15). `dependencies` stays react + react-dom. All four commands green — hollow in one spot: eslint.config.js loads only jsxA11y.configs.recommended, which has no nested-interactive rule."
+      },
+      {
+        "metric": "M5",
+        "score": 4,
+        "justification": "(c) I recomputed every token pair by relative luminance and all five of the candidate's figures reproduce to 2 dp: #111111/#ffffff = 18.88, #5b5b5b/#ffffff = 6.79, #5b5b5b/#fafafa = 6.51, #2255cc/#ffffff = 6.48, #b45309/#fafafa = 4.81, #b45309/#ffffff = 5.02. Lowest is 4.81 vs the 4.5 floor = 6.9% margin. (a) plausible green. (b) two unpriced warts: the skip link targets a non-focusable div, and the whole-card-Link rewrite produces nested anchors that lint will not catch."
+      },
+      {
+        "metric": "M6",
+        "score": 4,
+        "justification": "My own deletion test against Pages at /portfolio/ gives exactly 4: router.tsx (sole source of :param matching), the 404.html + main.tsx restore pair counted as one resource (correct conservative counting — portfolio has no public/ dir and no restore block, both verified), NotFound.tsx, and the EstadoCard BASE_URL helper (`${import.meta.env.BASE_URL}img/...`, verified in the donor). I reject MEASUREMENTS.md: a markdown file in the donor repo executes nothing on Pages and its deletion removes evidence density, an M1 property, not a page capability — the candidate pre-conceded this. Zero margin against the ≥4 target, and item 3 is structural only because item 1's own prop type `{routes: Route[]; fallback: ComponentType}` makes `fallback` non-optional."
+      }
+    ],
+    "attackOnCentralClaim": "The claim is: «no claim without evidence» is a compile-time property, not an editorial promise. It survives only in a narrowed form, and the narrowing is larger than the candidate admits. `tsc` enforces exactly one thing — that a value typed `Claim` carries an `evidence` field. It cannot check (i) that the URL resolves, (ii) that the evidence is RELEVANT (a repo-root URL typechecks against any number whatsoever), or (iii) prose written straight into JSX. The candidate concedes (iii) in its own weakestPoint and does not concede (i) or (ii) — and (ii) is where it breaks concretely. Its stated rationale for root-only linking is that «GitHub renders README.md at the repo root, which is where every status and number on the page actually comes from». I grepped climx/README.md for all six numbers it plans to print — 66.66, 98.92, 51/51, 44,266, 463 B, 9,852 — and got 0 hits. Every one lives three directories down in docs/planning/MEASUREMENTS.md. Worse, the README a clicking reader DOES land on says «41 tests» while the page says 51/51, so the design's own one-click destination contradicts its own page. The candidate flagged the 41/50/51 inconsistency in contentGaps and flagged the root-only rule in evidenceModel, and never noticed they collide. Second breakage: the Vitest «invariant» is presented as mechanical enforcement, but the five READMEs live outside the portfolio repo at F:\\\\Phyriad\\\\projects\\\\*, so the test can only assert content.ts's '0.1.0-experimental' equals a literal in the test file — a change-detector, not a truth-checker, blind to README drift. Third: M-3 says «ProjectCard rewritten as a whole-card Link using the ported EstadoCard .link CSS» while the home spec puts «el cluster de evidencia (repositorio · sitio en vivo)» inside that same card — an `<a>` inside an `<a>`. Invalid HTML that jsx-a11y recommended will not catch, and dropping the cluster to fix it falsifies the candidate's own sentence that on `/` all three assertions are one click from the README. THE COMPETITOR IS REAL, NOT A STRAWMAN. The named workload has the reader ARRIVING from a GitHub profile, and for the 20-second screen a well-written profile README genuinely wins: it renders in the reader's existing context with zero navigation, deep-links to any file (which this design forbids itself), needs no separate deploy, and renders images just as well. WHERE THIS DESIGN WINS: the reader who stays. Per-project routes with each project's self-declared limits quoted, a non-uniform status grid, and figures at controlled size are things a README does badly, and M2 = 5/5 verified across five READMEs is a real result no profile README achieves by accident. WHERE IT EMBARRASSES ITSELF: the non-Spanish-reading recruiter O1 names, meeting a Spanish `/` served by ~3 of 16 files, whose evidence cluster is the one element the card rewrite cannot render — while 13 files and an entire /colofon route sit behind a click that reader will never make.",
+    "killCriteria": [
+      {
+        "criterion": "K1 — requires content not on disk",
+        "cleared": true,
+        "margin": "Large. Exactly 2 assets used, both opened/sized by me: phyriadfg_multigpu.png 89,350 B and trazado_1.png 167,722 B. 3 of 5 project routes are declared figure-less and the asymmetry is named as accepted, not disguised. No photo, logo, testimonial, favicon or OG image invented (it declares their absence instead), and the unopened phyriadfg_pipeline.png is deliberately unused."
+      },
+      {
+        "criterion": "K2 — M6 < 3",
+        "cleared": true,
+        "margin": "1. My independent deletion test gives 4 (router / 404+restore pair / NotFound / BASE_URL asset helper) against the floor of 3. Note the margin against M6's ≥4 TARGET is 0, and a strict reading that NotFound's structurality is manufactured by the router's own non-optional `fallback` prop would give 3 — clearing K2 but missing the target."
+      },
+      {
+        "criterion": "K3 — cannot pass the M4 gate",
+        "cleared": true,
+        "margin": "Large. tsconfigs are byte-identical (diff exit 0, empty output), so the ported router compiles under the same strict options; testing-library is already installed; no new dependency. Partly hollow: eslint.config.js loads jsxA11y.configs.recommended only, which has no nested-interactive rule, so lint would go green over the nested-anchor defect."
+      },
+      {
+        "criterion": "K4 — unsupported claim or status hidden behind uniform polish",
+        "cleared": true,
+        "margin": "4 of 5 exact, 1 fact-level. All five diffed first-hand; the three version strings are byte-identical; PHarvard and Phyriager quote their READMEs' own sentences. Weakest is climx rendered «En producción» against a README that says only «Live at» — a register upgrade, but inside the objective's own «climx live/deployed» characterization, so not a contradiction. Non-uniformity is structural (3 warning badges vs 2)."
+      },
+      {
+        "criterion": "K5 — not measurable on this machine",
+        "cleared": true,
+        "margin": "Large. Every instrument is an npm script already present in package.json, the browser network panel the objective itself names, or hand arithmetic — I reproduced all five contrast pairs to 2 decimals myself. Lighthouse is explicitly excluded with the correct reason (measured against the pre-rename project-tw URL; E5 has no Lighthouse)."
+      },
+      {
+        "criterion": "K6 — new runtime dependency / service / key / cost",
+        "cleared": true,
+        "margin": "Total. `dependencies` verified as react ^19.2.7 + react-dom ^19.2.7 and nothing else; the design adds no import outside those and the existing devDeps."
+      },
+      {
+        "criterion": "K7 — exceeds E8 (>4 routes or >18 new files under src/)",
+        "cleared": true,
+        "margin": "1 route (3 of 4). Files: 2 as listed (16 of 18), 0 in my worst case (18 of 18) once ProjectPage and the colophon table are given CSS modules. This is the tightest criterion and the one the objective made a hard disqualifier."
+      }
+    ],
+    "smugglingCheck": "Clean, and unusually so — I looked for it specifically. The FORBIDDEN climx `public/img/estados/*.webp` state photographs appear nowhere: the design ports EstadoCard's MECHANISM only (the `${import.meta.env.BASE_URL}img/...` helper and the `onError` degrade), which the objective's FORBIDDEN clause explicitly names as «NOT forbidden and encouraged, pointed at the operator's own images», and it drops the `<li>/Link` wrapper, the whole estado/ides domain, and the `.img` rule that displayed the photos. The two images it does use are the operator's own work product, verified on disk. No DROPPED driver reappears under a new name either: no fetchWithCache, no useFetch, no staleness layer, no geo layer, no SearchCombobox, no AgeBanner/ForecastCard/skyIcon/NearestMunicipio/CommonsGallery — and /colofon's «Qué dejé fuera a propósito» section names the data layer, the geo layer, the ARIA combobox, the weather components and the state photos as deliberate refusals, i.e. it converts the smuggling check into page content. The one thing worth naming that is NOT smuggling: PrimitivesLab is a high-value inventory entry, not a dropped driver, so porting it as a colophon section is admissible — and the candidate declines to count it toward M6 anyway.",
+    "optimalityHonesty": "No unscoped absolute claim anywhere. Every superlative I found carries an explicit referent: «the single thing climx's router does that a hand-rolled switch would not» (a mechanical claim about :param matching, which I verified is true), «an improvement on the donor» (scoped to the named donor and argued), «the highest-value CONTENT in the donor», «the single strongest thing this design takes from climx», «the strongest presentation number available for the climx card», «the weakest possible reading of M6». It never claims to be the best candidate or an optimal design. It goes further than required in the other direction: weakestPoint concedes that a sibling candidate («D3») would have built the served route with 3 files instead of 16, and metricSelfEstimates for M6 pre-concedes a hedged entry and states the fallback score (4) if a recount rejects it — which mine did. On this axis the candidate is straight.",
+    "defects": [
+      {
+        "class": "F2",
+        "severity": "MAJOR",
+        "finding": "The 'repo-ROOT links only' rule breaks the evidence chain on the one project it matters most for, and its stated justification is factually false. Grep of F:\\Phyriad\\projects\\climx\\README.md for the six MEASUREMENTS numbers the page will print (66.66 / 98.92 / 51/51 / 44,266 / 463 B / 9,852) returns 0 hits — all six live in docs/planning/MEASUREMENTS.md, three levels down. So 0 of 6 climx doc-claims are one click from a page containing the number, against the design's assertion that «GitHub renders README.md at the repo root, which is where every status and number on the page actually comes from». Worse, the README the reader lands on says «41 tests» while the page says «51/51» — a visible contradiction one click from the claim, which is quality-veto territory. The candidate flagged the 41/50/51 inconsistency and the root-only rule separately and never connected them."
+      },
+      {
+        "class": "F2",
+        "severity": "MAJOR",
+        "finding": "The home card is not implementable as specified. M-3 says «ProjectCard rewritten as a whole-card Link using the ported EstadoCard .link CSS»; the `/` section spec puts «el cluster de evidencia (repositorio · sitio en vivo cuando existe)» inside that same card. That is an `<a>` nested inside an `<a>` — invalid HTML and a keyboard-navigation hazard. Verified that eslint.config.js loads only jsxA11y.configs.recommended, which has no nested-interactive rule, so M4/M5(a) go green over it. Resolving it the other way (drop the cluster from `/`) directly falsifies the candidate's own sentence: «On `/` each project carries exactly three assertions ... plus one evidence cluster, so all three are one click from the README that states them» — the very M1 claim for the highest-priority route in the named workload."
+      },
+      {
+        "class": "F2",
+        "severity": "MAJOR",
+        "finding": "«M1 becomes a compile-time property, not an editorial habit» is overstated by roughly the amount that matters. `tsc` enforces the PRESENCE of an `evidence` field on `Claim`-typed values and nothing else: it cannot check link liveness, and it cannot check evidence RELEVANCE — `{text:'1,409 LUT4 of 6,864', evidence:{kind:'repo', url:<root>}}` typechecks perfectly, which is exactly the pattern the design mandates. The candidate concedes only the third hole (JSX prose). /colofon is six sections of almost entirely free prose, so the design's own thesis route is the route least covered by the design's own mechanism."
+      },
+      {
+        "class": "F2",
+        "severity": "MAJOR",
+        "finding": "The Vitest content invariant is sold as the second mechanical enforcement of M1/M2 but cannot verify anything external. The five READMEs live outside the portfolio repo (F:\\Phyriad\\projects\\<name>\\README.md); the test can only assert that content.ts's '0.1.0-experimental' equals a string literal written in the test file. That is a change-detector, not a truth-checker: it is structurally incapable of catching README drift, which is precisely the M2 failure mode it is presented as guarding."
+      },
+      {
+        "class": "F1",
+        "severity": "MAJOR",
+        "finding": "/colofon is scope spent at zero metric return under the frozen metric set. It cannot raise M1 (it adds un-Claim-typed prose, so it can only lower it), it cannot raise M6 (the candidate itself declines both of its ports — PrimitivesShowcase and the ARCHITECTURE weakest-point stance — as non-structural), and it adds ~2-3 KB gzip to M3. It consumes roughly 3 of the 16 files on the axis the objective made a hard disqualifier, on a design whose own weakestPoint concedes `/` is served by ~3 of 16 files. Its claim «construida con los recursos de climx» is also the one claim on the page whose proof is not one click: verifying the reuse ledger requires diffing two repos."
+      },
+      {
+        "class": "F1",
+        "severity": "MINOR",
+        "finding": "M3(b) is priced at ~240 KB assuming compressed transport. Recomputed uncompressed against my own numbers — 222,600 B JS raw + ~5,100 B CSS + 167,722 B PNG + 750 B HTML = ~396 KB — headroom under the 500 KB cap falls from 52% to 21%. It still fits, so this is bounded, but the objective names `npm run preview` rather than the deployed host as the M3(b) instrument and the candidate never prices that case."
+      },
+      {
+        "class": "F1",
+        "severity": "MINOR",
+        "finding": "M5(b) is self-scored clean while inheriting a real wart verbatim. climx's app.tsx is `<div className=\"page\" id=\"contenido\">` with no `tabindex=\"-1\"` (read first-hand), so the adopted skip link points at a non-focusable element and will not reliably move focus. M5(b) requires every interactive element to be keyboard-operable; this is the one place the ported shell does not deliver and the candidate books no cost for it."
+      },
+      {
+        "class": "F1",
+        "severity": "MINOR",
+        "finding": "E8's 16-file budget omits any CSS module for ProjectPage (breadcrumb + «Límites declarados») and for ColophonPage's «Números medidos» table. Worst case is 18 of 18 — the K7 bound exactly, zero margin. (Two mitigations verified in the candidate's favour: climx's PrimitivesLab carries no module CSS, and portfolio's ProjectCard.module.css already exists so the EstadoCard port is a rewrite.)"
+      },
+      {
+        "class": "F1",
+        "severity": "MINOR",
+        "finding": "E7's signature rule («every code file ends with `Made with my soul - Swately <3`») is never mentioned across the 16-file plan. The ported climx files carry it already; the nine net-new authored files are unbudgeted for it. Trivially cheap to satisfy, but an envelope constraint the design never acknowledges."
+      },
+      {
+        "class": "F3",
+        "severity": "MINOR",
+        "finding": "M6 clears K2 (floor 3) by 1 but clears the ≥4 TARGET by exactly 0 on my recount, and one of the four is manufactured. NotFound.tsx counts as structural only because the ported router's own prop type is `{routes: Route[]; fallback: ComponentType}` with `fallback` non-optional (verified) — i.e. resource #1 creates resource #3's structurality, and any 5-line component satisfies the slot. A strict distinct-capability reading gives 3, which passes K2 and misses M6's target."
+      },
+      {
+        "class": "F1",
+        "severity": "MINOR",
+        "finding": "Two small self-report inaccuracies, both in the conservative direction and neither load-bearing: climx/router.test.tsx has 10 `it(` blocks against a portfolio baseline of 6, so M-1 lands at 16 tests, not «about 15»; and the two tsconfigs do not «differ only in comments» — `diff` returns exit 0 with empty output, they are byte-identical."
+      }
+    ],
+    "salvageables": [
+      "Rendering each project's status as the literal README version string PLUS that README's own qualifier sentence. I diffed all five and this is the strongest thing in the candidate: Phynned's «provisional y en revalidación» reproduces README line 232's 'provisional and under re-validation'; Phyriager's «el mod compila pero no se ha validado en vivo en un servidor' reproduces its README exactly; PHarvard carries the 2026-08-01 date from its own State table. This produces a verified 5/5 on the objective's top-priority metric and is portable to any page structure.",
+      "The `Evidence` discriminated union as a SHAPE — repo / live / doc / figure, with `doc` carrying value + file path + repo URL together. The compile-time guarantee it is wrapped in is oversold, but the four-kind taxonomy correctly distinguishes the kinds of proof this operator's projects actually have.",
+      "The declared two-figures-of-five asymmetry: using only phyriadfg_multigpu.png and trazado_1.png, leaving the other three project routes visibly figure-less, and refusing to fabricate the missing climx/Phynned/PHarvard screenshots — with the layout made to read as deliberate rather than unfinished.",
+      "Excluding climx's Lighthouse numbers because MEASUREMENTS.md records them against https://swately.github.io/project-tw/, the pre-rename URL, and E5 has no Lighthouse to re-run them with. I verified both facts; this is the single cleanest piece of evidential discipline in the candidate and it costs it its best presentation number.",
+      "The refusal ledger: eight to nine genuine climx ports listed and explicitly scored as NOT structural (router tests, the reset.css a11y block, EstadoCard.module.css, PrimitivesLab, the app shell, --color-warning, the README prose, the ARCHITECTURE stance). The objective declares M6 a floor rather than a maximand; this is what not farming P2 looks like in writing.",
+      "Counting public/404.html and the main.tsx restore block as ONE resource rather than two. The conservative count is the correct one and it is the kind of arithmetic a recount usually has to force.",
+      "The `asset(path)` helper extracted from EstadoCard's `estadoImg` — `${import.meta.env.BASE_URL}${path}` — with the onError degrading to a sentence naming the missing file. This is precisely the mechanism the objective's FORBIDDEN clause carves out as encouraged, redirected at the operator's own images, and it has two real consumers on disk today.",
+      "Refusing to print an undated «41 tests» for climx given that its README says 41 while MEASUREMENTS.md records 41/41, 50/50 and 51/51 on three different dates — insisting instead on one figure with its date and instrument.",
+      "The «Límites declarados» section: each project's page quoting that project's OWN self-stated limits (cannot exceed the display refresh; the empirical catalog is provisional; the mod is not validated live; the point is not speed). This is the objective's «impresses and overstates is worse than plain and holds up» rendered as a page section.",
+      "The self-authored weakestPoint that names a sibling candidate as beating this one on the named workload with three files instead of sixteen, and the M6 self-estimate that pre-states its own fallback score if a recount rejects the hedged entry — which mine did."
+    ],
+    "unverified": "I could not verify the six external URLs the entire evidence model rests on — five `github.com/Swately/<repo>` roots plus climx's live URL. I made no network request. The candidate declares this itself as its first contentGap and correctly states that a private repo drops that project's claims to no-link entries and fails the quality veto; it remains an open precondition on both M1 and the veto, and the operator is the only one who can close it. I did not run `npm run build`, `npm test`, `npm run lint` or `npm run typecheck` — all four write to disk (dist/, coverage/) and I was instructed not to write files; instead I measured the EXISTING dist/ artifacts (JS 196,605 B raw -> 61,506 B at gzip -9, CSS 2,763 B raw -> 1,139 B) and derived my M3 numbers from those plus the real byte sizes of the files to be ported. So my M3(a)/M3(b) figures are a first-hand recompute, not a first-hand measurement of the finished page. I did not determine whether `npm run preview` serves compressed responses, which is why I priced M3(b) both ways. I did not open phyriadfg_pipeline.png (the objective records its contents as unverified) — moot, since this candidate deliberately does not use it. Contrast: I recomputed all five token pairs from the hex values in tokens.css and every figure the candidate quoted reproduced to two decimals; that check is fully first-hand."
+  }
+]

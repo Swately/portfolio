@@ -1,0 +1,61 @@
+% Phynned — arquitectura: tres programas, un ciclo de decisión y las redes de seguridad a su alrededor.
+% Colores: contrato de figuras del portafolio (projects/portfolio/figure-contract). La tinta es el negro por defecto.
+% Compilar (receta del contrato):
+%   latex -interaction=nonstopmode phynned_architecture.tex
+%   dvisvgm --no-fonts -o phynned_architecture.svg phynned_architecture.dvi 2> dvisvgm.log   (un aviso «failed to create» = fallo)
+%   svgo --multipass phynned_architecture.svg -o phynned_architecture.min.svg
+\documentclass[border=10pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{phyriad-figure-colors}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+\newcommand{\sub}{\footnotesize\color{figMuted}}
+\hyphenpenalty=10000\exhyphenpenalty=10000 \tolerance=9999 \emergencystretch=3em
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily\small, >=Latex, semithick,
+  box/.style={draw, rounded corners=2pt, minimum height=1.05cm, align=center, fill=figPaper},
+  soft/.style={box, fill=figFill},
+  grp/.style={draw=figMuted, dashed, rounded corners=4pt, inner sep=8pt},
+  lab/.style={font=\footnotesize\sffamily, align=center, text=figMuted},
+  sub/.style={font=\footnotesize, text=figMuted},
+]
+% --- fuentes de datos -------------------------------------------------
+\node[soft, text width=3.4cm] (etw) {Sesión ETW del kernel\\{\sub solo lectura: nacimiento de procesos}};
+\node[soft, text width=3.4cm, below=5mm of etw] (nt) {Tabla de procesos\\{\sub una instantánea en bloque}};
+
+% --- ciclo del agente --------------------------------------------------
+\node[box, right=14mm of etw, yshift=-8mm, text width=2.3cm] (obs) {Observar\\{\sub quién está corriendo}};
+\node[box, right=7mm of obs, text width=2.3cm] (cls) {Clasificar\\{\sub juego, fondo o protegido}};
+\node[box, right=7mm of cls, text width=2.3cm, draw=figAccent, fill=figFillAccent] (gate) {Admitir\\{\sub compuerta que niega por defecto}};
+\node[box, right=7mm of gate, text width=2.3cm] (pol) {Decidir\\{\sub reglas, perfil, «nunca» del usuario}};
+\node[box, right=7mm of pol, text width=2.3cm] (act) {Actuar\\{\sub tres llamadas Win32}};
+
+\node[grp, fit=(obs)(cls)(gate)(pol)(act), label={[lab, anchor=south west]north west:\textbf{phynned-agent} (administrador, un ciclo cada 100 ms)}] (agent) {};
+
+% --- bajo el ciclo: redes de seguridad ---------------------------------
+\node[soft, text width=3.4cm, below=15mm of gate, xshift=-20mm] (jrn) {Diario de escritura previa\\{\sub PENDING $\rightarrow$ APPLIED; guarda la máscara anterior}};
+\node[soft, text width=3.0cm, right=8mm of jrn] (guard) {Guardián de reversión\\{\sub ¿empeoran los cuadros por segundo? deshace}};
+\node[soft, text width=3.0cm, right=8mm of guard] (audit) {Registro de auditoría\\{\sub una razón legible por acción}};
+
+\node[soft, text width=4.2cm, below=10mm of jrn] (dead) {phynned-revert\\{\sub ejecutable aparte: restaura las máscaras tras un cierre forzado}};
+
+% --- objetivos e interfaz ----------------------------------------------
+\node[box, right=12mm of act, text width=2.5cm] (tgt) {Procesos objetivo\\{\sub afinidad y prioridad}};
+\node[soft, above=16mm of tgt, text width=2.9cm] (ui) {phynned-ui\\{\sub interfaz ImGui; nunca toca un juego}};
+\node[soft, above=6mm of ui, text width=2.9cm] (cli) {phynned-cli y bench\\{\sub guiones y ejecutor A/B}};
+
+% --- flechas ------------------------------------------------------------
+\draw[->] (etw.east) -- ++(5mm,0) |- (obs.west);
+\draw[->] (nt.east)  -- ++(5mm,0) |- (obs.west);
+\draw[->] (obs) -- (cls); \draw[->] (cls) -- (gate); \draw[->] (gate) -- (pol); \draw[->] (pol) -- (act);
+\draw[->] (act) -- (tgt);
+\draw[->] (act.south) -- ++(0,-5mm) -| (jrn.north) node[lab, pos=0.8, left]{se anota antes};
+\draw[->] ([xshift=3mm]act.south) -- ++(0,-9mm) -| (audit.north);
+\draw[->, dashed] (guard.north) -- ++(0,5mm) -| ([xshift=-3mm]act.south) node[lab, pos=0.9, right, xshift=1mm]{deshace};
+\draw[->, dashed] (jrn.south) -- (dead.north) node[lab, midway, right]{en disco};
+\draw[<->, dashed] (agent.north east) -- ++(0,6mm) -| (ui.west) node[lab, pos=0.25, above]{memoria compartida};
+\draw[->, dashed] (cli) -- (ui);
+\end{tikzpicture}
+\end{document}

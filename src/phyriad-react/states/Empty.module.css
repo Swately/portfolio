@@ -1,0 +1,35 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--phy-space-xs);
+  padding: var(--phy-space-l);
+  background: var(--phy-paper-2);
+  border: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+.title {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-base);
+  font-weight: 600;
+  color: var(--phy-ink);
+}
+
+.hint {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-sm);
+  color: var(--phy-ink-muted);
+}
+
+.action {
+  padding-block-start: var(--phy-space-2xs);
+}
+
+/* The hairline border is remapped, not removed, under forced colors; the block stays visible — declared so the rule is explicit, not accidental. */
+@media (forced-colors: active) {
+  .empty {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Made with my soul - Swately <3 */

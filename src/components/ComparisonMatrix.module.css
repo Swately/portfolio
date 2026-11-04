@@ -1,0 +1,18 @@
+.kind {
+  border: 1px solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+  padding: 0 var(--phy-space-xs);
+  background: var(--phy-paper-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: var(--phy-ink-muted);
+}
+
+/* what was measured here is the one kind that earns the accent */
+.medido {
+  border-color: var(--phy-accent);
+  color: var(--phy-accent);
+}
+
+/* Made with my soul - Swately <3 */

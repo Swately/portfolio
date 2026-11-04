@@ -1,0 +1,32 @@
+% Phyriager - the round cycle: the environment is what learns, not a model.
+% Colours: figure-contract roles (phyriad-figure-colors.sty). Ink = TeX black; one accent (the environment).
+% Build: latex phyriager_ciclo.tex && dvisvgm --no-fonts -o phyriager_ciclo.svg phyriager_ciclo.dvi 2> dvisvgm.log
+%        (a "failed to create" line in dvisvgm.log = failed build) && svgo --multipass phyriager_ciclo.svg -o phyriager_ciclo.min.svg
+\documentclass[border=10pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{phyriad-figure-colors}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+\hyphenpenalty=10000\exhyphenpenalty=10000
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily\small, >=Latex, line width=0.7pt,
+  box/.style={draw, fill=figFill, rounded corners=2pt, align=center, minimum height=1.4cm, text width=3.3cm},
+  lab/.style={font=\sffamily\footnotesize, align=center, text=figMuted},
+]
+\node[box] (play) {\textbf{1. Ronda}\\un LLM juega por HTTP\\y narra lo que hace};
+\node[box, right=3cm of play] (audit) {\textbf{2. Auditor\'ia}\\el supervisor verifica\\su informe en el registro};
+\node[box, right=3cm of audit] (build) {\textbf{3. Arreglos}\\se construyen los de\\mayor palanca};
+\node[box, draw=figAccent, fill=figFillAccent, line width=1.1pt, below=2.4cm of audit, text width=7.4cm, minimum height=1.6cm] (env) {\textbf{El entorno}\\rutinas \;$\cdot$\; aut\'omatas compuestos \;$\cdot$\; lecciones\\[1pt]\footnotesize lo aprendido vive aqu\'i, no en los pesos de ning\'un modelo};
+
+\draw[->, thick] (play) -- (audit) node[midway, above, lab]{informe y\\fricciones};
+\draw[->, thick] (audit) -- (build) node[midway, above, lab]{lista\\priorizada};
+\draw[->, thick] (build.south) to[out=-90, in=0] (env.east);
+\draw[->, thick] (env.west) to[out=180, in=-90] (play.south);
+\node[lab, anchor=west] at ($(env.east)+(0.5,0.9)$) {se instalan};
+\node[lab, anchor=east] at ($(env.west)+(-1.7,0.9)$) {la ronda siguiente\\hereda desde\\su primer GET};
+\end{tikzpicture}
+\end{document}
+
+% Made with my soul - Swately <3

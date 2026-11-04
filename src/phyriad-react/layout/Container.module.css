@@ -1,0 +1,22 @@
+.container {
+  grid-column: var(--c-column);
+  min-inline-size: 0;
+}
+
+/* Local columns. Each line is named `col` so a child can place with
+   `start` — the same vocabulary the page grid uses, one level down. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--c-cols, 1), [col] minmax(0, 1fr));
+  column-gap: var(--c-gap);
+  row-gap: var(--c-row-gap);
+}
+
+/* Inherited lines. `subgrid` carries the parent's named lines through, which is
+   why a child placed at `col 3` here lands on the page's column 3 and not on a
+   local approximation of it. */
+.subgrid {
+  grid-template-columns: subgrid;
+}
+
+/* Made with my soul - Swately <3 */

@@ -1,0 +1,54 @@
+.dialog {
+  padding: 0;
+  /* The base layer's `* { margin: 0 }` is an author rule and beats the UA's
+     `dialog:modal { margin: auto }`: without this the modal is drawn at the top-left corner
+     (measured at 1280 x 800: (0, 0); at 320 px: 0 px on the left, 48 px on the right). */
+  margin: auto;
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+  background: var(--phy-paper);
+  color: var(--phy-ink);
+  max-inline-size: min(60ch, calc(100vw - 2 * var(--phy-space-l)));
+  /* no box-shadow: the backdrop provides the separation, per identity */
+}
+
+/* The ink veil — no blur: frosted glass is the template signature. Custom
+   properties reach ::backdrop in modern engines (~2024+); the boundary is
+   noted in the component doc. */
+.dialog::backdrop {
+  background: color-mix(in srgb, var(--phy-ink) 35%, transparent);
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-m);
+  padding: var(--phy-space-l);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--phy-space-m);
+}
+
+.title {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-md);
+  font-weight: 600;
+}
+
+.body {
+  font-family: var(--phy-font-ui);
+  font-size: var(--phy-text-base);
+  line-height: var(--phy-leading-ui);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--phy-space-s);
+}
+
+/* Made with my soul - Swately <3 */

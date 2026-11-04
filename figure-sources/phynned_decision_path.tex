@@ -1,0 +1,47 @@
+% Phynned — el camino de un proceso antes de que algo lo toque: se niega por defecto y el diario se escribe primero.
+% Colores: contrato de figuras del portafolio (projects/portfolio/figure-contract). La tinta es el negro por defecto.
+% Compilar (receta del contrato):
+%   latex -interaction=nonstopmode phynned_decision_path.tex
+%   dvisvgm --no-fonts -o phynned_decision_path.svg phynned_decision_path.dvi 2> dvisvgm.log   (un aviso «failed to create» = fallo)
+%   svgo --multipass phynned_decision_path.svg -o phynned_decision_path.min.svg
+\documentclass[border=10pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{phyriad-figure-colors}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+\newcommand{\sub}{\footnotesize\color{figMuted}}
+\hyphenpenalty=10000\exhyphenpenalty=10000 \tolerance=9999 \emergencystretch=3em
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily\small, >=Latex, semithick,
+  gate/.style={draw, rounded corners=2pt, minimum height=0.85cm, text width=7.2cm, align=left, fill=figFill},
+  act/.style={draw, rounded corners=2pt, minimum height=0.85cm, text width=7.2cm, align=left, fill=figPaper},
+  outb/.style={draw=figAccent, rounded corners=2pt, minimum height=0.85cm, text width=3.9cm, align=center, fill=figFillAccent},
+  revb/.style={draw, rounded corners=2pt, minimum height=0.85cm, text width=3.9cm, align=center, fill=figFill},
+  lab/.style={font=\footnotesize\sffamily, align=center, text=figMuted},
+  sub/.style={font=\footnotesize, text=figMuted},
+  node distance=4.5mm,
+]
+\node[gate] (g1) {1~~¿Está en la lista negra del sistema (audio, shell, seguridad)?};
+\node[gate, below=of g1] (g2) {2~~¿Es un proceso protegido (PPL)?};
+\node[gate, below=of g2] (g3) {3~~¿Es un título con anti-cheat conocido, o su controlador está activo?};
+\node[gate, below=of g3] (g4) {4~~¿El proceso gestiona su propia máscara de CPU?};
+\node[gate, below=of g4] (g5) {5~~¿Es un lanzador, audio o la ventana en primer plano?};
+\node[gate, below=of g5] (g6) {6~~¿Tiene una regla de usuario «nunca optimizar»?};
+\node[gate, below=of g6] (g7) {7~~¿No coincide con ningún juego ni proceso de fondo activo?};
+\node[gate, below=of g7] (g8) {8~~¿Otro optimizador ya lo está colocando?};
+\node[act, below=9mm of g8] (a1) {Diario: escribir PENDING y volcarlo a disco};
+\node[act, below=of a1] (a2) {Aplicar afinidad o prioridad (se captura la máscara previa)};
+\node[act, below=of a2] (a3) {Diario: marcar APPLIED y escribir la línea de auditoría};
+
+\node[outb, right=24mm of g4] (no) {Sin tocar\\{\sub no se le aplica ningún cambio}};
+\node[revb, right=24mm of a2] (rev) {Reversión\\{\sub al salir, ante una regresión o tras un cierre forzado}};
+
+\foreach \a/\b in {g1/g2,g2/g3,g3/g4,g4/g5,g5/g6,g6/g7,g7/g8,a1/a2,a2/a3}{\draw[->] (\a) -- (\b);}
+\draw[->] (g8) -- (a1) node[lab, midway, right]{las ocho respuestas son «no»};
+\foreach \g in {g1,g2,g3,g4,g5,g6,g7,g8}{\draw[->, dashed, draw=figMuted] (\g.east) -- ++(6mm,0) |- (no.west);}
+\draw[->, dashed] (a3.east) -| (rev.south);
+\node[lab, anchor=south west] at ([yshift=2mm]g1.north west) {\textbf{Todo proceso empieza aquí. Un «sí» en cualquier compuerta lo deja sin tocar.}};
+\end{tikzpicture}
+\end{document}

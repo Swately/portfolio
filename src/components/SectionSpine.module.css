@@ -1,0 +1,65 @@
+/* Hidden until the page has room for it OUTSIDE the band the wide figures take (.phy-wide: 62rem centred
+   on the reading column). Measured first at 1280 px with the spine beside the 60ch column: the hero figure
+   (992 px) ran under it from x=137, so a sticky spine would have covered every wide figure it passed.
+   Room = half the viewport minus half the band, minus the spine and two gaps: 50vw - 31rem - 10rem -
+   2 x 1.5rem >= 0 at 88rem (1408 px) on paper; measured at 1408 the spine started at x=14 (the scrollbar
+   moves the page's centre), so the threshold is 90rem (1440 px). A viewport query, not a container one:
+   the container is capped at --phy-page-max (64rem) and never reaches that width. */
+.spine {
+  display: none;
+}
+
+@media (width >= 90rem) {
+  /* Shares the grid cell of the page body (ProjectShell .spined), so it is as tall as the page and
+     `sticky` holds it for the whole read. The cell is the content area and the wide band is centred in
+     it, so the spine starts (100% - band) / 2, minus its own width and a gap, from the cell's start. */
+  .spine {
+    display: block;
+    grid-area: 1 / 1;
+    align-self: start;
+    justify-self: start;
+    position: sticky;
+    top: var(--phy-space-l);
+    inline-size: 10rem;
+    /* D-32 (2026-10-20): the spine hangs outside a DATA band, min(90rem, window - 26rem), not the 62rem figure
+       band, so a comparison matrix sized by its columns fits beside it from about 1600 px (measured with
+       the rule injected: at 1920 the PhyriadFG matrix spans x 295 to 1609 and fits). 26rem = the spine
+       (10rem) and two gutters on each side. ProjectShell caps tables at the same band. */
+    margin-inline-start: calc((100% - min(90rem, 100vw - 26rem)) / 2 - 10rem - var(--phy-space-l));
+  }
+}
+
+/* A hairline rail; the section being read is marked by weight and an ink bar on the rail. No colour:
+   ink and muted ink are both text colours gated at 4.5:1, and forced colours keep weight and the bar. */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-inline-start: var(--phy-rule-width) solid var(--phy-rule);
+}
+
+/* .phy-target centres its content (tokens 1.4.0, for one-glyph links); a list of titles reads from its rail. */
+.list .link {
+  display: flex;
+  justify-content: flex-start;
+  text-align: start;
+  padding-inline-start: calc(var(--phy-space-s) + 2px);
+  color: var(--phy-ink-muted);
+  text-decoration: none;
+}
+
+.list .link:hover,
+.list .link:focus-visible {
+  color: var(--phy-ink);
+  text-decoration: underline;
+}
+
+.list .link[aria-current] {
+  color: var(--phy-ink);
+  font-weight: 700;
+  padding-inline-start: calc(var(--phy-space-s) + var(--phy-rule-width));
+  border-inline-start: 2px solid var(--phy-ink);
+  margin-inline-start: calc(-1 * var(--phy-rule-width));
+}
+
+/* Made with my soul - Swately <3 */
