@@ -25,6 +25,9 @@ const FROZEN_STATUS: Record<string, string> = {
   pharvard: 'runs on silicon',
   phynned: '0.2.2-experimental',
   climx: 'en línea',
+  // the two package titles of the web substrate's READMEs (2026-11-04); substrate.test.ts also ties the tokens
+  // version here to the @version line of the copy this site ships
+  'sustrato-web': 'tokens 2.1.1 · react 1.4.0 (stable)',
 };
 
 // Build-time enumeration of what actually ships in public/img — no filesystem

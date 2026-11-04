@@ -1,6 +1,6 @@
 # Sustrato web — registro de evidencia (2026-11-04)
 
-> **Qué es esto.** El respaldo de cada cifra que la página `/sustrato-web` imprime. Cada sección dice **qué
+> **Qué es esto.** El respaldo de cada cifra que la página del proyecto (`/proyecto/sustrato-web`; la ruta antigua `/sustrato-web` redirige ahí) imprime. Cada sección dice **qué
 > comando se ejecutó**, **qué salió** y **dónde se ejecutó**. La página enlaza aquí cada afirmación
 > (`src/content/substrate.ts`), y una prueba (`src/content/substrate.test.ts`) falla si una cifra de la página
 > no está escrita en este documento. Eso protege contra que página y registro se separen; no puede saber si una
@@ -127,41 +127,41 @@ Resumen: **120 archivos coinciden**. El registro de hashes que `sync.mjs` guarda
 ## Presupuesto de tamaño
 
 `npm run size:budget` suma **todos** los fragmentos de JavaScript y de CSS del build (comprimidos con gzip) y
-falla si pasan del presupuesto. Esta sección lo subió de 115 a 135 kB de JS y de 7 a 9 kB de CSS
+falla si pasan del presupuesto. Este proyecto lo subió de 115 a 135 kB de JS y de 7 a 9 kB de CSS
 (`package.json`), de forma deliberada y con el costo medido:
 
 |                                   | Antes de la sección | Con la sección |
 | --------------------------------- | ------------------- | -------------- |
-| JS, suma de todos los fragmentos  | 112,0 kB            | 129,7 kB       |
-| CSS, suma de todos los fragmentos | 6,7 kB              | 8,7 kB         |
+| JS, suma de todos los fragmentos  | 112,0 kB            | 132,3 kB       |
+| CSS, suma de todos los fragmentos | 6,7 kB              | 8,3 kB         |
 
 ```text
 $ npm run size:budget
-  ok   js  129.73 kB of 135 kB budget (96%)
-  ok   css 8.72 kB of 9 kB budget (97%)
+  ok   js  132.29 kB of 135 kB budget (98%)
+  ok   css 8.34 kB of 9 kB budget (93%)
 
 PASS — within budget
 ```
 
 Resumen (en español, con coma decimal):
 
-**JS 129,7 de 135 kB · CSS 8,7 de 9 kB**
+**JS 132,3 de 135 kB · CSS 8,3 de 9 kB**
 
 (Con un decimal a propósito: la propia página imprime esta cifra y su tamaño comprimido cambia una centésima
-cada vez que se reescribe, de modo que 129,73 y 129,74 salieron en dos construcciones seguidas sin otro
+cada vez que se reescribe, de modo que 129,73 y 129,74 salieron (en una construcción anterior a la del dossier) en dos construcciones seguidas sin otro
 cambio. La salida literal de arriba es la de una de ellas.)
 
-**Costo para la página de inicio (medido).** La sección en sí pesa unos 8 kB; el resto es el laboratorio del
-sustrato. Ese laboratorio **no debería** cargarse en el inicio, pero se carga: la barrera de exportaciones del
+**Costo para la página de inicio (medido).** La entrada del proyecto en la lista, más el dossier con su matriz comparativa y su gráfica, suman el resto; el laboratorio del
+sustrato es la parte evitable. Ese laboratorio **no debería** cargarse en el inicio, pero se carga: la barrera de exportaciones del
 sustrato (`src/phyriad-react/index.ts`) reexporta `StandardsLab`, y mientras lo haga el empaquetador mezcla el
 laboratorio con las piezas comunes y lo precarga desde la entrada en todas las páginas. Lo que descarga el inicio
 (entrada, precargas y hojas de estilo, comprimido con gzip, calculado con un script propio, no con la
 herramienta del presupuesto):
 
-|                | Antes    | Después                |
-| -------------- | -------- | ---------------------- |
-| JS del inicio  | 83,96 kB | 93,19 kB (**+9,2 kB**) |
-| CSS del inicio | 6,68 kB  | 8,43 kB (**+1,75 kB**) |
+|                | Antes    | Después                 |
+| -------------- | -------- | ----------------------- |
+| JS del inicio  | 83,96 kB | 95,25 kB (**+11,3 kB**) |
+| CSS del inicio | 6,68 kB  | 8,04 kB (**+1,36 kB**)  |
 
 **Causa aislada** con una copia del proyecto: quitar de esa barrera las tres líneas que reexportan el
 laboratorio lo separa del inicio (que pasa a +2,5 kB de JS y +1,2 kB de CSS). Ni cargar el laboratorio con una
@@ -172,7 +172,7 @@ exportaciones de la barrera es un cambio MAJOR de phyriad-react. Está pendiente
 ## Accesibilidad
 
 Instrumento: axe-core 4.13.0 en el navegador, tema claro y oscuro, a 1280 y a 390 px, con la comprobación de
-contraste activa. Rutas: `/sustrato-web` (analizada junto con su caja de demostración), `/sustrato-web/laboratorio`
+contraste activa. Rutas: `/proyecto/sustrato-web` (analizada junto con su caja de demostración), `/sustrato-web/laboratorio`
 y `/sustrato-web/demo` (la demostración sola).
 
 Resumen: **0 violaciones** en todas las combinaciones (3 rutas × 2 temas × 2 anchos), sin desplazamiento

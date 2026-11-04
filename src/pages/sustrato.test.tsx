@@ -1,11 +1,19 @@
 import { describe, it, expect, beforeAll, beforeEach, vi, afterEach } from 'vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axe from 'axe-core';
-import SustratoWebPage from './SustratoWebPage';
+import SustratoWebPage from './projects/SustratoWebPage';
+import SustratoRedirect from './SustratoRedirect';
+import IndexPage from './IndexPage';
+import NotFound from './NotFound';
+import { Router } from '../phyriad-react';
 import SustratoLabPage from './SustratoLabPage';
 import SustratoDemo, { applySettings, readSettings } from './SustratoDemo';
 import SubstrateDemoFrame from '../components/SubstrateDemoFrame';
-import { substrateClaims, substrateLimits } from '../content/substrate';
+import { projects } from '../content';
+import { SECTIONS } from '../components/ProjectShell';
+
+// the ten sections of design v3, as heading ids
+const SECTION_IDS = Object.keys(SECTIONS).map((id) => `${id}-h`);
 
 beforeAll(() => {
   // jsdom has no ResizeObserver; Figure and the lab observe their boxes.
@@ -44,27 +52,21 @@ const clean = async (container: HTMLElement) => {
   return r.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(' | ')}`);
 };
 
-describe('the substrate page (/sustrato-web)', () => {
-  it('carries its nine sections in order, every signpost lands on a heading, and passes axe', async () => {
-    const { container } = render(
+describe('the substrate dossier (/proyecto/sustrato-web, design v3)', () => {
+  const dossier = () =>
+    render(
       <main>
         <SustratoWebPage />
       </main>,
     );
-    const ids = [
-      'resumen',
-      'contexto',
-      'mecanismo',
-      'decisiones',
-      'demos',
-      'laboratorio',
-      'afirmaciones',
-      'limites',
-      'verificacion',
-    ].map((s) => `${s}-h`);
-    const found = ids.map((id) => document.getElementById(id));
-    for (const [i, el] of found.entries()) expect(el, ids[i]).not.toBeNull();
-    // document order = the order the page promises
+
+  it('carries the ten sections of the format in order, every signpost lands on a heading, and passes axe', async () => {
+    const { container } = dossier();
+    // the charts and the matrix load on demand: wait for them before judging the page
+    await screen.findByRole('table', { name: /Cómo llega el código de un sistema/ });
+    await waitFor(() => expect(container.querySelector('svg[role="img"]')).not.toBeNull());
+    const found = SECTION_IDS.map((id) => document.getElementById(id));
+    for (const [i, el] of found.entries()) expect(el, SECTION_IDS[i]).not.toBeNull();
     for (let i = 1; i < found.length; i++)
       expect(
         found[i - 1]!.compareDocumentPosition(found[i]!) & Node.DOCUMENT_POSITION_FOLLOWING,
@@ -78,40 +80,85 @@ describe('the substrate page (/sustrato-web)', () => {
     expect(await cleanWithoutFrames(container)).toEqual([]);
   });
 
-  it('prints every claim of its ledger as an anchor with its evidence, and links the figure claim to its figure', () => {
-    render(
-      <main>
-        <SustratoWebPage />
-      </main>,
-    );
-    for (let n = 1; n <= substrateClaims.length; n++)
+  it('prints every claim of its ledger as an anchor, with the diagram as the figure of "En breve"', async () => {
+    dossier();
+    const p = projects.find((q) => q.slug === 'sustrato-web')!;
+    for (let n = 1; n <= p.claims.length; n++)
       expect(document.getElementById(`afirmacion-${n}`), `afirmacion-${n}`).not.toBeNull();
     expect(document.getElementById('figura-1')).not.toBeNull();
     expect(screen.getAllByRole('link', { name: /Ver la figura 1/ })).toHaveLength(1);
     expect(screen.getByText('Descripción textual de la figura')).toBeInTheDocument();
+    await screen.findByRole('table', { name: /Cómo llega el código de un sistema/ });
   });
 
-  it('declares its limits and the way the claims are checked', () => {
-    render(
-      <main>
-        <SustratoWebPage />
-      </main>,
-    );
-    for (const l of substrateLimits) expect(screen.getByText(l)).toBeInTheDocument();
-    expect(screen.getByText(/Cómo se comprueba que esta página no dice más/)).toBeInTheDocument();
+  it('shows its status, years and limits from the ledger, and a comparison that never claims an advantage', async () => {
+    dossier();
+    const p = projects.find((q) => q.slug === 'sustrato-web')!;
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(p.status);
+    for (const l of p.limits) expect(screen.getByText(l)).toBeInTheDocument();
+    await screen.findByRole('table', { name: /Cómo llega el código de un sistema/ });
+    expect(screen.getByText(/ninguna fila mide una ventaja/)).toBeInTheDocument();
   });
 
-  it('offers the laboratory and the demonstration without leaving the page', () => {
-    render(
-      <main>
-        <SustratoWebPage />
-      </main>,
-    );
+  it('offers the live demonstration in a titled box, and the laboratory, from inside the dossier', () => {
+    dossier();
+    expect(screen.getByTitle(/Demostración del sustrato web/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Abrir el laboratorio/ })).toHaveAttribute(
       'href',
       expect.stringMatching(/\/sustrato-web\/laboratorio$/),
     );
-    expect(screen.getByTitle(/Demostración del sustrato web/)).toBeInTheDocument();
+  });
+
+  it('says what can be repeated from the public repository and what cannot', () => {
+    dossier();
+    expect(screen.getByText(/Qué se puede repetir desde este repositorio/)).toBeInTheDocument();
+    expect(screen.getByText(/miran el/)).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /repetir las comprobaciones/ })).toBeInTheDocument();
+  });
+});
+
+describe('the substrate in the index and the old address', () => {
+  it('is the last entry of the home list, with its status, and its dossier link', () => {
+    const last = projects.at(-1)!;
+    expect(last.slug).toBe('sustrato-web');
+    const { container } = render(
+      <main>
+        <IndexPage />
+      </main>,
+    );
+    const entries = container.querySelectorAll('ol > li');
+    const entry = entries[entries.length - 1] as HTMLElement;
+    expect(entry).toHaveTextContent('Sustrato web');
+    expect(entry).toHaveTextContent(last.status);
+    expect(
+      Array.from(entry.querySelectorAll('a')).some((a) =>
+        a.getAttribute('href')?.endsWith('/proyecto/sustrato-web'),
+      ),
+    ).toBe(true);
+  });
+
+  it('/sustrato-web replaces itself with the dossier, so there is one page and not two', async () => {
+    window.history.replaceState(null, '', '/sustrato-web');
+    render(
+      <main>
+        <Router
+          routes={[
+            { path: '/sustrato-web', page: SustratoRedirect },
+            { path: '/proyecto/sustrato-web', page: SustratoWebPage },
+          ]}
+          fallback={NotFound}
+        />
+      </main>,
+    );
+    await waitFor(() =>
+      expect(window.location.pathname.endsWith('/proyecto/sustrato-web')).toBe(true),
+    );
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Sustrato web');
+    // replaced, not pushed: the old address is not in the history
+    expect(
+      window.location.pathname.endsWith('/sustrato-web') &&
+        !window.location.pathname.includes('/proyecto/'),
+    ).toBe(false);
   });
 });
 

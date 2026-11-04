@@ -235,25 +235,26 @@ every layout-dependent accessibility claim, and the jsdom run is the semantic ha
 **Not measured:** ink contrast of the new diagrams per pixel, a coarse pointer, forced colours, other engines, screen readers, the
 `maid` palette on any of it. The English text of Phynned is marked but a screen reader's pronunciation of it was not tested.
 
-## The web substrate section (`/sustrato-web`, 2026-11-04)
+## The web substrate project (`/proyecto/sustrato-web`, 2026-11-04)
 
-A new section, in Spanish, that explains how the substrate this site is built on works (`catalog/web`: phyriad-tokens +
-phyriad-react, copying with `sync.mjs`, the gates), with a live demonstration and the substrate's own laboratory. Linked from
-the **foot** (not the home list). Built on the operator's word ("usa tus recomendaciones": link in the foot, demonstrations in an
-isolated box).
+A new project in the home list (last entry), with a dossier in Spanish, that explains how the substrate this site is built on works (`catalog/web`: phyriad-tokens +
+phyriad-react, copying with `sync.mjs`, the gates), with a live demonstration and the substrate's own laboratory. Also linked
+from the foot. Built on the operator's word ("Usa tu recomendacion y si el estado propuesto esta bien, autorizo"); it first existed as a
+standalone `/sustrato-web` page, now a redirect to the dossier (one page, not two).
 
-| Route                       | What it is                                                                                                                                      |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/sustrato-web`             | the page: nine sections in the v3 order (mechanism before claims), a TikZ diagram, three decisions, ten `Claim`s with evidence, declared limits |
-| `/sustrato-web/demo`        | a **window route** (no site chrome): real substrate components in a document of their own, shown in an iframe by the page                       |
-| `/sustrato-web/laboratorio` | the substrate's `StandardsLab` (it was a development-only route before), with its own h1 and a way back                                         |
+| Route                       | What it is                                                                                                                             |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `/proyecto/sustrato-web`    | the dossier on `ProjectShell` (v3 order), a TikZ diagram, three decisions, a comparison matrix, a chart, ten `Claim`s, declared limits |
+| `/sustrato-web`             | redirect (replace) to the dossier                                                                                                      |
+| `/sustrato-web/demo`        | a **window route** (no site chrome): real substrate components in a document of their own, shown in an iframe by the page              |
+| `/sustrato-web/laboratorio` | the substrate's `StandardsLab` (it was a development-only route before), with its own h1 and a way back                                |
 
 **Why the demonstration is an iframe.** A palette and a type theme are attributes of the root element, so one page can show one
 at a time. The controls (palette, type theme, text size) post a message to the box, which sets the attributes **on its own
 document and never writes to storage**, so a demonstration cannot change the site's look on the next visit. The box follows the
 page's light/dark choice.
 
-**Files.** `src/content/substrate.ts` (the ledger: claims, limits, figure), `src/pages/{SustratoWebPage,SustratoLabPage,
+**Files.** `src/content/substrate.ts` (the ledger: claims, limits, figure), `src/pages/projects/SustratoWebPage.tsx`, `src/pages/{SustratoRedirect,SustratoLabPage,
 SustratoDemo}.tsx`, `src/components/SubstrateDemoFrame.tsx`, `figure-sources/sustrato_flujo.tex` →
 `public/img/sustrato_flujo.svg`, `docs/SUSTRATO_WEB_EVIDENCE.md` (the record behind every number), and `src/app.tsx` (three lazy
 routes, the foot link; the development-only `/lab` route is gone, the public one replaces it). Tests: `src/content/substrate.test.ts`
@@ -263,14 +264,14 @@ with a deliberate break.
 
 **Cost, measured (declared on purpose).** The budget went from JS 115 / CSS 7 kB to **135 / 9** (`package.json`):
 
-|                                     | Before   | After                  |
-| ----------------------------------- | -------- | ---------------------- |
-| JS, sum of every chunk              | 112.0 kB | 129.7 kB               |
-| CSS, sum of every chunk             | 6.7 kB   | 8.7 kB                 |
-| **Home page** JS (entry + preloads) | 83.96 kB | 93.19 kB (**+9.2 kB**) |
-| **Home page** CSS                   | 6.68 kB  | 8.43 kB (**+1.75 kB**) |
+|                                     | Before   | After                   |
+| ----------------------------------- | -------- | ----------------------- |
+| JS, sum of every chunk              | 112.0 kB | 132.3 kB                |
+| CSS, sum of every chunk             | 6.7 kB   | 8.3 kB                  |
+| **Home page** JS (entry + preloads) | 83.96 kB | 95.25 kB (**+11.3 kB**) |
+| **Home page** CSS                   | 6.68 kB  | 8.04 kB (**+1.36 kB**)  |
 
-The section itself is about 8 kB; the rest is the laboratory, and the **home page pays for it** although it never opens it: the
+The laboratory is the avoidable part, and the **home page pays for it** although it never opens it: the
 substrate's barrel (`src/phyriad-react/index.ts`) re-exports `StandardsLab`, so the bundler merges the laboratory with the shared
 pieces and preloads it on every page. Isolated on a copy: without those three re-export lines the home page pays about +2.5 kB. A lazy
 `import()`, importing from the file, and a chunk group in the bundler config were each tried and changed nothing. **Fixing it is a
@@ -281,6 +282,27 @@ catalog change** (removing exports from the barrel is a MAJOR of phyriad-react) 
 phyriad-react 1.4.0 but the copy does not declare react's version (tokens' 2.1.1 is declared and tested): it is quoted from the
 catalog's changelog. Evidence links point into this repository and open once it is published. Private project names were left out of
 the diagram and the record on purpose.
+
+## Papers and how they are worked (`/papers`, 2026-11-04)
+
+One route, linked from the foot, in Spanish: the first four papers of the author's series (holonic, disconnection, convergence,
+grain), each with its PDF in both editions (written natively in each language, not translated), its result as the paper's own abstract
+states it, and two `Claim`s; below them a "how a paper is worked" section (the seven-pass KAP funnel, the clean-context auditor, the key
+protocols: KAP, FDP, CONDUCT, metacognition, delegation) and the declared limits. Built on the operator's direct request
+("agregar al portafolio los 4 primeros ... como se trabaja para la creacion de papers, incluyendo una breve descripcion de los protocolos").
+
+**Files.** `src/content/papers.ts` (the ledger), `src/pages/PapersPage.tsx` (+ `.module.css`), `public/papers/` (eight PDFs copied byte for byte
+from `phyriad-papers/*/paper_{es,en}.pdf`, and the three frozen `SPINE.md`), `docs/PAPERS_EVIDENCE.md` (the record: page counts with the command,
+abstracts, the papers' own statements of status, and short quotes from each protocol with file and line, because the protocols are not published).
+Tests: `src/content/papers.test.ts` (a printed number is in the record; every link lands on a heading of it; every published file exists) and
+`src/pages/papers.test.tsx` (the four papers, both editions, unique ids, axe).
+
+**Budget.** The route is lazy: its chunk is 5.4 kB gzip and the home page does not load it. The sum-of-chunks JS budget went from 135 to **142 kB**
+(`package.json`) because the sum counts every route, not what one visit pays.
+
+**Not verified.** The papers' arguments and their bibliographies were not re-checked; they are the author's own analyses, not peer-reviewed. KAP records the
+full arc for the holonic and disconnection papers only; the audit records of the convergence and grain papers were not found, and the page says so. The
+grain paper's effective-information validation figure is quoted from its `SPINE.md`, not re-run. No axe pass in a real browser yet, no Safari, no screen reader.
 
 ## Synced to tokens 2.1.1 / react 1.4.0 (2026-10-21)
 

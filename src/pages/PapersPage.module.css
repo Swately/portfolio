@@ -1,0 +1,18 @@
+/* The /papers page: only what the substrate's components do not already give. Colours and sizes come from tokens. */
+.claims {
+  margin: 0;
+  padding-left: var(--phy-space-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--phy-space-s);
+}
+
+.files {
+  overflow-wrap: anywhere;
+}
+
+.frozen {
+  color: var(--phy-ink-muted);
+}
+
+/* Made with my soul - Swately <3 */

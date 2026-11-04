@@ -15,3 +15,4 @@ docs/planning/aap/
 # this project does not own and put the copy permanently out of sync — which is
 # exactly what happened the first time this line was missing.
 src/phyriad-react/
+public/papers/

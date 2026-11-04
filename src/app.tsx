@@ -7,10 +7,14 @@ import { lazyPage } from './lib/lazyPage';
 const PhyriadFGPage = lazyPage(() => import('./pages/projects/PhyriadFGPage'));
 const PhyriagerPage = lazyPage(() => import('./pages/projects/PhyriagerPage'));
 const PhynnedPage = lazyPage(() => import('./pages/projects/PhynnedPage'));
-// The substrate section (/sustrato-web): its page, its isolated demonstration document and the laboratory.
-const SustratoWebPage = lazyPage(() => import('./pages/SustratoWebPage'));
+// The substrate: its dossier (a project like the others), the old /sustrato-web address that now redirects to it,
+// its isolated demonstration document and the laboratory.
+const SustratoWebPage = lazyPage(() => import('./pages/projects/SustratoWebPage'));
+const SustratoRedirect = lazyPage(() => import('./pages/SustratoRedirect'));
 const SustratoDemo = lazyPage(() => import('./pages/SustratoDemo'));
 const SustratoLabPage = lazyPage(() => import('./pages/SustratoLabPage'));
+// The papers and how they are worked: its own route, loaded on demand like the project pages.
+const PapersPage = lazyPage(() => import('./pages/PapersPage'));
 import EvidencePage from './pages/EvidencePage';
 import NotFound from './pages/NotFound';
 import Masthead from './components/Masthead';
@@ -25,9 +29,11 @@ const routes: Route[] = [
   { path: '/proyecto/phyriadfg', page: PhyriadFGPage },
   { path: '/proyecto/phyriager', page: PhyriagerPage },
   { path: '/proyecto/phynned', page: PhynnedPage },
+  { path: '/proyecto/sustrato-web', page: SustratoWebPage },
   { path: '/proyecto/:slug', page: ProjectPage },
   { path: '/evidencia', page: EvidencePage },
-  { path: '/sustrato-web', page: SustratoWebPage },
+  { path: '/papers', page: PapersPage },
+  { path: '/sustrato-web', page: SustratoRedirect },
   // The demonstration is a window route (no site chrome) shown in an iframe by the page above: a palette
   // is an attribute of the root element, so a second document is how one box changes and the page does not.
   { path: '/sustrato-web/demo', page: SustratoDemo, window: true },
@@ -47,7 +53,9 @@ const footer = (
   <SiteFooter>
     <Link to="/evidencia">Cómo se verifica este sitio</Link>
     {' · '}
-    <Link to="/sustrato-web">El sustrato web</Link>
+    <Link to="/proyecto/sustrato-web">El sustrato web</Link>
+    {' · '}
+    <Link to="/papers">Papers</Link>
     {' · '}
     <ThemeToggle prefix="Tema" labels={{ system: 'Sistema', light: 'Claro', dark: 'Oscuro' }} />
   </SiteFooter>

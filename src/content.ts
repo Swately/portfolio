@@ -13,6 +13,8 @@
 // VERBATIM from each project's README, which is written in English — so the
 // evidence rows read bilingual by construction. That is declared, not accidental.
 
+import { substrateClaims, substrateLimits } from './content/substrate';
+
 /** How a claim can be backed, ordered by how independently a reader can check it. */
 export type Evidence =
   /** Open the running thing yourself. The strongest kind. */
@@ -522,6 +524,26 @@ export const projects: Project[] = [
       'Reconstruido en 2026 a partir de un proyecto escolar de 2023, conservado en la etiqueta ' +
         'v0-school.',
     ],
+  },
+  {
+    slug: 'sustrato-web',
+    name: 'Sustrato web',
+    tag: 'Sistema de diseño',
+    // The two package titles in the catalog's READMEs ("phyriad-tokens — 2.1.1 (stable)", "phyriad-react — 1.4.0
+    // (stable)"), joined; the catalog is not published, so the status is frozen against the copied files too:
+    // substrate.test.ts compares the tokens version here with the @version line of the vendored copy.
+    status: 'tokens 2.1.1 · react 1.4.0 (stable)',
+    statusSource:
+      'catalog/web/tokens/README.md y catalog/web/react/README.md, títulos (el catálogo no está publicado; la copia que lleva este sitio declara la versión de los tokens)',
+    statusChecked: '4 de noviembre de 2026',
+    years: 'desde agosto de 2026',
+    repoUrl: 'https://github.com/Swately/portfolio',
+    summary:
+      'La base de estilos y componentes de este sitio y de otros proyectos: tokens de CSS y ' +
+      'componentes de React que se copian a cada sitio, con pruebas que calculan el contraste, el ' +
+      'tamaño y la copia misma en lugar de afirmarlos.',
+    claims: substrateClaims,
+    limits: substrateLimits,
   },
 ];
 

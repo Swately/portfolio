@@ -1,0 +1,56 @@
+{
+  "schema": "phyriad-chart/1",
+  "id": "sustrato-web-contraste-texto-atenuado",
+  "title": "Contraste de la tinta atenuada sobre la tercera superficie, por paleta y esquema",
+  "takeaway": "El par más justo, la tinta atenuada sobre la tercera superficie, supera 4,5:1 en las tres paletas y en los dos esquemas; el mínimo es Maid en claro, con 5,02:1.",
+  "kind": "bar",
+  "unit": ":1",
+  "xLabel": "paleta",
+  "yLabel": "contraste (relación de luminancias WCAG)",
+  "series": [
+    {
+      "name": "claro",
+      "emphasis": true,
+      "points": [
+        {
+          "x": "Vitrina",
+          "y": 6.47
+        },
+        {
+          "x": "Óxido",
+          "y": 5.36
+        },
+        {
+          "x": "Maid",
+          "y": 5.02
+        }
+      ]
+    },
+    {
+      "name": "oscuro",
+      "points": [
+        {
+          "x": "Vitrina",
+          "y": 6.59
+        },
+        {
+          "x": "Óxido",
+          "y": 5.92
+        },
+        {
+          "x": "Maid",
+          "y": 5.84
+        }
+      ]
+    }
+  ],
+  "instrument": "node catalog/web/tokens/testbench.mjs (2.1.1), líneas «muted text on the third surface» de cada paleta y esquema; el testbench calcula la relación con la fórmula de luminancia relativa de WCAG y exige 4,5:1. Una ejecución; es un cálculo sobre valores de color, no una medición con ruido, así que no hay variación entre corridas que reportar.",
+  "source": {
+    "label": "docs/SUSTRATO_WEB_EVIDENCE.md, «Testbench de tokens»",
+    "url": "https://github.com/Swately/portfolio/blob/main/docs/SUSTRATO_WEB_EVIDENCE.md#testbench-de-tokens"
+  },
+  "notes": [
+    "Es el par más justo de los cinco que el testbench exige sobre esa superficie; sobre el papel y la segunda superficie los valores son mayores (por ejemplo, Maid en claro: 5,85 y 5,17).",
+    "Es un cálculo sobre los valores de color de las paletas; no mide cómo se ve en una pantalla concreta."
+  ]
+}

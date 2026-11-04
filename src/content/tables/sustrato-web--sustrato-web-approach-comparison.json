@@ -1,0 +1,80 @@
+{
+  "schema": "phyriad-matrix/1",
+  "id": "sustrato-web-approach-comparison",
+  "title": "Cómo llega el código de un sistema de componentes a un proyecto: el sustrato web, shadcn/ui y Material UI, según lo que cada uno dice de sí mismo.",
+  "note": "Comparación de enfoque únicamente: ninguna fila lleva una medición del sustrato frente a la alternativa y no se afirma ventaja de ningún tipo; shadcn/ui y Material UI son conjuntos de componentes completos y esta tabla solo trata de cómo el código llega a un proyecto. Las dos fuentes externas se abrieron de primera mano el 2026-11-04 con una herramienta que devuelve un resumen hecho por un modelo pequeño, no el texto literal: el nivel es [V2] (primaria, parcial; la brecha se declara). Una celda sin dato es algo que esa página no trata.",
+  "status": "approach-only",
+  "options": ["Sustrato web", "shadcn/ui", "Material UI"],
+  "rows": [
+    {
+      "attribute": "Cómo llega el código a un proyecto",
+      "kind": "enfoque",
+      "cells": [
+        "Se copia el catálogo al proyecto con sync.mjs, que guarda un hash por archivo; el proyecto lleva sus propios archivos.",
+        "Le entrega al proyecto el código de cada componente en lugar de un paquete que se importa (Introduction, «Open Code»).",
+        "Paquete de npm: npm install @mui/material @emotion/react @emotion/styled; la documentación leída es de la versión v9.5.0."
+      ]
+    },
+    {
+      "attribute": "Quién edita el código después",
+      "kind": "enfoque",
+      "cells": [
+        "El proyecto puede editar su copia, pero sync.mjs lo detecta por el hash y no la pisa sin --force; --promote devuelve la edición al catálogo.",
+        "El proyecto: según la página, se edita el código del botón directamente.",
+        null
+      ]
+    },
+    {
+      "attribute": "Cómo sabe un proyecto que hay una versión nueva",
+      "kind": "enfoque",
+      "cells": [
+        "fleet-check recorre las copias y dice cuáles van atrasadas (en la medición de esta página, 1 de 5).",
+        "La página plantea la pregunta de cómo traer las actualizaciones de origen y no la responde en el texto leído.",
+        null
+      ]
+    },
+    {
+      "attribute": "Estilos en ejecución",
+      "kind": "enfoque",
+      "cells": [
+        "Variables de CSS (los tokens) y CSS de módulos; sin biblioteca de estilos en ejecución.",
+        null,
+        "Emotion (@emotion/react y @emotion/styled), según el comando de instalación."
+      ]
+    },
+    {
+      "attribute": "Fuente y nivel",
+      "kind": "enfoque",
+      "cells": [
+        "README, registros de cambios y comandos del propio proyecto, ejecutados de primera mano. [V1]",
+        "ui.shadcn.com/docs, abierta el 2026-11-04; resumen de una herramienta, no texto literal. [V2]",
+        "mui.com/material-ui/getting-started/installation, abierta el 2026-11-04; resumen de una herramienta. [V2]"
+      ]
+    }
+  ],
+  "sources": [
+    [
+      {
+        "text": "docs/SUSTRATO_WEB_EVIDENCE.md",
+        "href": "https://github.com/Swately/portfolio/blob/main/docs/SUSTRATO_WEB_EVIDENCE.md"
+      }
+    ],
+    [
+      {
+        "text": "ui.shadcn.com/docs",
+        "href": "https://ui.shadcn.com/docs"
+      }
+    ],
+    [
+      {
+        "text": "mui.com/material-ui/getting-started/installation",
+        "href": "https://mui.com/material-ui/getting-started/installation/"
+      }
+    ]
+  ],
+  "quotes": [[], ["\"hands you the actual component code\" (Introduction, «Open Code»)"], []],
+  "origin": {
+    "label": "Elaborada para este dossier, no viene de la sesión de otro proyecto",
+    "note": "Escrita el 2026-11-04 con las dos fuentes externas abiertas ese día."
+  }
+}

@@ -4,6 +4,7 @@ import { describe, it, expect } from 'vitest';
 // (the same way skin.test.ts and figures.test.ts do).
 // @ts-expect-error TS7016: untyped JavaScript helper
 import { readText } from '../../scripts/read-text.mjs';
+import { projects } from '../content';
 import {
   EVIDENCE_DOC,
   PAGES_ROOT,
@@ -77,6 +78,25 @@ describe('the substrate ledger (route /sustrato-web)', () => {
     const v = (s: string) => (s.match(/@version\s+(\d+\.\d+\.\d+)/) || [])[1];
     expect(v(tokens)).toBe(SUBSTRATE_VERSIONS.tokens);
     expect(v(base)).toBe(SUBSTRATE_VERSIONS.tokens);
+  });
+
+  it('the project entry of the ledger carries these claims and a status built from the same versions', () => {
+    const p = projects.find((q) => q.slug === 'sustrato-web')!;
+    expect(p).toBeDefined();
+    expect(p.claims).toBe(substrateClaims);
+    expect(p.limits).toBe(substrateLimits);
+    expect(p.status).toBe(
+      `tokens ${SUBSTRATE_VERSIONS.tokens} · react ${SUBSTRATE_VERSIONS.react} (stable)`,
+    );
+    // the dossier's own figure is the first figure among its claims (the hero of "En breve")
+    expect(p.claims.find((c) => c.evidence.kind === 'figure')!.evidence).toBe(substrateFigure);
+    // its comparison and its chart exist and are named after the slug, as the loaders require
+    expect(
+      readText('src/content/tables/sustrato-web--sustrato-web-approach-comparison.json'),
+    ).toContain('phyriad-matrix/1');
+    expect(
+      readText('src/content/charts/sustrato-web--sustrato-web-contraste-texto-atenuado.json'),
+    ).toContain('phyriad-chart/1');
   });
 
   it('what the page says about react 1.4.0 can only be true if the copy has its features', () => {

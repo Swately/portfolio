@@ -1,7 +1,7 @@
 import type { Claim, FigureEvidence } from '../content';
 
 /**
- * The "Sustrato web" page's ledger (route /sustrato-web). Same discipline as the projects' ledger: every
+ * The "Sustrato web" project's ledger (dossier at /proyecto/sustrato-web; /sustrato-web redirects there). Same discipline as the projects' ledger: every
  * assertion is a `Claim`, so `evidence` is required and `tsc` fails an assertion with no backing; the numbers
  * are recorded in docs/SUSTRATO_WEB_EVIDENCE.md with the command that produced them, and substrate.test.ts
  * fails when a number printed here is not written in that record (the type gate proofs against OMISSION, this
@@ -50,7 +50,7 @@ export const measured = {
   reactChecks: '108 exportaciones · 16 comprobaciones',
   scaleDelta: '0,001 px en Chromium · 0,031 px en Firefox 157',
   synced: '120 archivos coinciden',
-  budget: 'JS 129,7 de 135 kB · CSS 8,7 de 9 kB',
+  budget: 'JS 132,3 de 135 kB · CSS 8,3 de 9 kB',
   axe: '0 violaciones',
 } as const;
 
