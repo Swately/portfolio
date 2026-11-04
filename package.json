@@ -15,7 +15,7 @@
     "format": "prettier --check .",
     "substrate:check": "node ../../catalog/web/react/sync.mjs src --check",
     "substrate:sync": "node ../../catalog/web/react/sync.mjs src",
-    "size:budget": "node ../../catalog/web/react/size-budget.mjs dist --js 115 --css 7",
+    "size:budget": "node ../../catalog/web/react/size-budget.mjs dist --js 135 --css 9",
     "figures:check": "node figure-contract/build-contract.mjs --check && node --test figure-contract/contract.check.mjs && node figure-contract/validate-chart.mjs figure-contract/examples/chart.bar.example.json figure-contract/examples/chart.range.example.json",
     "figures:build": "node scripts/figures/build-figure.mjs"
   },

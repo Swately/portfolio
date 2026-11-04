@@ -1,0 +1,28 @@
+.box {
+  min-inline-size: 0;
+}
+
+.scale {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--phy-space-xs);
+}
+
+/* the value next to the slider: the monospace voice at the small step, as Text size="sm" mono would give */
+.value {
+  font-family: var(--phy-font-mono);
+  font-size: var(--phy-text-sm);
+  min-inline-size: 4ch;
+}
+
+/* The box: a hairline in the site's own rule colour (3:1) around a document of its own. */
+.frame {
+  inline-size: 100%;
+  block-size: 36rem;
+  max-block-size: 80svh;
+  border: var(--phy-rule-width) solid var(--phy-rule);
+  border-radius: var(--phy-radius);
+  background: var(--phy-paper);
+}
+
+/* Made with my soul - Swately <3 */

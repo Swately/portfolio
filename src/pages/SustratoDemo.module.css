@@ -1,0 +1,12 @@
+/* A window route owns the viewport: no site chrome, so the demonstration gives itself room. */
+.demo {
+  padding: var(--phy-space-m);
+  max-inline-size: 48rem;
+  margin-inline: auto;
+}
+
+.card {
+  padding: var(--phy-space-m);
+}
+
+/* Made with my soul - Swately <3 */

@@ -235,6 +235,53 @@ every layout-dependent accessibility claim, and the jsdom run is the semantic ha
 **Not measured:** ink contrast of the new diagrams per pixel, a coarse pointer, forced colours, other engines, screen readers, the
 `maid` palette on any of it. The English text of Phynned is marked but a screen reader's pronunciation of it was not tested.
 
+## The web substrate section (`/sustrato-web`, 2026-11-04)
+
+A new section, in Spanish, that explains how the substrate this site is built on works (`catalog/web`: phyriad-tokens +
+phyriad-react, copying with `sync.mjs`, the gates), with a live demonstration and the substrate's own laboratory. Linked from
+the **foot** (not the home list). Built on the operator's word ("usa tus recomendaciones": link in the foot, demonstrations in an
+isolated box).
+
+| Route                       | What it is                                                                                                                                      |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/sustrato-web`             | the page: nine sections in the v3 order (mechanism before claims), a TikZ diagram, three decisions, ten `Claim`s with evidence, declared limits |
+| `/sustrato-web/demo`        | a **window route** (no site chrome): real substrate components in a document of their own, shown in an iframe by the page                       |
+| `/sustrato-web/laboratorio` | the substrate's `StandardsLab` (it was a development-only route before), with its own h1 and a way back                                         |
+
+**Why the demonstration is an iframe.** A palette and a type theme are attributes of the root element, so one page can show one
+at a time. The controls (palette, type theme, text size) post a message to the box, which sets the attributes **on its own
+document and never writes to storage**, so a demonstration cannot change the site's look on the next visit. The box follows the
+page's light/dark choice.
+
+**Files.** `src/content/substrate.ts` (the ledger: claims, limits, figure), `src/pages/{SustratoWebPage,SustratoLabPage,
+SustratoDemo}.tsx`, `src/components/SubstrateDemoFrame.tsx`, `figure-sources/sustrato_flujo.tex` →
+`public/img/sustrato_flujo.svg`, `docs/SUSTRATO_WEB_EVIDENCE.md` (the record behind every number), and `src/app.tsx` (three lazy
+routes, the foot link; the development-only `/lab` route is gone, the public one replaces it). Tests: `src/content/substrate.test.ts`
+(a number the page prints must be written in the record; versions equal the copied files'; every evidence link lands on a heading
+of the record; the diagram is themed and its declared size is its file size) and `src/pages/sustrato.test.tsx`; each was seen red
+with a deliberate break.
+
+**Cost, measured (declared on purpose).** The budget went from JS 115 / CSS 7 kB to **135 / 9** (`package.json`):
+
+|                                     | Before   | After                  |
+| ----------------------------------- | -------- | ---------------------- |
+| JS, sum of every chunk              | 112.0 kB | 129.7 kB               |
+| CSS, sum of every chunk             | 6.7 kB   | 8.7 kB                 |
+| **Home page** JS (entry + preloads) | 83.96 kB | 93.19 kB (**+9.2 kB**) |
+| **Home page** CSS                   | 6.68 kB  | 8.43 kB (**+1.75 kB**) |
+
+The section itself is about 8 kB; the rest is the laboratory, and the **home page pays for it** although it never opens it: the
+substrate's barrel (`src/phyriad-react/index.ts`) re-exports `StandardsLab`, so the bundler merges the laboratory with the shared
+pieces and preloads it on every page. Isolated on a copy: without those three re-export lines the home page pays about +2.5 kB. A lazy
+`import()`, importing from the file, and a chunk group in the bundler config were each tried and changed nothing. **Fixing it is a
+catalog change** (removing exports from the barrel is a MAJOR of phyriad-react) and is **pending**. Details and numbers:
+`docs/SUSTRATO_WEB_EVIDENCE.md`, "Presupuesto de tamaño".
+
+**Not verified.** Safari; forced colours; a screen reader; the type scale outside Chromium and Firefox 157. The page names
+phyriad-react 1.4.0 but the copy does not declare react's version (tokens' 2.1.1 is declared and tested): it is quoted from the
+catalog's changelog. Evidence links point into this repository and open once it is published. Private project names were left out of
+the diagram and the record on purpose.
+
 ## Synced to tokens 2.1.1 / react 1.4.0 (2026-10-21)
 
 The type system arrived (face roles, `data-type` themes, a computed scale); this site stays on the default `editorial` theme,

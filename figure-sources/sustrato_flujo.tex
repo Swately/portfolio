@@ -1,0 +1,42 @@
+% Substrate web - how a change travels: catalogue -> copy with a hash -> consumers, and the gates beneath.
+% Colours: figure-contract roles (phyriad-figure-colors.sty). Ink = TeX black; one accent (the copy step).
+% Build: node scripts/figures/build-figure.mjs figure-sources/sustrato_flujo.tex public/img/sustrato_flujo.svg
+\documentclass[border=10pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{phyriad-figure-colors}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+\hyphenpenalty=10000\exhyphenpenalty=10000
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily\small, >=Latex, line width=0.7pt,
+  box/.style={draw, fill=figFill, rounded corners=2pt, align=center, minimum height=1.15cm, text width=3.5cm},
+  small/.style={draw, fill=figFill, rounded corners=2pt, align=center, minimum height=0.8cm, text width=3.3cm},
+  lab/.style={font=\sffamily\footnotesize, align=center, text=figMuted},
+]
+% catalogue
+\node[box] (tok) {\textbf{phyriad-tokens 2.1.1}\\roles, paletas, escala};
+\node[box, below=0.45cm of tok] (rea) {\textbf{phyriad-react 1.4.0}\\componentes y estado};
+\node[lab, above=0.2cm of tok] {\textbf{cat\'alogo} (una sola fuente)};
+% the copy step: the one accent
+\node[draw=figAccent, fill=figFillAccent, line width=1.1pt, rounded corners=2pt, align=center, text width=3.7cm, minimum height=2.2cm, right=2.1cm of $(tok)!0.5!(rea)$] (sync) {\textbf{se copia, no se enlaza}\\\footnotesize sync.mjs guarda un\\hash por archivo y\\distingue qui\'en cambi\'o};
+% consumers
+\node[small, right=2.1cm of sync, yshift=1.95cm] (c1) {laboratorio (test-page)};
+\node[small, below=0.3cm of c1] (c2) {portafolio};
+\node[small, below=0.3cm of c2] (c3) {panel de monitoreo};
+\node[small, below=0.3cm of c3] (c4) {PhyriadFG};
+\node[lab, above=0.2cm of c1] {\textbf{consumidores} (cada uno su copia)};
+\draw[->, thick] ($(tok.east)!0.5!(rea.east)$) -- (sync.west);
+\draw[->, thick] (sync.east) -- (c1.west);
+\draw[->, thick] (sync.east) -- (c2.west);
+\draw[->, thick] (sync.east) -- (c3.west);
+\draw[->, thick] (sync.east) -- (c4.west);
+% the gates
+\node[draw, dashed, rounded corners=2pt, align=center, text width=15.2cm, minimum height=1.3cm, below=0.9cm of rea.south west, anchor=north west, fill=none] (gates) {\textbf{compuertas}: testbench de tokens \;$\cdot$\; testbench de react \;$\cdot$\; API.md generado \;$\cdot$\; presupuesto de tama\~no \;$\cdot$\; axe\\\footnotesize y \texttt{fleet-check}, que recorre las copias y dice cu\'ales van atrasadas};
+\draw[->, dashed] (gates.north -| tok.south) -- (rea.south);
+\draw[->, dashed] (c4.south) -- (c4.south |- gates.north);
+\end{tikzpicture}
+\end{document}
+
+% Made with my soul - Swately <3
